@@ -360,6 +360,9 @@ const init = () => {
   }
 
   render(Nodes.FOOTER_STATS, createStatistic());
+
+  render(Nodes.BODY, createFilmDetails());
+  document.querySelector(`.film-details`).classList.add(`visually-hidden`);
 };
 
 init();
