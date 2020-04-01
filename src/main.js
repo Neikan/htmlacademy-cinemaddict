@@ -344,6 +344,7 @@ const init = () => {
   render(Nodes.HEADER, createProfileRank());
   render(Nodes.MAIN, createMenu());
   render(Nodes.MAIN, createSorting());
+  render(Nodes.MAIN, createFilmDetails());
   render(Nodes.MAIN, createFilms());
 
   const filmsContainer = Nodes.MAIN.querySelector(`.films .films-list__container`);
@@ -360,9 +361,6 @@ const init = () => {
   }
 
   render(Nodes.FOOTER_STATS, createStatistic());
-
-  render(Nodes.BODY, createFilmDetails());
-  document.querySelector(`.film-details`).classList.add(`visually-hidden`);
 };
 
 init();
