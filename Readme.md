@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
-* Студент: [Евгений Сладков](https://up.htmlacademy.ru/ecmascript/11/user/1264031).
-* Наставник: `Неизвестно`.
+* Студент: [Евгений Сладков](https://htmlacademy.ru/profile/id1264031).
+* Наставник: [Артём Рудов](https://htmlacademy.ru/profile/artrudov).
 
 ---
 
