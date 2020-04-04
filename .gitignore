@@ -11,4 +11,7 @@ Thumbs.db
 *.log*
 node_modules/
 
-# Файлы сборки (допишите самостоятельно)
+# Файлы сборки
+build/
+bundle.js
+bundle.js.map
