@@ -1,5 +1,5 @@
 import {getRandomElement, getRandomDate, getCommentDate} from '../utils.js';
-import {CommentTexts, CommentEmojis, CommentAutors, Dates} from '../consts.js';
+import {CommentTexts, CommentEmojies, CommentAutors, Dates} from '../consts.js';
 
 
 /**
@@ -11,10 +11,10 @@ export const generateComment = () => {
 
   return {
     text: getRandomElement(CommentTexts),
-    emoji: getRandomElement(CommentEmojis),
-    autor: getRandomElement(CommentAutors),
+    emoji: getRandomElement(CommentEmojies),
+    author: getRandomElement(CommentAutors),
     date: getCommentDate(randomDate),
-    deleteButton: ``,
+    button: `Delete`,
   };
 };
 

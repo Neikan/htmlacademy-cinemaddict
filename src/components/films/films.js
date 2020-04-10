@@ -1,5 +1,5 @@
 import {Count, Sorting} from "../../consts";
-import {createFilmCards} from "./films-generation";
+import {createFilmCards} from "./films-creation";
 import {createFilmsRated} from "./films-rated";
 import {createFilmsCommented} from "./films-commented";
 import {createShowMore} from "../button-show-more/button-show-more";
