@@ -1,10 +1,11 @@
-import {createProfileRank} from "./components/profile-rank";
-import {createMenu} from "./components/menu";
-import {createSorting} from "./components/sorting";
-import {createFilms} from "./components/films";
-import {createFilmDetails} from "./components/film-details";
-import {createStatistic} from "./components/stats";
-import {render} from "./components/utils";
+import {render} from "./utils";
+import {createProfileRank} from "./components/profile/profile-rank";
+import {createMenu} from "./components/menu/menu";
+import {createSorting} from "./components/sorting/sorting";
+import {createFilms} from "./components/films/films";
+import {createFilmDetails} from "./components/films/film-details";
+import {createStatistic} from "./components/statistic/stats";
+
 
 const Nodes = {
   BODY: document.querySelector(`body`),
@@ -12,6 +13,7 @@ const Nodes = {
   MAIN: document.querySelector(`.main`),
   FOOTER_STATS: document.querySelector(`.footer__statistics`)
 };
+
 
 /**
  * Отрисовка компонентов на странице

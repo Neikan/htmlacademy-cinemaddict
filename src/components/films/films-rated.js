@@ -1,4 +1,4 @@
-import {Count} from "./consts";
+import {Count} from "../../consts";
 import {createFilmCards} from "./films-generation";
 
 /**
