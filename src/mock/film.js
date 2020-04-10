@@ -9,14 +9,15 @@ import {generateComments} from './comment.js';
  * @return {Object} созданный фильм
  */
 export const generateFilm = () => {
+  const titles = getRandomElement(Titles);
   const commentsCount = getRandomInt(Count.COMMENTS_MAX);
   const randomDate = getRandomDate(new Date());
   const releaseDate = getReleaseDate(randomDate);
 
   return {
     poster: getRandomElement(Posters),
-    title: getRandomElement(Titles),
-    titleOrigin: getRandomElement(Titles),
+    title: titles.translate,
+    titleOrigin: titles.original,
     rating: getRandomRating(),
     director: getRandomElement(Directors),
     screenwriters: getRandomSubArray(Screenwriters),

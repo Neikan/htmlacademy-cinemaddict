@@ -72,22 +72,67 @@ export const AgeRatings = [
 
 
 export const Titles = [
-  `Бэтмен`,
-  `Бэтмен возвращается`,
-  `Бэтмен навсегда`,
-  `Бэтмен и Робин`,
-  `Бэтмен: Начало`,
-  `Темный рыцарь`,
-  `Темный рыцарь: Возрождение легенды`,
-  `Бэтмен против Супермена: На заре справедливости`,
-  `Отряд самоубийц`,
-  `Лига справедливости`,
-  `Джокер`,
-  `Бэтмен-ниндзя`,
-  `Бэтмен: Мультсериалы`,
-  `Безграничный Бэтмен`,
-  `Бэтмен: Лего версии`,
-  `Готэм`
+  {
+    translate: `Бэтмен`,
+    original: `Batman`
+  },
+  {
+    translate: `Бэтмен возвращается`,
+    original: `Batman Returns`
+  },
+  {
+    translate: `Бэтмен навсегда`,
+    original: `Batman Forever`
+  },
+  {
+    translate: `Бэтмен и Робин`,
+    original: `Batman & Robin`
+  },
+  {
+    translate: `Бэтмен: Начало`,
+    original: `Batman Begins`
+  },
+  {
+    translate: `Темный рыцарь`,
+    original: `The Dark Knight`
+  },
+  {
+    translate: `Темный рыцарь: Возрождение легенды`,
+    original: `The Dark Knight Rises`
+  },
+  {
+    translate: `Бэтмен-ниндзя`,
+    original: `Batman Ninja`
+  },
+  {
+    translate: `Бэтмен против Супермена: На заре справедливости`,
+    original: `Batman v Superman: Dawn of Justice`
+  },
+
+  {
+    translate: `Отряд самоубийц`,
+    original: `Suicide Squad`
+  },
+  {
+    translate: `Лига справедливости`,
+    original: ``
+  },
+  {
+    translate: `Джокер`,
+    original: `Joker`
+  },
+  {
+    translate: `Безграничный Бэтмен`,
+    original: `Batman Unlimited`
+  },
+  {
+    translate: `Лего Фильм: Бэтмен`,
+    original: `The Lego Batman Movie`
+  },
+  {
+    translate: `Готэм`,
+    original: `Gotham`
+  }
 ];
 
 

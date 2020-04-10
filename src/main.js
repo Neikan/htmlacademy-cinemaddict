@@ -22,7 +22,7 @@ let showingFilmsCount = Count.FILMS_ON_START;
 
 const showMoreClickHandler = () => {
   const filmsContainer = document.querySelector(`.films .films-list__container`);
-  const prevTasksCount = Count.FILMS_ON_START;
+  const prevTasksCount = showingFilmsCount;
   showingFilmsCount += Count.FILMS_BY_BUTTON;
 
   films.slice(prevTasksCount, showingFilmsCount)
@@ -33,6 +33,7 @@ const showMoreClickHandler = () => {
   }
 };
 
+console.log(films);
 
 /**
  * Отрисовка компонентов на странице

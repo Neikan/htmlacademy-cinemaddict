@@ -1,11 +1,10 @@
-
 /**
  * Создание шаблона подробной карточки о фильме
  * @return {string} подробная карточка о фильме
  */
 export const createFilmDetails = () => {
   return (`
-    <section class="film-details visually-hidden">
+    <section class="film-details">
       <form class="film-details__inner" action="" method="get">
         <div class="form-details__top-container">
           <div class="film-details__close">

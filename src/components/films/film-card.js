@@ -32,7 +32,7 @@ export const createFilmCard = (film) => {
       <a class="film-card__comments">${commentsCount} comments</a>
       <form class="film-card__controls">
         <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist${ClassesMarkup.addToWatch}">Add to watchlist</button>
-        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched${ClassesMarkup.markAsFavourite}">Mark as watched</button>
+        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched${ClassesMarkup.markAsWatched}">Mark as watched</button>
         <button class="film-card__controls-item button film-card__controls-item--favorite${ClassesMarkup.markAsFavourite}">Mark as favorite</button>
       </form>
     </article>
