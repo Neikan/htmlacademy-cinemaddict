@@ -1,5 +1,8 @@
+import {Count} from "../../consts";
+import {castNumberFormat} from "../../utils";
+
 /**
  * Создание шаблона информации о статистике
  * @return {string} информация
  */
-export const createStatistic = () => `<p>130 291 movies inside</p>`;
+export const createStatistic = () => `<p>${castNumberFormat(Count.FILMS)} movies inside</p>`;

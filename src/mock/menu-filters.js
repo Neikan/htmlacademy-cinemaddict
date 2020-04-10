@@ -1,5 +1,9 @@
 import {Count, MenuItems} from "../consts";
 
+/**
+ * Создание количества фильмов для фильтров меню
+ * @return {Array}
+ */
 export const generateMenu = () => {
   return MenuItems.map((item) => ({
     name: item.name,

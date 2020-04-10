@@ -1,14 +1,15 @@
 import {createFilmCard} from "./film-card";
 
+
 /**
- * Создание нескольких карточек фильмов по одному щаблону
- * @param {number} count количество итераций
- * @return {string} результирующая строка
+ * Создание разметки нескольких карточек фильмов
+ * @param {Array} films список фильмов
+ * @return {string} разметка нескольких карточек
  */
-export const createFilmCards = (count) => {
+export const createFilmCards = (films) => {
   let result = ``;
-  for (let i = 0; i < count; i++) {
-    result += createFilmCard();
-  }
+  films.forEach((it) => {
+    result += createFilmCard(it);
+  });
   return result;
 };

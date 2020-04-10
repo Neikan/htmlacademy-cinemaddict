@@ -37,7 +37,7 @@ export const getRandomElement = (array) => {
  * Получание случайного логического значения
  * @return {boolean} полученное логическое значение
  */
-// const getRandomBoolean = () => Math.random() > 0.5;
+export const getRandomBoolean = () => Math.random() > 0.5;
 
 
 /**
@@ -115,9 +115,18 @@ export const getReleaseDate = (date) => {
  * @return {string}
  */
 const castTimeFormat = (value) => {
-  return value < 10 ? `0${value}` : String(value);
+  return value < Count.CHECK_FORMAT_TIME ? `0${value}` : String(value);
 };
 
+/**
+ * Приведение формата часов и минут к формату: 2 часа 3 минуты -> 02:03
+ * @param {string} value
+ * @return {string}
+ */
+export const castNumberFormat = (value) => {
+  return value > Count.CHECK_FORMAT_NUMBER ?
+    `${Math.trunc(value / Count.CHECK_FORMAT_NUMBER)}  ${value % Count.CHECK_FORMAT_NUMBER}` : String(value);
+};
 
 /**
  * Получение случайной даты в формате "год/месяц/день часы:минуты"
@@ -154,10 +163,11 @@ export const getRandomDuration = () => {
  */
 export const getRandomDescription = () => {
   let description = [];
+  const shuffleArr = getShuffleArray(Descriptions);
   const lengthDesc = getRandomInt(Count.DESCRIPTION_LENGTH_MAX, Count.DESCRIPTION_LENGTH_MIM);
 
   for (let i = 0; i < lengthDesc; i++) {
-    description[i] = Descriptions[i];
+    description[i] = shuffleArr[i];
   }
   description = description.join(` `);
 

@@ -1,5 +1,6 @@
 import {Posters, Titles, Directors, Screenwriters, Actors, Countries, AgeRatings, Genres, Count} from '../consts.js';
-import {getRandomElement, getRandomSubArray, getRandomInt, getRandomRating, getRandomDate, getReleaseDate, getRandomDuration, getRandomDescription} from '../utils.js';
+import {getRandomElement, getRandomSubArray, getRandomInt, getRandomRating, getRandomDate} from '../utils.js';
+import {getReleaseDate, getRandomDuration, getRandomDescription, getRandomBoolean} from '../utils.js';
 import {generateComments} from './comment.js';
 
 
@@ -29,5 +30,20 @@ export const generateFilm = () => {
     comments: generateComments(commentsCount),
     description: getRandomDescription(),
     age: getRandomElement(AgeRatings),
+    isWatch: getRandomBoolean(),
+    isWatched: getRandomBoolean(),
+    isFavorite: getRandomBoolean()
   };
+};
+
+
+/**
+ * Генерация заданного количества фильмов
+ * @param {Number} count количество фильмов
+ * @return {Array} массив сгенерированных фильмов
+ */
+export const generateFilms = (count) => {
+  return new Array(count)
+    .fill(``)
+    .map(generateFilm);
 };
