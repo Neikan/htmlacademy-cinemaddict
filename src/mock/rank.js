@@ -1,20 +1,26 @@
-import {ProfileRank} from '../consts.js';
-import {getRandomInt} from '../utils.js';
+import {ProfileRank, Filter} from '../consts.js';
+import {filterCountMenu} from './menu-filters.js';
 
-export const getRandomProfileRank = () => {
-  const randomRank = getRandomInt(ProfileRank.moviebuff.range.to);
+
+/**
+ * Получение ранга профиля пользователя
+ * @param {Array} films список фильмов
+ * @return {string} ранг профиля пользователя
+ */
+export const getProfileRank = (films) => {
+  const rank = filterCountMenu(films, Filter.IS_WATCHED);
 
   switch (true) {
-    case (randomRank >= ProfileRank.novice.range.from && randomRank < ProfileRank.novice.range.to):
+    case (rank >= ProfileRank.novice.range.from && rank <= ProfileRank.novice.range.to):
       return ProfileRank.novice.rank;
 
-    case (randomRank >= ProfileRank.fun.range.from && randomRank < ProfileRank.fun.range.to):
+    case (rank >= ProfileRank.fun.range.from && rank <= ProfileRank.fun.range.to):
       return ProfileRank.fun.rank;
 
-    case (randomRank >= ProfileRank.moviebuff.range.from && randomRank < ProfileRank.moviebuff.range.to):
+    case (rank >= ProfileRank.moviebuff.range.from && rank <= ProfileRank.moviebuff.range.to):
       return ProfileRank.moviebuff.rank;
 
     default:
-      return (`1`);
+      return (``);
   }
 };

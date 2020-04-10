@@ -1,10 +1,13 @@
 /**
- * Создание шаблона подробной карточки о фильме
- * @return {string} подробная карточка о фильме
+ * Создание разметки подробной карточки о фильме
+ * @param {Object} film фильм
+ * @return {string} разметка подробной карточки о фильме
  */
-export const createFilmDetails = () => {
+export const createFilmDetails = (film) => {
+  const {} = film;
+
   return (`
-    <section class="film-details">
+    <section class="film-details visually-hidden">
       <form class="film-details__inner" action="" method="get">
         <div class="form-details__top-container">
           <div class="film-details__close">

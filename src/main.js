@@ -33,18 +33,17 @@ const showMoreClickHandler = () => {
   }
 };
 
-console.log(films);
 
 /**
  * Отрисовка компонентов на странице
  */
 const init = () => {
-  render(Nodes.HEADER, createProfileRank());
+  render(Nodes.HEADER, createProfileRank(films));
   render(Nodes.MAIN, createMenu(films));
   render(Nodes.MAIN, createSorting());
   render(Nodes.MAIN, createFilms(films));
   render(Nodes.FOOTER_STATS, createStatistic());
-  render(Nodes.BODY, createFilmDetails());
+  render(Nodes.BODY, createFilmDetails(films[0]));
 
   document.querySelector(`.films-list__show-more`).addEventListener(`click`, showMoreClickHandler);
 };

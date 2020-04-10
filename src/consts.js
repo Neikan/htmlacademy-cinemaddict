@@ -251,8 +251,8 @@ export const ProfileRank = {
   fun: {
     rank: `Fan`,
     range: {
-      from: 1,
-      to: 10
+      from: 11,
+      to: 20
     },
   },
 
