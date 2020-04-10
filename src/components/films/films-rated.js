@@ -1,6 +1,7 @@
 import {Count} from "../../consts";
 import {createFilmCards} from "./films-generation";
 
+
 /**
  * Создание шаблона списка высокорейтинговых фильмов
  * @param {Array} films список фильмов

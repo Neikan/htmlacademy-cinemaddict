@@ -1,8 +1,10 @@
-import {Count} from "../../consts";
+import {Count, Sorting} from "../../consts";
 import {createFilmCards} from "./films-generation";
 import {createFilmsRated} from "./films-rated";
 import {createFilmsCommented} from "./films-commented";
 import {createShowMore} from "../button-show-more/button-show-more";
+import {sortingArray} from "../../utils";
+
 
 /**
  * Создание разметки списка фильмов
@@ -19,8 +21,8 @@ export const createFilms = (films) => {
         </div>
         ${createShowMore()}
       </section>
-      ${createFilmsRated(films)}
-      ${createFilmsCommented(films)}
+      ${createFilmsRated(sortingArray(films, Sorting.TOP_RATING))}
+      ${createFilmsCommented(sortingArray(films, Sorting.MOST_COMMENTED))}
     </section>
   `);
 };

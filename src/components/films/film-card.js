@@ -4,7 +4,7 @@
  * @return {string} стандартная карточка фильма
  */
 export const createFilmCard = (film) => {
-  const {poster, title, rating, year, duration,
+  const {poster, title, rating, year, duration, genres,
     commentsCount, description, isWatch, isWatched, isFavorite} = film;
 
   const ActiveClass = {
@@ -25,7 +25,7 @@ export const createFilmCard = (film) => {
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
         <span class="film-card__duration">${duration}</span>
-        <span class="film-card__genre">Drama</span>
+        <span class="film-card__genre">${genres}</span>
       </p>
       <img src="./images/posters/${poster}" alt="" class="film-card__poster">
       <p class="film-card__description">${description}</p>

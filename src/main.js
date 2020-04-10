@@ -33,12 +33,13 @@ const showMoreClickHandler = () => {
   }
 };
 
+
 /**
  * Отрисовка компонентов на странице
  */
 const init = () => {
   render(Nodes.HEADER, createProfileRank());
-  render(Nodes.MAIN, createMenu());
+  render(Nodes.MAIN, createMenu(films));
   render(Nodes.MAIN, createSorting());
   render(Nodes.MAIN, createFilms(films));
   render(Nodes.FOOTER_STATS, createStatistic());

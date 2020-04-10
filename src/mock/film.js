@@ -25,7 +25,7 @@ export const generateFilm = () => {
     year: randomDate.getFullYear(),
     duration: getRandomDuration(),
     country: getRandomElement(Countries),
-    genres: getRandomSubArray(Genres),
+    genres: getRandomSubArray(Genres).join(`, `),
     commentsCount,
     comments: generateComments(commentsCount),
     description: getRandomDescription(),

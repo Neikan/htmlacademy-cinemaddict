@@ -1,14 +1,9 @@
-import {Count, MenuItems} from "../consts";
-
 /**
- * Создание количества фильмов для фильтров меню
- * @return {Array}
+ *
+ * @param {Array} films
+ * @param {string} param
+ * @return {Number}
  */
-export const generateMenu = () => {
-  return MenuItems.map((item) => ({
-    name: item.name,
-    link: item.link,
-    isActive: item.isActive,
-    count: Math.floor(Math.random() * Count.FILMS),
-  }));
+export const filterCountMenu = (films, param) => {
+  return films.filter((film) => film[param] === true).length;
 };

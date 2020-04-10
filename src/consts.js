@@ -21,7 +21,7 @@ export const Count = {
   FILMS_BY_BUTTON: 5,
   FILMS_EXTRA: 2,
   RAITING_MAX: 10,
-  COMMENTS_MAX: 5,
+  COMMENTS_MAX: 50,
   DURATION_HOURS_MAX: 3,
   DURATION_MINUTES_MAX: 59,
   DESCRIPTION_LENGTH_MAX: 5,
@@ -38,29 +38,16 @@ export const Position = {
 };
 
 
-export const MenuItems = [
-  {
-    name: `All movies`,
-    link: `#all`,
-    isActive: true
-  },
-  {
-    name: `Watchlist`,
-    link: `#watchlist`,
-    isActive: false
-  },
-  {
-    name: `History`,
-    link: `#history`,
-    isActive: false
-  },
-  {
-    name: `Favorites`,
-    link: `#favorites`,
-    isActive: false
-  }
-];
+export const Filter = {
+  IS_WATCH: `isWatch`,
+  IS_WATCHED: `isWatched`,
+  IS_FAVORITE: `isFavorite`
+};
 
+export const Sorting = {
+  TOP_RATING: `rating`,
+  MOST_COMMENTED: `commentsCount`
+};
 
 export const Countries = [
   `France`,

@@ -119,7 +119,7 @@ const castTimeFormat = (value) => {
 };
 
 /**
- * Приведение формата часов и минут к формату: 2 часа 3 минуты -> 02:03
+ * Приведение формата 4х-6ти-значного числа и к формату "123 456"
  * @param {string} value
  * @return {string}
  */
@@ -172,4 +172,24 @@ export const getRandomDescription = () => {
   description = description.join(` `);
 
   return description;
+};
+
+
+/**
+ * Сортировка массива объектов по параметру
+ * @param {Array} array массив для сортировки
+ * @param {string} param параметр сортировки
+ * @return {Array} отсортированный массив
+ */
+export const sortingArray = (array, param) => {
+  const result = array.slice();
+
+  result.sort((a, b) => {
+    return b[param] - a[param];
+  });
+  if (result[0][param] === 0) {
+    return ``;
+  }
+
+  return result;
 };
