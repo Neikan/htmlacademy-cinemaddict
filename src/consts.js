@@ -14,24 +14,31 @@ export const MONTH_NAMES = [
 ];
 
 
-export const Count = {
-  ZERO: 0,
-  ONE: 1,
-  FILMS: 20,
-  FILMS_ON_START: 5,
-  FILMS_BY_BUTTON: 5,
-  FILMS_EXTRA: 2,
-  RAITING_MAX: 10,
-  COMMENTS_MAX: 5,
-  DURATION_HOURS_MAX: 3,
-  DURATION_MINUTES_MAX: 59,
-  DESCRIPTION_LENGTH_MAX: 5,
-  DESCRIPTION_LENGTH_MIM: 1,
-  CHECK_FORMAT_TIME: 10,
-  CHECK_FORMAT_NUMBER: 1000,
-  STATS_ALL_FILMS: 1000000
+export const CountFilm = {
+  ALL: 20,
+  START: 5,
+  BY_BUTTON: 5,
+  EXTRA: 2,
 };
 
+export const CountDescription = {
+  MIM: 1,
+  MAX: 5
+};
+
+export const RAITING_MAX = 10;
+export const COUNT_COMMENTS_MAX = 5;
+export const STATS_ALL_FILMS = 1000000;
+
+export const CountDuration = {
+  HOURS_MAX: 3,
+  MINUTES_MIN: 59,
+};
+
+export const CountCheckFormat = {
+  TIME: 10,
+  NUMBER: 1000,
+};
 
 export const Position = {
   BEFORE_END: `beforeend`,
@@ -50,7 +57,7 @@ export const Sorting = {
   MOST_COMMENTED: `commentsCount`
 };
 
-export const Countries = [
+export const COUNTRIES = [
   `France`,
   `Germany`,
   `India`,
@@ -63,7 +70,7 @@ export const Countries = [
 ];
 
 
-export const AgeRatings = [
+export const AGE_RATINGS = [
   `0+`,
   `6+`,
   `12+`,
@@ -72,7 +79,7 @@ export const AgeRatings = [
 ];
 
 
-export const Titles = [
+export const TITLES = [
   {
     translate: `Бэтмен`,
     original: `Batman`
@@ -137,7 +144,7 @@ export const Titles = [
 ];
 
 
-export const Posters = [
+export const POSTERS = [
   `made-for-each-other.png`,
   `popeye-meets-sinbad.png`,
   `sagebrush-trail.jpg`,
@@ -148,7 +155,7 @@ export const Posters = [
 ];
 
 
-export const Descriptions = [
+export const DESCRIPTION = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
   `Cras aliquet varius magna, non porta ligula feugiat eget.`,
   `Fusce tristique felis at fermentum pharetra.`,
@@ -161,7 +168,7 @@ export const Descriptions = [
   `In rutrum ac purus sit amet tempus.`
 ];
 
-export const Genres = [
+export const GENRES = [
   `Aниме`,
   `Биография`,
   `Боевик`,
@@ -194,7 +201,7 @@ export const Genres = [
   `Эротика`
 ];
 
-export const Directors = [
+export const DIRECTORS = [
   `Тим Бертон`,
   `Джоэл Шумахер`,
   `Кристофер Нолан`,
@@ -204,7 +211,7 @@ export const Directors = [
   `Дзюнпэй Мидзусаки`
 ];
 
-export const Screenwriters = [
+export const SCREEN_WRITERS = [
   `Акива Голдсман`,
   `Боб Кейн`,
   `Кристофер Нолан`,
@@ -217,7 +224,7 @@ export const Screenwriters = [
   `Сэм Хэмм`,
 ];
 
-export const Actors = [
+export const ACTORS = [
   `Майкл Китон`,
   `Джек Николсон`,
   `Ким Бейсингер`,
@@ -267,7 +274,7 @@ export const ProfileRank = {
 };
 
 
-export const CommentAutors = [
+export const COMMENT_AUTHORS = [
   `Neikan`,
   `Mictlantechuhtli`,
   `Эрнанда`,
@@ -277,7 +284,7 @@ export const CommentAutors = [
   `Azatot`
 ];
 
-export const CommentTexts = [
+export const COMMENT_TEXTS = [
   `Начну с главного — это великолепно! Настолько, что я даже решился написать отзыв, как умею.`,
   `Возникает вопрос: а на кого рассчитан этот фильм? Его нельзя показывать из-за наличия жестокости. Откровенно глупо и безсмысленно: эротики нет, романтических нет, глубокий смысл, экшен и драматизм отсутствуют!`,
   `Когда я увидел анонс картины, я очень заинтересовался и решил обязательно посмотреть! Это круто! 100 из 10!`,
@@ -287,23 +294,9 @@ export const CommentTexts = [
   `Увидев трейлер в сети этой картины, сразу занес в список ожиданий, так был удивлен! И вот недавно вышел в сеть это фильм, но впечатления от просмотра получил двоякие слишком(`
 ];
 
-export const CommentEmojies = [
+export const COMMENT_EMOJIES = [
   `smile`,
   `sleeping`,
   `puke`,
   `angry`
 ];
-
-export const Dates = {
-  def: {
-    year: 1970,
-    month: 1,
-    day: 1
-  },
-
-  comment: {
-    year: 2020,
-    month: 1,
-    day: 1
-  },
-};

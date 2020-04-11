@@ -1,4 +1,4 @@
-import {Count, Sorting} from "../consts";
+import {Sorting, CountFilm} from "../consts";
 import {createFilmCards} from "./films/films-creation";
 import {createFilmsRated} from "./films-rated";
 import {createFilmsCommented} from "./films-commented";
@@ -16,7 +16,7 @@ const createFilms = (films) => {
       <section class="films-list">
         <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
         <div class="films-list__container">
-          ${createFilmCards(films.slice(Count.ZERO, Count.FILMS_ON_START))}
+          ${createFilmCards(films.slice(0, CountFilm.START))}
         </div>
         ${createShowMore()}
       </section>

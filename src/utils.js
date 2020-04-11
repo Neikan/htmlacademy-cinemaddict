@@ -1,4 +1,4 @@
-import {Position, Count, MONTH_NAMES, Dates, Descriptions} from "./consts";
+import {Position, MONTH_NAMES, DESCRIPTION, RAITING_MAX, CountDuration, CountCheckFormat, CountDescription} from "./consts";
 
 /**
  * Отрисовка элемента страницы ("компонента")
@@ -16,7 +16,7 @@ export const render = (container, template, position = Position.BEFORE_END) =>
  * @param {Number} min меньшее число
  * @return {Number} полученное случайное число
  */
-export const getRandomInt = (max, min = Count.ZERO) => {
+export const getRandomInt = (max, min = 0) => {
   return min + Math.floor(Math.random() * (max - min));
 };
 
@@ -59,7 +59,7 @@ const getShuffleArray = function (array) {
 export const getRandomSubArray = (array) => {
   const shuffleArray = getShuffleArray(array);
   const subArray = [];
-  const lengthSubArray = getRandomInt(shuffleArray.length, Count.ONE);
+  const lengthSubArray = getRandomInt(shuffleArray.length, 1);
 
   for (let i = 0; i < lengthSubArray; i++) {
     subArray.push(shuffleArray[i]);
@@ -73,7 +73,7 @@ export const getRandomSubArray = (array) => {
  * @return {Number} значение рейтинга
  */
 export const getRandomRating = () => {
-  return Math.fround(Math.random() * Count.RAITING_MAX).toFixed(1);
+  return Math.fround(Math.random() * RAITING_MAX).toFixed(1);
 };
 
 /**
@@ -82,7 +82,7 @@ export const getRandomRating = () => {
  * @param {Date} minDate
  * @return {Date} полученная дата
  */
-export const getRandomDate = (maxDate, minDate = new Date(Dates.def.year, Dates.def.month, Dates.def.day)) => {
+export const getRandomDate = (maxDate, minDate = new Date(1970, 1, 1)) => {
   return new Date(minDate.getTime() + Math.random() * (maxDate.getTime() - minDate.getTime()));
 };
 
@@ -105,7 +105,7 @@ export const getReleaseDate = (date) => {
  * @return {string}
  */
 const castTimeFormat = (value) => {
-  return value < Count.CHECK_FORMAT_TIME ? `0${value}` : String(value);
+  return value < CountCheckFormat.TIME ? `0${value}` : String(value);
 };
 
 /**
@@ -114,8 +114,8 @@ const castTimeFormat = (value) => {
  * @return {string}
  */
 export const castNumberFormat = (value) => {
-  return value > Count.CHECK_FORMAT_NUMBER ?
-    `${Math.trunc(value / Count.CHECK_FORMAT_NUMBER)}  ${value % Count.CHECK_FORMAT_NUMBER}` : String(value);
+  return value > CountCheckFormat.NUMBER ?
+    `${Math.trunc(value / CountCheckFormat.NUMBER)}  ${value % CountCheckFormat.NUMBER}` : String(value);
 };
 
 /**
@@ -138,8 +138,8 @@ export const getCommentDate = (date) => {
  * @return {string} длительность фильма
  */
 export const getRandomDuration = () => {
-  const hours = getRandomInt(0, Count.DURATION_HOURS_MAX);
-  const minutes = getRandomInt(0, Count.DURATION_MINUTES_MAX);
+  const hours = getRandomInt(0, CountDuration.HOURS_MAX);
+  const minutes = getRandomInt(0, CountDuration.MINUTES_MAX);
   const duration = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
 
   return duration;
@@ -151,8 +151,8 @@ export const getRandomDuration = () => {
  */
 export const getRandomDescription = () => {
   let description = [];
-  const shuffleArr = getShuffleArray(Descriptions);
-  const lengthDesc = getRandomInt(Count.DESCRIPTION_LENGTH_MAX, Count.DESCRIPTION_LENGTH_MIM);
+  const shuffleArr = getShuffleArray(DESCRIPTION);
+  const lengthDesc = getRandomInt(CountDescription.MAX, CountDescription.MIM);
 
   for (let i = 0; i < lengthDesc; i++) {
     description[i] = shuffleArr[i];

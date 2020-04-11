@@ -1,4 +1,4 @@
-import {Count} from "./consts";
+import {CountFilm} from "./consts";
 import {render} from "./utils";
 import {createProfileRank} from "./components/profile-rank";
 import {createMenu} from "./components/menu";
@@ -16,13 +16,13 @@ const Nodes = {
   FOOTER_STATS: document.querySelector(`.footer__statistics`)
 };
 
-const films = generateFilms(Count.FILMS);
-let showingFilmsCount = Count.FILMS_ON_START;
+const films = generateFilms(CountFilm.ALL);
+let showingFilmsCount = CountFilm.START;
 
 const showMoreClickHandler = () => {
   const filmsContainer = document.querySelector(`.films .films-list__container`);
   const prevTasksCount = showingFilmsCount;
-  showingFilmsCount += Count.FILMS_BY_BUTTON;
+  showingFilmsCount += CountFilm.BY_BUTTON;
 
   films.slice(prevTasksCount, showingFilmsCount)
     .forEach((film) => render(filmsContainer, createFilmCard(film)));
@@ -34,7 +34,7 @@ const showMoreClickHandler = () => {
 
 const btnCloseDetailsClickHandler = () => {
   if (document.querySelector(`.film-details__close-btn`)) {
-    document.querySelector(`.film-details`).classList.add(`visually-hidden`);
+    document.querySelector(`.film-details`).remove();
   }
 };
 

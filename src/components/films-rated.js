@@ -1,4 +1,4 @@
-import {Count} from "../consts";
+import {CountFilm} from "../consts";
 import {createFilmCards} from "./films/films-creation";
 
 /**
@@ -11,7 +11,7 @@ const createFilmsRated = (films) => {
     <section class="films-list--extra">
       <h2 class="films-list__title">Top rated</h2>
       <div class="films-list__container">
-        ${createFilmCards(films.slice(Count.ZERO, Count.FILMS_EXTRA))}
+        ${createFilmCards(films.slice(0, CountFilm.EXTRA))}
       </div>
     </section>
   `);

@@ -1,4 +1,14 @@
-import {Posters, Titles, Directors, Screenwriters, Actors, Countries, AgeRatings, Genres, Count} from '../consts.js';
+import {
+  TITLES,
+  POSTERS,
+  DIRECTORS,
+  SCREEN_WRITERS,
+  ACTORS,
+  COUNTRIES,
+  GENRES,
+  AGE_RATINGS,
+  COUNT_COMMENTS_MAX
+} from '../consts.js';
 import {getRandomElement, getRandomSubArray, getRandomInt, getRandomRating, getRandomDate} from '../utils.js';
 import {getReleaseDate, getRandomDuration, getRandomDescription, getRandomBoolean} from '../utils.js';
 import {generateComments} from './comment.js';
@@ -8,28 +18,28 @@ import {generateComments} from './comment.js';
  * @return {Object} созданный фильм
  */
 const generateFilm = () => {
-  const titles = getRandomElement(Titles);
-  const commentsCount = getRandomInt(Count.COMMENTS_MAX);
+  const titles = getRandomElement(TITLES);
+  const commentsCount = getRandomInt(COUNT_COMMENTS_MAX);
   const randomDate = getRandomDate(new Date());
   const releaseDate = getReleaseDate(randomDate);
 
   return {
-    poster: getRandomElement(Posters),
+    poster: getRandomElement(POSTERS),
     title: titles.translate,
     titleOrigin: titles.original,
     rating: getRandomRating(),
-    director: getRandomElement(Directors),
-    screenwriters: getRandomSubArray(Screenwriters).join(`, `),
-    actors: getRandomSubArray(Actors).join(`, `),
+    director: getRandomElement(DIRECTORS),
+    screenwriters: getRandomSubArray(SCREEN_WRITERS).join(`, `),
+    actors: getRandomSubArray(ACTORS).join(`, `),
     releaseDate,
     year: randomDate.getFullYear(),
     duration: getRandomDuration(),
-    country: getRandomElement(Countries),
-    genres: getRandomSubArray(Genres),
+    country: getRandomElement(COUNTRIES),
+    genres: getRandomSubArray(GENRES),
     commentsCount,
     comments: generateComments(commentsCount),
     description: getRandomDescription(),
-    age: getRandomElement(AgeRatings),
+    age: getRandomElement(AGE_RATINGS),
     isWatch: getRandomBoolean(),
     isWatched: getRandomBoolean(),
     isFavorite: getRandomBoolean()
