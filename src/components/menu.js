@@ -1,5 +1,5 @@
-import {Filter} from "../../consts";
-import {filterCountMenu} from "../../mock/menu-filters";
+import {Filter} from "../consts";
+import {filterCountMenu} from "../mock/menu-filters";
 
 /**
  * Создание разметки главного меню

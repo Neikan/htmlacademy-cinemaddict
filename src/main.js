@@ -1,14 +1,13 @@
-import {render} from "./utils";
-import {createProfileRank} from "./components/profile/profile-rank";
-import {createMenu} from "./components/menu/menu";
-import {createSorting} from "./components/sorting/sorting";
-import {createFilms} from "./components/films/films";
-import {createFilmDetails} from "./components/films/components/film-details/film-details";
-import {createStatistic} from "./components/statistic/stats";
 import {Count} from "./consts";
+import {render} from "./utils";
+import {createProfileRank} from "./components/profile-rank";
+import {createMenu} from "./components/menu";
+import {createSorting} from "./components/sorting";
+import {createFilms} from "./components/films";
+import {createStatistic} from "./components/stats";
+import {createFilmCards} from "./components/films/films-creation";
+import {createFilmDetails} from "./components/films/film-details";
 import {generateFilms} from "./mock/film";
-import {createFilmCards} from "./components/films/components/common/films-creation";
-
 
 const Nodes = {
   BODY: document.querySelector(`body`),
@@ -32,7 +31,6 @@ const showMoreClickHandler = () => {
     document.querySelector(`.films-list__show-more`).remove();
   }
 };
-
 
 /**
  * Отрисовка компонентов на странице

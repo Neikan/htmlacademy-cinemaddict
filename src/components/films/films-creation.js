@@ -1,4 +1,4 @@
-import {createFilmCard} from "../film-card/film-card";
+import {createFilmCard} from "./film-card";
 
 /**
  * Создание разметки нескольких карточек фильмов

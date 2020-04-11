@@ -1,4 +1,4 @@
-import {createGenresBlock} from "./components/genres";
+import {createGenresBlock} from "./genres";
 
 /**
  * Создание разметки блока подробной информации о фильме

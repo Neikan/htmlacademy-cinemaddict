@@ -1,5 +1,5 @@
-import {Count} from "../../consts";
-import {createFilmCards} from "./components/common/films-creation";
+import {Count} from "../consts";
+import {createFilmCards} from "./films/films-creation";
 
 /**
  * Создание шаблона списка высокорейтинговых фильмов

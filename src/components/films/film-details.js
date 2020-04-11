@@ -1,6 +1,6 @@
-import {createDetailsInfo} from "./details-info/details-info";
-import {createControls} from "./constrols/controls";
-import {createCommentBlock} from "./comments/comments";
+import {createDetailsInfo} from "./film-details/details-info";
+import {createControls} from "./film-details/controls";
+import {createCommentBlock} from "./film-details/comments";
 
 /**
  * Создание разметки подробной карточки фильма

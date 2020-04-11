@@ -1,4 +1,4 @@
-import {getProfileRank} from "../../mock/rank";
+import {getProfileRank} from "../mock/rank";
 
 /**
  * Создание разметки блока ранга профиля пользователя
