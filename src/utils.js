@@ -25,9 +25,7 @@ export const getRandomInt = (max, min = 0) => {
  * @param {Array} array массив для получения элемента
  * @return {*} случайный элемент массива
  */
-export const getRandomElement = (array) => {
-  return array[getRandomInt(array.length)];
-};
+export const getRandomElement = (array) => array[getRandomInt(array.length)];
 
 /**
  * Получание случайного логического значения
@@ -72,9 +70,7 @@ export const getRandomSubArray = (array) => {
  * Получение случайного значения рейтинга фильма
  * @return {Number} значение рейтинга
  */
-export const getRandomRating = () => {
-  return Math.fround(Math.random() * RAITING_MAX).toFixed(1);
-};
+export const getRandomRating = () => Math.fround(Math.random() * RAITING_MAX).toFixed(1);
 
 /**
  * Получение случайной даты
@@ -104,12 +100,10 @@ export const getReleaseDate = (date) => {
  * @param {string} value
  * @return {string}
  */
-const castTimeFormat = (value) => {
-  return value < CountCheckFormat.TIME ? `0${value}` : String(value);
-};
+const castTimeFormat = (value) => (value < CountCheckFormat.TIME ? `0${value}` : String(value));
 
 /**
- * Приведение формата 4х-6ти-значного числа и к формату "123 456"
+ * Приведение формата 4х-6ти-значного числа к формату "123 456"
  * @param {string} value
  * @return {string}
  */
@@ -165,18 +159,14 @@ export const getRandomDescription = () => {
 /**
  * Сортировка массива объектов по параметру
  * @param {Array} array массив для сортировки
- * @param {string} param параметр сортировки
- * @return {Array} отсортированный массив
+ * @param {Object} {параметры сортировки}
+ * @param {Number} count количество отстортированных элементов
+ * @return {Array} отсортированный массив заданной длины
  */
-export const sortingArray = (array, param) => {
-  const result = array.slice();
+export const sortingArray = (array, {type, parameter}, count) =>
+  [...array].sort(choiceType[type](parameter)).slice(0, count);
 
-  result.sort((a, b) => {
-    return b[param] - a[param];
-  });
-  if (result[0][param] === 0) {
-    return ``;
-  }
-
-  return result;
+const choiceType = {
+  'forNumber': (parameter) => ((a, b) => (b[parameter] - a[parameter])),
+  'forArray': (parameter) => ((a, b) => (b[parameter].length - a[parameter].length))
 };

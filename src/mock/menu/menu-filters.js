@@ -11,10 +11,6 @@ const filterCountMenu = (films, param) => films.reduce(getCount(param), 0);
  * @param {string} param параметр проверки
  * @return {Number} значение счетчика
  */
-const getCount = (param) => {
-  return (count, film) => {
-    return (film[param] ? ++count : count);
-  };
-};
+const getCount = (param) => (count, film) => (film[param] ? ++count : count);
 
 export {filterCountMenu};

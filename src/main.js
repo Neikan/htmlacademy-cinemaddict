@@ -1,4 +1,4 @@
-import {CountFilm} from "./consts";
+import {CountFilm, KeyCode} from "./consts";
 import {render} from "./utils";
 import {createProfileRank} from "./components/profile-rank";
 import {createMenu} from "./components/menu";
@@ -6,7 +6,7 @@ import {createSorting} from "./components/sorting";
 import {createFilms} from "./components/films";
 import {createStatistic} from "./components/stats";
 import {createFilmDetails} from "./components/films/film-details";
-import {generateFilms} from "./mock/film";
+import {generateFilms} from "./mock/films/film";
 import {createFilmCard} from "./components/films/film-card";
 
 const Nodes = {
@@ -33,7 +33,11 @@ const showMoreClickHandler = () => {
 };
 
 const btnCloseDetailsClickHandler = () => {
-  if (document.querySelector(`.film-details__close-btn`)) {
+  document.querySelector(`.film-details`).remove();
+};
+
+const btnCloseDetailsKeyDownHandler = function (evt) {
+  if (evt.keyCode === KeyCode.ESC) {
     document.querySelector(`.film-details`).remove();
   }
 };
@@ -51,6 +55,7 @@ const init = () => {
 
   document.querySelector(`.films-list__show-more`).addEventListener(`click`, showMoreClickHandler);
   document.querySelector(`.film-details__close-btn`).addEventListener(`click`, btnCloseDetailsClickHandler);
+  document.addEventListener(`keydown`, btnCloseDetailsKeyDownHandler);
 };
 
 init();

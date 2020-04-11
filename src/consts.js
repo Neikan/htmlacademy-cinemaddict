@@ -1,3 +1,11 @@
+export const RAITING_MAX = 10;
+export const COUNT_COMMENTS_MAX = 5;
+
+export const KeyCode = {
+  ENTER: 13,
+  ESC: 27
+};
+
 export const MONTH_NAMES = [
   `January`,
   `February`,
@@ -26,10 +34,6 @@ export const CountDescription = {
   MAX: 5
 };
 
-export const RAITING_MAX = 10;
-export const COUNT_COMMENTS_MAX = 5;
-export const STATS_ALL_FILMS = 1000000;
-
 export const CountDuration = {
   HOURS_MAX: 3,
   MINUTES_MIN: 59,
@@ -53,8 +57,14 @@ export const Filter = {
 };
 
 export const Sorting = {
-  TOP_RATING: `rating`,
-  MOST_COMMENTED: `commentsCount`
+  ByRating: {
+    type: `forNumber`,
+    parameter: `rating`
+  },
+  ByComments: {
+    type: `forArray`,
+    parameter: `comments`
+  }
 };
 
 export const COUNTRIES = [
@@ -116,7 +126,6 @@ export const TITLES = [
     translate: `Бэтмен против Супермена: На заре справедливости`,
     original: `Batman v Superman: Dawn of Justice`
   },
-
   {
     translate: `Отряд самоубийц`,
     original: `Suicide Squad`
@@ -143,7 +152,6 @@ export const TITLES = [
   }
 ];
 
-
 export const POSTERS = [
   `made-for-each-other.png`,
   `popeye-meets-sinbad.png`,
@@ -153,7 +161,6 @@ export const POSTERS = [
   `the-great-flamarion.jpg`,
   `the-man-with-the-golden-arm.jpg`,
 ];
-
 
 export const DESCRIPTION = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
@@ -248,28 +255,17 @@ export const ACTORS = [
 ];
 
 export const ProfileRank = {
-  novice: {
-    rank: `Novice`,
-    range: {
-      from: 1,
-      to: 10
-    },
+  NOVICE: {
+    RANK: `Novice`,
+    FROM: 1,
   },
-
-  fun: {
-    rank: `Fan`,
-    range: {
-      from: 11,
-      to: 20
-    },
+  FUN: {
+    RANK: `Fan`,
+    FROM: 11
   },
-
-  moviebuff: {
-    rank: `Movie Buff`,
-    range: {
-      from: 21,
-      to: 1000
-    },
+  MOVIE_BUFF: {
+    RANK: `Movie Buff`,
+    FROM: 21
   }
 };
 

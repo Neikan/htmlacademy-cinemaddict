@@ -1,5 +1,4 @@
-import {CountFilm} from "../consts";
-import {createFilmCards} from "./films/films-creation";
+import {createFilmCards} from "./films/film-card";
 
 /**
  * Создание шаблона списка самых обсуждаемых фильмов
@@ -11,7 +10,7 @@ const createFilmsCommented = (films) => {
     <section class="films-list--extra">
       <h2 class="films-list__title">Most commented</h2>
       <div class="films-list__container">
-        ${createFilmCards(films.slice(0, CountFilm.EXTRA))}
+        ${createFilmCards(films)}
       </div>
     </section>
   `);

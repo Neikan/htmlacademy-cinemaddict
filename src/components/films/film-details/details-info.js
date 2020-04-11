@@ -2,12 +2,24 @@ import {createGenresBlock} from "./genres";
 
 /**
  * Создание разметки блока подробной информации о фильме
- * @param {Object} film фильм
+ * @param {Object} {свойства фильма}
  * @return {string} разметка блока информации
  */
-const createDetailsInfo = (film) => {
-  const {poster, title, titleOrigin, rating, director, screenwriters,
-    actors, releaseDate, duration, country, genres, description, age} = film;
+const createDetailsInfo = ({
+  poster,
+  title,
+  titleOrigin,
+  rating,
+  director,
+  screenwriters,
+  actors,
+  releaseDate,
+  duration,
+  country,
+  genres,
+  description,
+  age
+}) => {
 
   return (`
     <div class="film-details__info-wrap">

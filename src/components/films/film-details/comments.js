@@ -3,16 +3,14 @@ import {createEmojiesBlock} from "./emojies";
 
 /**
  * Создание разметки блока комментирования о фильме
- * @param {*} film фильм
+ * @param {Object} {свойства фильма}
  * @return {string} разметка блока комментирования
  */
-const createCommentBlock = (film) => {
-  const {commentsCount, comments} = film;
-
+const createCommentBlock = ({comments}) => {
   return (`
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsCount}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
         ${createCommentList(comments)}
         <div class="film-details__new-comment">
           <div for="add-emoji" class="film-details__add-emoji-label"></div>
@@ -48,12 +46,10 @@ const createComments = (comments) => comments.map((comment) => createComment(com
 
 /**
  * Создание разметки комментария
- * @param {Object} comment комментарий
+ * @param {Object} {свойства комментария}
  * @return {string} разметка комментария
  */
-const createComment = (comment) => {
-  const {text, emoji, author, date, button} = comment;
-
+const createComment = ({text, emoji, author, date, button}) => {
   return (`
     <li class="film-details__comment">
       <span class="film-details__comment-emoji">

@@ -1,5 +1,5 @@
-import {getRandomElement, getRandomDate, getCommentDate} from '../utils.js';
-import {COMMENT_AUTHORS, COMMENT_TEXTS, COMMENT_EMOJIES} from '../consts.js';
+import {getRandomElement, getRandomDate, getCommentDate} from '../../utils.js';
+import {COMMENT_AUTHORS, COMMENT_TEXTS, COMMENT_EMOJIES} from '../../consts.js';
 
 /**
  * Создание комментария
@@ -22,10 +22,6 @@ const generateComment = () => {
  * @param {Number} count количество комментариев
  * @return {Array} сгенерированный массив комментариев
  */
-const generateComments = (count) => {
-  return new Array(count)
-  .fill(``)
-  .map(generateComment);
-};
+const generateComments = (count) => new Array(count).fill(``).map(generateComment);
 
 export {generateComment, generateComments};

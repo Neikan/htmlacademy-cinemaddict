@@ -8,10 +8,10 @@ import {
   GENRES,
   AGE_RATINGS,
   COUNT_COMMENTS_MAX
-} from '../consts.js';
-import {getRandomElement, getRandomSubArray, getRandomInt, getRandomRating, getRandomDate} from '../utils.js';
-import {getReleaseDate, getRandomDuration, getRandomDescription, getRandomBoolean} from '../utils.js';
-import {generateComments} from './comment.js';
+} from '../../consts.js';
+import {getRandomElement, getRandomSubArray, getRandomInt, getRandomRating, getRandomDate} from '../../utils.js';
+import {getReleaseDate, getRandomDuration, getRandomDescription, getRandomBoolean} from '../../utils.js';
+import {generateComments} from '../comments/comment.js';
 
 /**
  * Генерация фильма
@@ -19,7 +19,6 @@ import {generateComments} from './comment.js';
  */
 const generateFilm = () => {
   const titles = getRandomElement(TITLES);
-  const commentsCount = getRandomInt(COUNT_COMMENTS_MAX);
   const randomDate = getRandomDate(new Date());
   const releaseDate = getReleaseDate(randomDate);
 
@@ -36,8 +35,7 @@ const generateFilm = () => {
     duration: getRandomDuration(),
     country: getRandomElement(COUNTRIES),
     genres: getRandomSubArray(GENRES),
-    commentsCount,
-    comments: generateComments(commentsCount),
+    comments: generateComments(getRandomInt(COUNT_COMMENTS_MAX)),
     description: getRandomDescription(),
     age: getRandomElement(AGE_RATINGS),
     isWatch: getRandomBoolean(),
