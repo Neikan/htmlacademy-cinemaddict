@@ -7,8 +7,8 @@ import {createFilmCard} from "./film-card";
  */
 const createFilmCards = (films) => {
   let result = ``;
-  films.forEach((it) => {
-    result += createFilmCard(it);
+  films.forEach((film) => {
+    result += createFilmCard(film);
   });
   return result;
 };
