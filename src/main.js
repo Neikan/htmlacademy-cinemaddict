@@ -5,9 +5,9 @@ import {createMenu} from "./components/menu";
 import {createSorting} from "./components/sorting";
 import {createFilms} from "./components/films";
 import {createStatistic} from "./components/stats";
-import {createFilmCards} from "./components/films/films-creation";
 import {createFilmDetails} from "./components/films/film-details";
 import {generateFilms} from "./mock/film";
+import {createFilmCard} from "./components/films/film-card";
 
 const Nodes = {
   BODY: document.querySelector(`body`),
@@ -25,10 +25,16 @@ const showMoreClickHandler = () => {
   showingFilmsCount += Count.FILMS_BY_BUTTON;
 
   films.slice(prevTasksCount, showingFilmsCount)
-    .forEach((film) => render(filmsContainer, createFilmCards(film)));
+    .forEach((film) => render(filmsContainer, createFilmCard(film)));
 
   if (showingFilmsCount >= films.length) {
     document.querySelector(`.films-list__show-more`).remove();
+  }
+};
+
+const btnCloseDetailsClickHandler = () => {
+  if (document.querySelector(`.film-details__close-btn`)) {
+    document.querySelector(`.film-details`).classList.add(`visually-hidden`);
   }
 };
 
@@ -44,6 +50,7 @@ const init = () => {
   render(Nodes.BODY, createFilmDetails(films[0]));
 
   document.querySelector(`.films-list__show-more`).addEventListener(`click`, showMoreClickHandler);
+  document.querySelector(`.film-details__close-btn`).addEventListener(`click`, btnCloseDetailsClickHandler);
 };
 
 init();
