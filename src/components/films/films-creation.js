@@ -1,4 +1,4 @@
-import {createFilmCard} from "./film-card";
+import {createFilmCard} from "./components/film-card/film-card";
 
 
 /**

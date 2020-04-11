@@ -1,4 +1,4 @@
-import {createGenresList} from "./details-info/genre-list";
+import {createGenresList} from "./components/genre-list";
 
 
 /**

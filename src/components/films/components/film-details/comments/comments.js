@@ -1,6 +1,6 @@
-import {createComment} from "./comments/comment-item";
-import {createEmojiList} from "./comments/emoji-list";
-import {CommentEmojies} from "../../../consts";
+import {createComment} from "./components/comment-item";
+import {createEmojiList} from "./components/emoji-list";
+import {CommentEmojies} from "../../../../../consts";
 
 
 /**

@@ -3,11 +3,11 @@ import {createProfileRank} from "./components/profile/profile-rank";
 import {createMenu} from "./components/menu/menu";
 import {createSorting} from "./components/sorting/sorting";
 import {createFilms} from "./components/films/films";
-import {createFilmDetails} from "./components/films/film-details";
+import {createFilmDetails} from "./components/films/components/film-details/film-details";
 import {createStatistic} from "./components/statistic/stats";
 import {Count} from "./consts";
 import {generateFilms} from "./mock/film";
-import {createFilmCard} from "./components/films/film-card";
+import {createFilmCards} from "./components/films/films-creation";
 
 
 const Nodes = {
@@ -26,7 +26,7 @@ const showMoreClickHandler = () => {
   showingFilmsCount += Count.FILMS_BY_BUTTON;
 
   films.slice(prevTasksCount, showingFilmsCount)
-    .forEach((film) => render(filmsContainer, createFilmCard(film)));
+    .forEach((film) => render(filmsContainer, createFilmCards(film)));
 
   if (showingFilmsCount >= films.length) {
     document.querySelector(`.films-list__show-more`).remove();
