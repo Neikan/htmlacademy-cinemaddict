@@ -7,7 +7,7 @@ import {createFilmDetails} from "./components/films/components/film-details/film
 import {createStatistic} from "./components/statistic/stats";
 import {Count} from "./consts";
 import {generateFilms} from "./mock/film";
-import {createFilmCards} from "./components/films/films-creation";
+import {createFilmCards} from "./components/films/components/common/films-creation";
 
 
 const Nodes = {

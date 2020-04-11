@@ -1,13 +1,12 @@
 import {Count} from "../../consts";
-import {createFilmCards} from "./films-creation";
-
+import {createFilmCards} from "./components/common/films-creation";
 
 /**
  * Создание шаблона списка высокорейтинговых фильмов
  * @param {Array} films список фильмов
  * @return {string} список высокорейтинговых фильмов
  */
-export const createFilmsRated = (films) => {
+const createFilmsRated = (films) => {
   return (`
     <section class="films-list--extra">
       <h2 class="films-list__title">Top rated</h2>
@@ -17,3 +16,5 @@ export const createFilmsRated = (films) => {
     </section>
   `);
 };
+
+export {createFilmsRated};

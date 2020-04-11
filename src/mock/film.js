@@ -3,12 +3,11 @@ import {getRandomElement, getRandomSubArray, getRandomInt, getRandomRating, getR
 import {getReleaseDate, getRandomDuration, getRandomDescription, getRandomBoolean} from '../utils.js';
 import {generateComments} from './comment.js';
 
-
 /**
  * Генерация фильма
  * @return {Object} созданный фильм
  */
-export const generateFilm = () => {
+const generateFilm = () => {
   const titles = getRandomElement(Titles);
   const commentsCount = getRandomInt(Count.COMMENTS_MAX);
   const randomDate = getRandomDate(new Date());
@@ -37,14 +36,15 @@ export const generateFilm = () => {
   };
 };
 
-
 /**
  * Генерация заданного количества фильмов
  * @param {Number} count количество фильмов
  * @return {Array} массив сгенерированных фильмов
  */
-export const generateFilms = (count) => {
+const generateFilms = (count) => {
   return new Array(count)
     .fill(``)
     .map(generateFilm);
 };
+
+export {generateFilm, generateFilms};

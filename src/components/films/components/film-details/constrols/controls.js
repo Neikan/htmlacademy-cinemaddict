@@ -3,7 +3,7 @@
  * @param {Object} film фильм
  * @return {string} разметка блока управления
  */
-export const createControls = (film) => {
+const createControls = (film) => {
   const {isWatch, isWatched, isFavorite} = film;
 
   const Checked = {
@@ -25,3 +25,5 @@ export const createControls = (film) => {
     </section>
   `);
 };
+
+export {createControls};

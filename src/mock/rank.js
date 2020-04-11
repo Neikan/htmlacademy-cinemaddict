@@ -1,13 +1,12 @@
 import {ProfileRank, Filter} from '../consts.js';
 import {filterCountMenu} from './menu-filters.js';
 
-
 /**
  * Получение ранга профиля пользователя
  * @param {Array} films список фильмов
  * @return {string} ранг профиля пользователя
  */
-export const getProfileRank = (films) => {
+const getProfileRank = (films) => {
   const rank = filterCountMenu(films, Filter.IS_WATCHED);
 
   switch (true) {
@@ -24,3 +23,5 @@ export const getProfileRank = (films) => {
       return (``);
   }
 };
+
+export {getProfileRank};

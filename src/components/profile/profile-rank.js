@@ -5,7 +5,7 @@ import {getProfileRank} from "../../mock/rank";
  * @param {Array} films список фильмов
  * @return {string} разметка ранга профиля пользователя
  */
-export const createProfileRank = (films) => {
+const createProfileRank = (films) => {
   return (`
     <section class="header__profile profile">
       <p class="profile__rating">${getProfileRank(films)}</p>
@@ -13,3 +13,5 @@ export const createProfileRank = (films) => {
     </section>
   `);
 };
+
+export {createProfileRank};

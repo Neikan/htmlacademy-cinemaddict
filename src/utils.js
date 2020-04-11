@@ -1,6 +1,5 @@
 import {Position, Count, MONTH_NAMES, Dates, Descriptions} from "./consts";
 
-
 /**
  * Отрисовка элемента страницы ("компонента")
  * @param {Element} container контейнер, в который отрисосывается шаблон
@@ -10,7 +9,6 @@ import {Position, Count, MONTH_NAMES, Dates, Descriptions} from "./consts";
  */
 export const render = (container, template, position = Position.BEFORE_END) =>
   void container.insertAdjacentHTML(position, template);
-
 
 /**
  * Получение случайного числа из диапазона
@@ -22,7 +20,6 @@ export const getRandomInt = (max, min = Count.ZERO) => {
   return min + Math.floor(Math.random() * (max - min));
 };
 
-
 /**
  * Получение случайного элемента массива
  * @param {Array} array массив для получения элемента
@@ -32,13 +29,11 @@ export const getRandomElement = (array) => {
   return array[getRandomInt(array.length)];
 };
 
-
 /**
  * Получание случайного логического значения
  * @return {boolean} полученное логическое значение
  */
 export const getRandomBoolean = () => Math.random() > 0.5;
-
 
 /**
  * Перемешивание массива
@@ -55,7 +50,6 @@ const getShuffleArray = function (array) {
 
   return array;
 };
-
 
 /**
  * Создание подмассива из массива
@@ -74,7 +68,6 @@ export const getRandomSubArray = (array) => {
   return subArray;
 };
 
-
 /**
  * Получение случайного значения рейтинга фильма
  * @return {Number} значение рейтинга
@@ -82,7 +75,6 @@ export const getRandomSubArray = (array) => {
 export const getRandomRating = () => {
   return Math.fround(Math.random() * Count.RAITING_MAX).toFixed(1);
 };
-
 
 /**
  * Получение случайной даты
@@ -93,7 +85,6 @@ export const getRandomRating = () => {
 export const getRandomDate = (maxDate, minDate = new Date(Dates.def.year, Dates.def.month, Dates.def.day)) => {
   return new Date(minDate.getTime() + Math.random() * (maxDate.getTime() - minDate.getTime()));
 };
-
 
 /**
  * Получение случайной даты в формате "день месяц год"
@@ -107,7 +98,6 @@ export const getReleaseDate = (date) => {
 
   return `${day} ${month} ${year}`;
 };
-
 
 /**
  * Приведение формата часов и минут к формату: 2 часа 3 минуты -> 02:03
@@ -143,7 +133,6 @@ export const getCommentDate = (date) => {
   return `${year}/${month}/${day} ${hours}:${minutes}`;
 };
 
-
 /**
  * Создание случайной длительности фильма
  * @return {string} длительность фильма
@@ -155,7 +144,6 @@ export const getRandomDuration = () => {
 
   return duration;
 };
-
 
 /**
  * Создание случайного описания фильма
@@ -173,7 +161,6 @@ export const getRandomDescription = () => {
 
   return description;
 };
-
 
 /**
  * Сортировка массива объектов по параметру

@@ -1,13 +1,12 @@
 import {Count} from "../../consts";
-import {createFilmCards} from "./films-creation";
-
+import {createFilmCards} from "./components/common/films-creation";
 
 /**
  * Создание шаблона списка самых обсуждаемых фильмов
  * @param {Array} films список фильмов
  * @return {string} список самых обсуждаемых фильмов
  */
-export const createFilmsCommented = (films) => {
+const createFilmsCommented = (films) => {
   return (`
     <section class="films-list--extra">
       <h2 class="films-list__title">Most commented</h2>
@@ -17,3 +16,5 @@ export const createFilmsCommented = (films) => {
     </section>
   `);
 };
+
+export {createFilmsCommented};

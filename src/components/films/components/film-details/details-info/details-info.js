@@ -1,12 +1,11 @@
-import {createGenresList} from "./components/genre-list";
-
+import {createGenresBlock} from "./components/genres";
 
 /**
  * Создание разметки блока подробной информации о фильме
- * @param {*} film фильм
+ * @param {Object} film фильм
  * @return {string} разметка блока информации
  */
-export const createDetailsInfo = (film) => {
+const createDetailsInfo = (film) => {
   const {poster, title, titleOrigin, rating, director, screenwriters,
     actors, releaseDate, duration, country, genres, description, age} = film;
 
@@ -55,7 +54,7 @@ export const createDetailsInfo = (film) => {
             <td class="film-details__term">Country</td>
             <td class="film-details__cell">${country}</td>
           </tr>
-          ${createGenresList(genres)}
+          ${createGenresBlock(genres)}
         </table>
 
         <p class="film-details__film-description">
@@ -66,3 +65,5 @@ export const createDetailsInfo = (film) => {
 
   `);
 };
+
+export {createDetailsInfo};

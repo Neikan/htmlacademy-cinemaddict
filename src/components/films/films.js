@@ -1,17 +1,16 @@
 import {Count, Sorting} from "../../consts";
-import {createFilmCards} from "./films-creation";
+import {createFilmCards} from "./components/common/films-creation";
 import {createFilmsRated} from "./films-rated";
 import {createFilmsCommented} from "./films-commented";
 import {createShowMore} from "../button-show-more/button-show-more";
 import {sortingArray} from "../../utils";
-
 
 /**
  * Создание разметки списка фильмов
  * @param {Array} films список фильмов
  * @return {string} разметка списка фильмов
  */
-export const createFilms = (films) => {
+const createFilms = (films) => {
   return (`
     <section class="films">
       <section class="films-list">
@@ -26,3 +25,5 @@ export const createFilms = (films) => {
     </section>
   `);
 };
+
+export {createFilms};

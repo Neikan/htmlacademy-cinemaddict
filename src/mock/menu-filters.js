@@ -4,8 +4,7 @@
  * @param {string} param параметр фильтрации
  * @return {Number} количество соответствующих элементов
  */
-export const filterCountMenu = (films, param) => films.reduce(getCount(param), 0);
-
+const filterCountMenu = (films, param) => films.reduce(getCount(param), 0);
 
 /**
  * Проверка элемента и изменение счетчика по ее результатам
@@ -17,3 +16,5 @@ const getCount = (param) => {
     return (film[param] ? ++count : count);
   };
 };
+
+export {filterCountMenu};

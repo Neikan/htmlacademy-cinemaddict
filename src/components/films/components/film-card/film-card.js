@@ -3,7 +3,7 @@
  * @param {Object} film фильм
  * @return {string} разметка стандартной карточки фильма
  */
-export const createFilmCard = (film) => {
+const createFilmCard = (film) => {
   const {poster, title, rating, year, duration, genres,
     commentsCount, description, isWatch, isWatched, isFavorite} = film;
 
@@ -41,3 +41,5 @@ export const createFilmCard = (film) => {
     </article>
   `);
 };
+
+export {createFilmCard};

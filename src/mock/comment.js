@@ -1,12 +1,11 @@
 import {getRandomElement, getRandomDate, getCommentDate} from '../utils.js';
 import {CommentTexts, CommentEmojies, CommentAutors, Dates} from '../consts.js';
 
-
 /**
  * Создание комментария
  * @return {Object} созданный комментарий
  */
-export const generateComment = () => {
+const generateComment = () => {
   const randomDate = getRandomDate(new Date(), new Date(Dates.comment.year, Dates.comment.month, Dates.comment.day));
 
   return {
@@ -18,8 +17,15 @@ export const generateComment = () => {
   };
 };
 
-export const generateComments = (count) => {
+/**
+ * Генерация массива комментариев
+ * @param {Number} count количество комментариев
+ * @return {Array} сгенерированный массив комментариев
+ */
+const generateComments = (count) => {
   return new Array(count)
   .fill(``)
   .map(generateComment);
 };
+
+export {generateComment, generateComments};

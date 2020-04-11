@@ -1,14 +1,12 @@
-import {createComment} from "./components/comment-item";
-import {createEmojiList} from "./components/emoji-list";
 import {CommentEmojies} from "../../../../../consts";
-
+import {createEmojiesBlock} from "./components/emojies";
 
 /**
  * Создание разметки блока комментирования о фильме
  * @param {*} film фильм
  * @return {string} разметка блока комментирования
  */
-export const createCommentBlock = (film) => {
+const createCommentBlock = (film) => {
   const {commentsCount, comments} = film;
 
   return (`
@@ -21,13 +19,12 @@ export const createCommentBlock = (film) => {
           <label class="film-details__comment-label">
             <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
           </label>
-          ${createEmojiList(CommentEmojies)}
+          ${createEmojiesBlock(CommentEmojies)}
         </div>
       </section>
     </div>
   `);
 };
-
 
 /**
  * Создание разметки списка комментариев
@@ -42,7 +39,36 @@ const createCommentList = (comments) => {
   `);
 };
 
+/**
+ * Создание разметки комментариев
+ * @param {Array} comments комментарии
+ * @return {string} разметка
+ */
+const createComments = (comments) => comments.map((comment) => createComment(comment)).join(`\n`);
 
-const createComments = (comments) => {
-  return comments.map((comment) => createComment(comment)).join(`\n`);
+/**
+ * Создание разметки комментария
+ * @param {Object} comment комментарий
+ * @return {string} разметка комментария
+ */
+const createComment = (comment) => {
+  const {text, emoji, author, date, button} = comment;
+
+  return (`
+    <li class="film-details__comment">
+      <span class="film-details__comment-emoji">
+        <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
+      </span>
+      <div>
+        <p class="film-details__comment-text">${text}</p>
+        <p class="film-details__comment-info">
+          <span class="film-details__comment-author">${author}</span>
+          <span class="film-details__comment-day">${date}</span>
+          <button class="film-details__comment-delete">${button}</button>
+        </p>
+      </div>
+    </li>
+  `);
 };
+
+export {createCommentBlock};
