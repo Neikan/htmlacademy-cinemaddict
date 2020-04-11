@@ -1,4 +1,4 @@
-import {Position, MONTH_NAMES, DESCRIPTION, RAITING_MAX, CountDuration, CountCheckFormat, CountDescription} from "./consts";
+import {Position, RAITING_MAX, CountCheckFormat, MONTH_NAMES} from "./consts";
 
 /**
  * Отрисовка элемента страницы ("компонента")
@@ -38,7 +38,7 @@ export const getRandomBoolean = () => Math.random() > 0.5;
  * @param {Array} array исходный массив данных
  * @return {Array} новый перемешанный массив
  */
-const getShuffleArray = function (array) {
+export const getShuffleArray = function (array) {
   let j;
 
   for (let i = array.length - 1; i > 0; i--) {
@@ -67,10 +67,19 @@ export const getRandomSubArray = (array) => {
 };
 
 /**
- * Получение случайного значения рейтинга фильма
- * @return {Number} значение рейтинга
+ * Сортировка массива объектов по параметру
+ * @param {Array} array массив для сортировки
+ * @param {Object} {параметры сортировки}
+ * @param {Number} count количество отстортированных элементов
+ * @return {Array} отсортированный массив заданной длины
  */
-export const getRandomRating = () => Math.fround(Math.random() * RAITING_MAX).toFixed(1);
+export const sortingArray = (array, {type, parameter}, count) =>
+  [...array].sort(choiceType[type](parameter)).slice(0, count);
+
+const choiceType = {
+  'forNumber': (parameter) => ((a, b) => (b[parameter] - a[parameter])),
+  'forArray': (parameter) => ((a, b) => (b[parameter].length - a[parameter].length))
+};
 
 /**
  * Получение случайной даты
@@ -80,19 +89,6 @@ export const getRandomRating = () => Math.fround(Math.random() * RAITING_MAX).to
  */
 export const getRandomDate = (maxDate, minDate = new Date(1970, 1, 1)) => {
   return new Date(minDate.getTime() + Math.random() * (maxDate.getTime() - minDate.getTime()));
-};
-
-/**
- * Получение случайной даты в формате "день месяц год"
- * @param {Date} date дата для приведения формата
- * @return {string} полученная дата
- */
-export const getReleaseDate = (date) => {
-  const day = date.getDate();
-  const month = MONTH_NAMES[date.getMonth()];
-  const year = date.getFullYear();
-
-  return `${day} ${month} ${year}`;
 };
 
 /**
@@ -128,45 +124,14 @@ export const getCommentDate = (date) => {
 };
 
 /**
- * Создание случайной длительности фильма
- * @return {string} длительность фильма
+ * Получение случайной даты в формате "день месяц год"
+ * @param {Date} date дата для приведения формата
+ * @return {string} полученная дата
  */
-export const getRandomDuration = () => {
-  const hours = getRandomInt(0, CountDuration.HOURS_MAX);
-  const minutes = getRandomInt(0, CountDuration.MINUTES_MAX);
-  const duration = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+export const getReleaseDate = (date) => {
+  const day = date.getDate();
+  const month = MONTH_NAMES[date.getMonth()];
+  const year = date.getFullYear();
 
-  return duration;
-};
-
-/**
- * Создание случайного описания фильма
- * @return {string} описание фильма
- */
-export const getRandomDescription = () => {
-  let description = [];
-  const shuffleArr = getShuffleArray(DESCRIPTION);
-  const lengthDesc = getRandomInt(CountDescription.MAX, CountDescription.MIM);
-
-  for (let i = 0; i < lengthDesc; i++) {
-    description[i] = shuffleArr[i];
-  }
-  description = description.join(` `);
-
-  return description;
-};
-
-/**
- * Сортировка массива объектов по параметру
- * @param {Array} array массив для сортировки
- * @param {Object} {параметры сортировки}
- * @param {Number} count количество отстортированных элементов
- * @return {Array} отсортированный массив заданной длины
- */
-export const sortingArray = (array, {type, parameter}, count) =>
-  [...array].sort(choiceType[type](parameter)).slice(0, count);
-
-const choiceType = {
-  'forNumber': (parameter) => ((a, b) => (b[parameter] - a[parameter])),
-  'forArray': (parameter) => ((a, b) => (b[parameter].length - a[parameter].length))
+  return `${day} ${month} ${year}`;
 };

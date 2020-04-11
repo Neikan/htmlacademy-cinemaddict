@@ -1,5 +1,5 @@
-import {ProfileRank, Filter} from '../../consts.js';
-import {filterCountMenu} from '../menu/menu-filters.js';
+import {ProfileRank, Filter} from '../consts.js';
+import {filterCountMenu} from './menu-filters.js';
 
 /**
  * Получение ранга профиля пользователя

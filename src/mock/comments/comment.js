@@ -1,5 +1,6 @@
+import {EMOJIES} from '../../consts.js';
 import {getRandomElement, getRandomDate, getCommentDate} from '../../utils.js';
-import {COMMENT_AUTHORS, COMMENT_TEXTS, COMMENT_EMOJIES} from '../../consts.js';
+import {COMMENT_TEXTS, COMMENT_AUTHORS} from './comment-consts.js';
 
 /**
  * Создание комментария
@@ -10,7 +11,7 @@ const generateComment = () => {
 
   return {
     text: getRandomElement(COMMENT_TEXTS),
-    emoji: getRandomElement(COMMENT_EMOJIES),
+    emoji: getRandomElement(EMOJIES),
     author: getRandomElement(COMMENT_AUTHORS),
     date: getCommentDate(randomDate),
     button: `Delete`,

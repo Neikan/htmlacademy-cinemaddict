@@ -1,4 +1,5 @@
 import {
+  COUNT_COMMENTS_MAX,
   TITLES,
   POSTERS,
   DIRECTORS,
@@ -6,12 +7,20 @@ import {
   ACTORS,
   COUNTRIES,
   GENRES,
-  AGE_RATINGS,
-  COUNT_COMMENTS_MAX
-} from '../../consts.js';
-import {getRandomElement, getRandomSubArray, getRandomInt, getRandomRating, getRandomDate} from '../../utils.js';
-import {getReleaseDate, getRandomDuration, getRandomDescription, getRandomBoolean} from '../../utils.js';
+  AGE_RATINGS
+} from './film-consts';
+
+import {
+  getRandomElement,
+  getRandomSubArray,
+  getRandomInt,
+  getRandomBoolean,
+  getRandomDate,
+  getReleaseDate,
+} from '../../utils.js';
+
 import {generateComments} from '../comments/comment.js';
+import {getRandomDuration, getRandomDescription, getRandomRating} from './film-utils';
 
 /**
  * Генерация фильма

@@ -6,8 +6,8 @@ import {createSorting} from "./components/sorting";
 import {createFilms} from "./components/films";
 import {createStatistic} from "./components/stats";
 import {createFilmDetails} from "./components/films/film-details";
-import {generateFilms} from "./mock/films/film";
 import {createFilmCard} from "./components/films/film-card";
+import {generateFilms} from "./mock/films/film";
 
 const Nodes = {
   BODY: document.querySelector(`body`),

@@ -1,4 +1,4 @@
-import {COMMENT_EMOJIES} from "../../../consts";
+import {EMOJIES} from "../../../consts";
 import {createEmojiesBlock} from "./comments/emojies";
 
 /**
@@ -17,7 +17,7 @@ const createCommentBlock = ({comments}) => {
           <label class="film-details__comment-label">
             <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
           </label>
-          ${createEmojiesBlock(COMMENT_EMOJIES)}
+          ${createEmojiesBlock(EMOJIES)}
         </div>
       </section>
     </div>
