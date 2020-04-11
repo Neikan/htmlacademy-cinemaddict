@@ -1,3 +1,8 @@
+/**
+ * Создание разметки смайла
+ * @param {string} emoji смайл
+ * @return {string} разметка элемента
+ */
 export const createEmoji = (emoji) => {
   return (`
     <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}">

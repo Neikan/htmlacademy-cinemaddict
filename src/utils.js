@@ -65,7 +65,7 @@ const getShuffleArray = function (array) {
 export const getRandomSubArray = (array) => {
   const shuffleArray = getShuffleArray(array);
   const subArray = [];
-  const lengthSubArray = getRandomInt(shuffleArray.length);
+  const lengthSubArray = getRandomInt(shuffleArray.length, Count.ONE);
 
   for (let i = 0; i < lengthSubArray; i++) {
     subArray.push(shuffleArray[i]);
@@ -101,7 +101,7 @@ export const getRandomDate = (maxDate, minDate = new Date(Dates.def.year, Dates.
  * @return {string} полученная дата
  */
 export const getReleaseDate = (date) => {
-  const day = date.getDay();
+  const day = date.getDate();
   const month = MONTH_NAMES[date.getMonth()];
   const year = date.getFullYear();
 
@@ -134,7 +134,7 @@ export const castNumberFormat = (value) => {
  * @return {string} полученная дата
  */
 export const getCommentDate = (date) => {
-  const day = date.getDay();
+  const day = date.getDate();
   const month = date.getMonth();
   const year = date.getFullYear();
   const hours = castTimeFormat(date.getHours());
@@ -151,7 +151,7 @@ export const getCommentDate = (date) => {
 export const getRandomDuration = () => {
   const hours = getRandomInt(0, Count.DURATION_HOURS_MAX);
   const minutes = getRandomInt(0, Count.DURATION_MINUTES_MAX);
-  const duration = `${hours}h ${minutes}m`;
+  const duration = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
 
   return duration;
 };

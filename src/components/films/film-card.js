@@ -1,7 +1,7 @@
 /**
- * Создание шаблона стандартной карточки фильма
+ * Создание разметки стандартной карточки фильма
  * @param {Object} film фильм
- * @return {string} стандартная карточка фильма
+ * @return {string} разметка стандартной карточки фильма
  */
 export const createFilmCard = (film) => {
   const {poster, title, rating, year, duration, genres,
@@ -25,15 +25,18 @@ export const createFilmCard = (film) => {
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
         <span class="film-card__duration">${duration}</span>
-        <span class="film-card__genre">${genres}</span>
+        <span class="film-card__genre">${genres[0]}</span>
       </p>
       <img src="./images/posters/${poster}" alt="" class="film-card__poster">
       <p class="film-card__description">${description}</p>
       <a class="film-card__comments">${commentsCount} comments</a>
       <form class="film-card__controls">
-        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist${ClassesMarkup.addToWatch}">Add to watchlist</button>
-        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched${ClassesMarkup.markAsWatched}">Mark as watched</button>
-        <button class="film-card__controls-item button film-card__controls-item--favorite${ClassesMarkup.markAsFavourite}">Mark as favorite</button>
+        <button class="film-card__controls-item button
+          film-card__controls-item--add-to-watchlist${ClassesMarkup.addToWatch}">Add to watchlist</button>
+        <button class="film-card__controls-item button
+          film-card__controls-item--mark-as-watched${ClassesMarkup.markAsWatched}">Mark as watched</button>
+        <button class="film-card__controls-item button
+          film-card__controls-item--favorite${ClassesMarkup.markAsFavourite}">Mark as favorite</button>
       </form>
     </article>
   `);

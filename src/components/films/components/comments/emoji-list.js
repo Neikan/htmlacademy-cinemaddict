@@ -1,7 +1,7 @@
 import {createEmoji} from "./emoji-item";
 
 /**
- * Создание разметки перечня смайлов
+ * Создание разметки списка смайлов
  * @param {Array} emojies смайлы
  * @return {string} разметка списка
  */

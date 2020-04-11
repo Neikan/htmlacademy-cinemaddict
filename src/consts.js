@@ -16,6 +16,7 @@ export const MONTH_NAMES = [
 
 export const Count = {
   ZERO: 0,
+  ONE: 1,
   FILMS: 20,
   FILMS_ON_START: 5,
   FILMS_BY_BUTTON: 5,
@@ -28,8 +29,7 @@ export const Count = {
   DESCRIPTION_LENGTH_MIM: 1,
   CHECK_FORMAT_TIME: 10,
   CHECK_FORMAT_NUMBER: 1000,
-  STATS_ALL_FILMS: 1000000,
-  GENRES_MAX: 3
+  STATS_ALL_FILMS: 1000000
 };
 
 
