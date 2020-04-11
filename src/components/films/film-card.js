@@ -11,14 +11,11 @@ const createFilmCards = (films) => films.reduce((cards, film) => cards + createF
  * @return {string} разметка стандартной карточки фильма
  */
 const createFilmCard = ({
-  poster,
-  title,
+  promo,
+  titles,
   rating,
-  year,
-  duration,
-  genres,
+  details,
   comments,
-  description,
   isWatch,
   isWatched,
   isFavorite
@@ -33,15 +30,15 @@ const createFilmCard = ({
 
   return (`
     <article class="film-card">
-      <h3 class="film-card__title">${title}</h3>
+      <h3 class="film-card__title">${titles.translate}</h3>
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
-        <span class="film-card__year">${year}</span>
-        <span class="film-card__duration">${duration}</span>
-        <span class="film-card__genre">${genres[0]}</span>
+        <span class="film-card__year">${details.year}</span>
+        <span class="film-card__duration">${details.duration.info}</span>
+        <span class="film-card__genre">${details.genres[0]}</span>
       </p>
-      <img src="./images/posters/${poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${description}</p>
+      <img src="./images/posters/${promo.poster}" alt="" class="film-card__poster">
+      <p class="film-card__description">${details.description}</p>
       <a class="film-card__comments">${comments.length} comments</a>
       <form class="film-card__controls">
         <button class="film-card__controls-item button

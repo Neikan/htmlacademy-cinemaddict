@@ -1,5 +1,5 @@
 import {COMMENT_EMOJIES} from "../../../consts";
-import {createEmojiesBlock} from "./emojies";
+import {createEmojiesBlock} from "./comments/emojies";
 
 /**
  * Создание разметки блока комментирования о фильме
