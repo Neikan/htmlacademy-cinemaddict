@@ -28,7 +28,7 @@ const getRows = ({director, screenwriters, actors, releaseDate, duration, countr
  * @param {Array} rows массив
  * @return {string} разметка блока
  */
-const createRows = (rows) => rows.map((row) => createRow(row)).join(`\n`);
+const createRows = (rows) => rows.map(createRow).join(`\n`);
 
 /**
  * Создание разметки строки таблицы

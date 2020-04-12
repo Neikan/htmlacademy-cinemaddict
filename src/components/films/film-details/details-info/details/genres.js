@@ -28,6 +28,6 @@ const createGenre = (genre) => `<span class="film-details__genre">${genre}</span
  * @param {Array} genres жанры
  * @return {string} разметка перечня
  */
-const createGenres = (genres) => genres.map((genre) => createGenre(genre)).join(`\n`);
+const createGenres = (genres) => genres.map(createGenre).join(`\n`);
 
 export {createGenresBlock};

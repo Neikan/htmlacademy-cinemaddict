@@ -16,7 +16,7 @@ const createEmojiesBlock = (emojies) => {
  * @param {Array} emojies смайлы
  * @return {string} разметка перечня
  */
-const createEmojies = (emojies) => emojies.map((emoji) => createEmoji(emoji)).join(`\n`);
+const createEmojies = (emojies) => emojies.map(createEmoji).join(`\n`);
 
 /**
  * Создание разметки смайла

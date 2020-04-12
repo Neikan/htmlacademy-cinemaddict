@@ -42,7 +42,7 @@ const createCommentList = (comments) => {
  * @param {Array} comments комментарии
  * @return {string} разметка комментария
  */
-const createComments = (comments) => comments.map((comment) => createComment(comment)).join(`\n`);
+const createComments = (comments) => comments.map(createComment).join(`\n`);
 
 /**
  * Создание разметки одного комментария
