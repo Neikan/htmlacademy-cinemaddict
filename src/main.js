@@ -19,6 +19,11 @@ const Nodes = {
 const films = generateFilms(CountFilm.ALL);
 let showingFilmsCount = CountFilm.START;
 
+const removeCardDetails = () => {
+  document.querySelector(`.film-details`).remove();
+  document.removeEventListener(`keydown`, btnCloseDetailsKeyDownHandler);
+};
+
 const showMoreClickHandler = () => {
   const filmsContainer = document.querySelector(`.films .films-list__container`);
   const prevTasksCount = showingFilmsCount;
@@ -33,12 +38,14 @@ const showMoreClickHandler = () => {
 };
 
 const btnCloseDetailsClickHandler = () => {
-  document.querySelector(`.film-details`).remove();
+  if (document.querySelector(`.film-details`)) {
+    removeCardDetails();
+  }
 };
 
 const btnCloseDetailsKeyDownHandler = function (evt) {
   if (evt.keyCode === KeyCode.ESC) {
-    document.querySelector(`.film-details`).remove();
+    removeCardDetails();
   }
 };
 
