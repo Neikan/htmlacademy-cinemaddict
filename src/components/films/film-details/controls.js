@@ -1,7 +1,7 @@
 /**
  * Создание разметки блока кнопок управления фильмом
  * @param {Object} {свойства фильма}
- * @return {string} разметка блока управления
+ * @return {string} разметка блока
  */
 const createControls = ({isWatch, isWatched, isFavorite}) => {
   const CHECKED = `checked`;

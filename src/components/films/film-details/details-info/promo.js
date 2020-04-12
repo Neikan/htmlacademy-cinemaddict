@@ -1,7 +1,7 @@
 /**
  * Создание разметки постера и возрастного ограничения
  * @param {Object} {постер и ограничение}
- * @return {string} разметка
+ * @return {string} разметка блока
  */
 const createPromo = ({poster, age}) => {
   return (`

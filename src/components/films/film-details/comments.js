@@ -4,7 +4,7 @@ import {createEmojiesBlock} from "./comments/emojies";
 /**
  * Создание разметки блока комментирования о фильме
  * @param {Object} {свойства фильма}
- * @return {string} разметка блока комментирования
+ * @return {string} разметка блока
  */
 const createCommentBlock = ({comments}) => {
   return (`
@@ -38,16 +38,16 @@ const createCommentList = (comments) => {
 };
 
 /**
- * Создание разметки комментариев
+ * Создание разметки нескольких комментариев
  * @param {Array} comments комментарии
- * @return {string} разметка
+ * @return {string} разметка комментария
  */
 const createComments = (comments) => comments.map((comment) => createComment(comment)).join(`\n`);
 
 /**
- * Создание разметки комментария
+ * Создание разметки одного комментария
  * @param {Object} {свойства комментария}
- * @return {string} разметка комментария
+ * @return {string} разметка одного комментария
  */
 const createComment = ({text, emoji, author, date, button}) => {
   return (`

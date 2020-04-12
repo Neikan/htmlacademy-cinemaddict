@@ -2,9 +2,9 @@ import {Filter} from "../consts";
 import {filterCountMenu} from "../mock/menu-filters";
 
 /**
- * Создание разметки главного меню
+ * Создание разметки блока главного меню
  * @param {Array} films список фильмов
- * @return {string} разметка главного меню с количеством фильмов по фильтрам
+ * @return {string} разметка блока
  */
 const createMenu = (films) => {
   return (`

@@ -1,9 +1,9 @@
-import {createFilmCards} from "./films/film-card";
+import {createFilmCards} from "./film-card";
 
 /**
- * Создание шаблона списка самых обсуждаемых фильмов
+ * Создание разметки блока самых обсуждаемых фильмов
  * @param {Array} films список фильмов
- * @return {string} список самых обсуждаемых фильмов
+ * @return {string} разметка блока
  */
 const createFilmsCommented = (films) => {
   return (`

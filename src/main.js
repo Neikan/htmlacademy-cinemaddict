@@ -2,7 +2,7 @@ import {CountFilm, KeyCode} from "./consts";
 import {render} from "./utils";
 import {createProfileRank} from "./components/profile-rank";
 import {createMenu} from "./components/menu";
-import {createSorting} from "./components/sorting";
+import {createSorting} from "./components/films/sorting";
 import {createFilms} from "./components/films";
 import {createStatistic} from "./components/stats";
 import {createFilmDetails} from "./components/films/film-details";

@@ -1,14 +1,14 @@
 import {CountFilm, Sorting} from "../consts";
-import {createFilmsRated} from "./films-rated";
-import {createFilmsCommented} from "./films-commented";
-import {createShowMore} from "./button-show-more";
+import {createFilmsRated} from "./films/films-rated";
+import {createFilmsCommented} from "./films/films-commented";
+import {createShowMore} from "./films/button-show-more";
 import {sortingArray} from "../utils";
 import {createFilmCards} from "./films/film-card";
 
 /**
- * Создание разметки списка фильмов
+ * Создание разметки блока фильмов
  * @param {Array} films список фильмов
- * @return {string} разметка списка фильмов
+ * @return {string} разметка блока
  */
 const createFilms = (films) => {
   return (`

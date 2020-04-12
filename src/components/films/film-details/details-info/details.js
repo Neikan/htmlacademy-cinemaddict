@@ -1,9 +1,9 @@
 import {createGenresBlock} from "./details/genres";
 
 /**
- * Создание разметки детальной информации
+ * Создание разметки блока детальной информации
  * @param {Object} details детальная информация
- * @return {string} разметка деталей
+ * @return {string} разметка блока
  */
 const createDetails = (details) => {
   return (`
@@ -26,7 +26,7 @@ const getRows = ({director, screenwriters, actors, releaseDate, duration, countr
 /**
  * Создание разметки строк таблицы
  * @param {Array} rows массив
- * @return {string} разметка
+ * @return {string} разметка блока
  */
 const createRows = (rows) => rows.map((row) => createRow(row)).join(`\n`);
 
@@ -45,9 +45,9 @@ const createRow = ({name, info}) => {
 };
 
 /**
- * Создание разметки описания фильма
+ * Создание разметки блока описания фильма
  * @param {string} description описание
- * @return {string} разметка описания
+ * @return {string} разметка блока описания
  */
 const createDescription = (description) =>
   `<p class="film-details__film-description">${description}</p>`;

@@ -1,9 +1,9 @@
-import {createFilmCards} from "./films/film-card";
+import {createFilmCards} from "./film-card";
 
 /**
- * Создание шаблона списка высокорейтинговых фильмов
+ * Создание разметки блока высокорейтинговых фильмов
  * @param {Array} films список фильмов
- * @return {string} список высокорейтинговых фильмов
+ * @return {string} разметка блока
  */
 const createFilmsRated = (films) => {
   return (`

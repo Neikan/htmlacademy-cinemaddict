@@ -3,7 +3,7 @@ import {getProfileRank} from "../mock/rank";
 /**
  * Создание разметки блока ранга профиля пользователя
  * @param {Array} films список фильмов
- * @return {string} разметка ранга профиля пользователя
+ * @return {string} разметка блока
  */
 const createProfileRank = (films) => {
   return (`

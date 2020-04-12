@@ -5,7 +5,7 @@ import {createDetails} from "./details-info/details";
 /**
  * Создание разметки блока подробной информации о фильме
  * @param {Object} {свойства фильма}
- * @return {string} разметка блока информации
+ * @return {string} разметка блока
  */
 const createDetailsInfo = ({promo, titles, rating, details}) => {
   return (`

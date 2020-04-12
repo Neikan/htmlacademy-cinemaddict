@@ -82,6 +82,6 @@ const generateFilm = () => {
  * @param {Number} count количество фильмов
  * @return {Array} массив сгенерированных фильмов
  */
-const generateFilms = (count) => new Array(count).fill().map(generateFilm);
+const generateFilms = (count) => new Array(count).fill({}).map(generateFilm);
 
 export {generateFilm, generateFilms};

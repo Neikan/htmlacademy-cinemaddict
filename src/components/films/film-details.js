@@ -3,9 +3,9 @@ import {createControls} from "./film-details/controls";
 import {createCommentBlock} from "./film-details/comments";
 
 /**
- * Создание разметки подробной карточки фильма
+ * Создание разметки блока подробной карточки фильма
  * @param {Object} film фильм
- * @return {string} разметка подробной карточки фильма
+ * @return {string} разметка блока
  */
 const createFilmDetails = (film) => {
   return (`

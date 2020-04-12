@@ -6,9 +6,9 @@
 const createFilmCards = (films) => films.reduce((cards, film) => cards + createFilmCard(film), ``);
 
 /**
- * Создание разметки стандартной карточки фильма
+ * Создание разметки блока стандартной карточки фильма
  * @param {Object} {свойства фильма}
- * @return {string} разметка стандартной карточки фильма
+ * @return {string} разметка блока
  */
 const createFilmCard = ({
   promo,

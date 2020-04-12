@@ -1,7 +1,7 @@
 /**
- * Создание разметки списка смайлов
+ * Создание разметки блока смайлов
  * @param {Array} emojies смайлы
- * @return {string} разметка списка
+ * @return {string} разметка блока
  */
 const createEmojiesBlock = (emojies) => {
   return (`
@@ -13,8 +13,8 @@ const createEmojiesBlock = (emojies) => {
 
 /**
  * Создание разметки перечня смайлов
- * @param {Array} emojies смыйлы
- * @return {string} разметка перечня смайлов
+ * @param {Array} emojies смайлы
+ * @return {string} разметка перечня
  */
 const createEmojies = (emojies) => emojies.map((emoji) => createEmoji(emoji)).join(`\n`);
 
