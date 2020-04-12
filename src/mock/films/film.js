@@ -29,7 +29,6 @@ import {getRandomDuration, getRandomDescription, getRandomRating} from './film-u
 const generateFilm = () => {
   const titles = getRandomElement(TITLES);
   const randomDate = getRandomDate(new Date());
-  const releaseDate = getReleaseDate(randomDate);
 
   return {
     promo: {
@@ -56,7 +55,7 @@ const generateFilm = () => {
       },
       releaseDate: {
         name: `Release Date`,
-        info: releaseDate
+        info: getReleaseDate(randomDate)
       },
       duration: {
         name: `Runtime`,

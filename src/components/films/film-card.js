@@ -1,9 +1,12 @@
+import {CountFilm} from "../../consts";
+
 /**
  * Создание разметки нескольких карточек фильмов
  * @param {Array} films список фильмов
  * @return {string} разметка нескольких карточек
  */
-const createFilmCards = (films) => films.reduce((cards, film) => cards + createFilmCard(film), ``);
+const createFilmCards = (films) => films.slice(0, CountFilm.START)
+  .reduce((cards, film) => cards + createFilmCard(film), ``);
 
 /**
  * Создание разметки блока стандартной карточки фильма

@@ -10,14 +10,14 @@ const getProfileRank = (films) => {
   const rank = filterCountMenu(films, Filter.IS_WATCHED);
 
   switch (true) {
-    case (rank >= ProfileRank.NOVICE.FROM && rank <= ProfileRank.FUN.FROM - 1):
-      return ProfileRank.NOVICE.RANK;
+    case (rank >= ProfileRank.NOVICE.from && rank <= ProfileRank.FUN.from - 1):
+      return ProfileRank.NOVICE.rank;
 
-    case (rank >= ProfileRank.FUN.FROM && rank <= ProfileRank.MOVIE_BUFF.FROM - 1):
-      return ProfileRank.FUN.RANK;
+    case (rank >= ProfileRank.FUN.from && rank <= ProfileRank.MOVIE_BUFF.from - 1):
+      return ProfileRank.FUN.rank;
 
-    case (rank >= ProfileRank.MOVIE_BUFF.FROM):
-      return ProfileRank.MOVIE_BUFF.RANK;
+    case (rank >= ProfileRank.MOVIE_BUFF.from):
+      return ProfileRank.MOVIE_BUFF.rank;
 
     default:
       return (``);

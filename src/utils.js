@@ -1,4 +1,4 @@
-import {Position, RAITING_MAX, CountCheckFormat, MONTH_NAMES} from "./consts";
+import {Position, CountCheckFormat, MONTH_NAMES, START_DATE_FILMS, CountFilm} from "./consts";
 
 /**
  * Отрисовка элемента страницы ("компонента")
@@ -73,7 +73,7 @@ export const getRandomSubArray = (array) => {
  * @param {Number} count количество отстортированных элементов
  * @return {Array} отсортированный массив заданной длины
  */
-export const sortingArray = (array, {type, parameter}, count) =>
+export const sortingArray = (array, {type, parameter}, count = CountFilm.EXTRA) =>
   [...array].sort(choiceType[type](parameter)).slice(0, count);
 
 const choiceType = {
@@ -87,7 +87,7 @@ const choiceType = {
  * @param {Date} minDate
  * @return {Date} полученная дата
  */
-export const getRandomDate = (maxDate, minDate = new Date(1970, 1, 1)) => {
+export const getRandomDate = (maxDate, minDate = new Date([...START_DATE_FILMS])) => {
   return new Date(minDate.getTime() + Math.random() * (maxDate.getTime() - minDate.getTime()));
 };
 

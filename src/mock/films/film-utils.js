@@ -1,4 +1,4 @@
-import {DESCRIPTION, CountDescription, CountDuration, RAITING_MAX} from "./film-consts";
+import {DESCRIPTION, CountDescription, CountDuration, RATING_MAX} from "./film-consts";
 import {getRandomInt, getShuffleArray} from "../../utils";
 
 /**
@@ -34,4 +34,4 @@ export const getRandomDuration = () => {
  * Получение случайного значения рейтинга фильма
  * @return {Number} значение рейтинга
  */
-export const getRandomRating = () => Math.fround(Math.random() * RAITING_MAX).toFixed(1);
+export const getRandomRating = () => Math.fround(Math.random() * RATING_MAX).toFixed(1);

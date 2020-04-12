@@ -43,11 +43,11 @@ export const Filter = {
 };
 
 export const Sorting = {
-  ByRating: {
+  BY_RATING: {
     type: `forNumber`,
     parameter: `rating`
   },
-  ByComments: {
+  BY_COMMENTS: {
     type: `forArray`,
     parameter: `comments`
   }
@@ -55,16 +55,16 @@ export const Sorting = {
 
 export const ProfileRank = {
   NOVICE: {
-    RANK: `Novice`,
-    FROM: 1,
+    rank: `Novice`,
+    from: 1,
   },
   FUN: {
-    RANK: `Fan`,
-    FROM: 11
+    rank: `Fan`,
+    from: 11
   },
   MOVIE_BUFF: {
-    RANK: `Movie Buff`,
-    FROM: 21
+    rank: `Movie Buff`,
+    from: 21
   }
 };
 
@@ -74,3 +74,5 @@ export const EMOJIES = [
   `puke`,
   `angry`
 ];
+
+export const START_DATE_FILMS = [1970, 1, 1];
