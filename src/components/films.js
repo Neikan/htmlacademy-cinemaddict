@@ -1,25 +1,29 @@
-import {Count} from "./consts";
-import {createFilmCards} from "./films-generation";
-import {createShowMore} from "./button-show-more";
-import {createFilmsRated} from "./films-rated";
-import {createFilmsCommented} from "./films-commented";
+import {Sorting} from "../consts";
+import {createFilmsRated} from "./films/films-rated";
+import {createFilmsCommented} from "./films/films-commented";
+import {createShowMore} from "./films/button-show-more";
+import {sortingArray} from "../utils";
+import {createFilmCards} from "./films/film-card";
 
 /**
- * Создание шаблона списка фильмов
- * @return {string} список фильмов
+ * Создание разметки блока фильмов
+ * @param {Array} films список фильмов
+ * @return {string} разметка блока
  */
-export const createFilms = () => {
+const createFilms = (films) => {
   return (`
     <section class="films">
       <section class="films-list">
         <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
         <div class="films-list__container">
-          ${createFilmCards(Count.FILMS)}
+          ${createFilmCards(films)}
         </div>
         ${createShowMore()}
       </section>
-      ${createFilmsRated()}
-      ${createFilmsCommented()}
+      ${createFilmsRated(sortingArray(films, Sorting.BY_RATING))}
+      ${createFilmsCommented(sortingArray(films, Sorting.BY_COMMENTS))}
     </section>
   `);
 };
+
+export {createFilms};

@@ -1,8 +1,8 @@
 /**
- * Создание шаблона панели сортировки
- * @return {string} сортировка
+ * Создание разметки блока сортировки фильмов
+ * @return {string} разметка блока
  */
-export const createSorting = () => {
+const createSorting = () => {
   return (`
     <ul class="sort">
       <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
@@ -11,3 +11,5 @@ export const createSorting = () => {
     </ul>
   `);
 };
+
+export {createSorting};
