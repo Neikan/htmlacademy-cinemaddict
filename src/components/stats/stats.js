@@ -1,5 +1,5 @@
-import {CountFilm} from "../consts";
-import {castNumberFormat} from "../utils";
+import {CountFilm} from "../../consts";
+import {castNumberFormat} from "../../utils";
 
 /**
  * Создание разметки блока информации о количестве фильмов

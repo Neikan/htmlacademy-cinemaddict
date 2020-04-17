@@ -32,7 +32,8 @@ export const CountCheckFormat = {
 
 export const Position = {
   BEFORE_END: `beforeend`,
-  AFTER_END: `afterend`
+  AFTER_END: `afterend`,
+  AFTER_BEGIN: `afterbegin`
 };
 
 

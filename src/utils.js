@@ -135,3 +135,36 @@ export const getReleaseDate = (date) => {
 
   return `${day} ${month} ${year}`;
 };
+
+/**
+ * Создание DOM-элемента
+ * @param {string} template шаблон-разметка для создания элемента
+ * @return {string} разметка созданного элемента
+ */
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
+/**
+ * Отрисовка элемента страницы ("компонента")
+ * @param {Element} container контейнер, в который отрисосывается шаблон
+ * @param {string} element отрисовываемый элемент
+ * @param {string} position место в контейнере для отрисовываемого шаблона
+ * @return {void}
+ */
+export const renderComponent = (container, element, position = Position.BEFORE_END) => {
+  switch (position) {
+    case Position.AFTER_BEGIN:
+      container.prepend(element);
+      break;
+    case Position.AFTER_END:
+      container.after(element);
+      break;
+    case Position.BEFORE_END:
+      container.append(element);
+      break;
+  }
+};

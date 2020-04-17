@@ -1,4 +1,4 @@
-import {createFilmCards} from "./film-card";
+import {createFilmCards} from "../film-card/film-card";
 
 /**
  * Создание разметки блока самых обсуждаемых фильмов
