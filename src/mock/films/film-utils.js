@@ -1,6 +1,7 @@
 import {DESCRIPTION, CountDescription, CountDuration, RATING_MAX} from "./film-consts";
 import {getRandomInt, getShuffleArray} from "../../utils";
 
+
 /**
  * Получение случайного описания фильма
  * @return {string} описание фильма
@@ -18,6 +19,7 @@ export const getRandomDescription = () => {
   return description;
 };
 
+
 /**
  * Создание случайной длительности фильма
  * @return {string} длительность фильма
@@ -29,6 +31,7 @@ export const getRandomDuration = () => {
 
   return duration;
 };
+
 
 /**
  * Получение случайного значения рейтинга фильма

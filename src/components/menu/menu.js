@@ -2,6 +2,7 @@ import {Filter} from "../../consts";
 import {filterCountMenu} from "../../mock/menu-filters";
 import {createElement} from "../../utils";
 
+
 /**
  * Создание разметки блока главного меню
  * @param {Array} films список фильмов
@@ -26,6 +27,7 @@ const createMenu = (films) => {
     </nav>`
   );
 };
+
 
 /**
  * Создание класса подробной карточки фильма

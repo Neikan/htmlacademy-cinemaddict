@@ -3,6 +3,7 @@ import {createControls} from "./components/controls";
 import {createCommentBlock} from "./components/comments";
 import {createElement} from "../../utils";
 
+
 /**
  * Создание разметки блока подробной карточки фильма
  * @param {Object} film фильм
@@ -24,6 +25,7 @@ const createFilmDetails = (film) => {
     </section>`
   );
 };
+
 
 /**
  * Создание класса подробной карточки фильма

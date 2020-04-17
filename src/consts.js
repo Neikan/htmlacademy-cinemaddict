@@ -77,3 +77,10 @@ export const EMOJIES = [
 ];
 
 export const START_DATE_FILMS = [1970, 1, 1];
+
+export const CLASS_POINTER = `pointer`;
+
+export const ExtraName = {
+  RATED: `Top rated`,
+  COMMENTED: `Most commented`
+};

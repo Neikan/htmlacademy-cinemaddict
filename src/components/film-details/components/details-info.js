@@ -1,6 +1,7 @@
-import {createPromo} from "./details-info/promo";
-import {createTitles} from "./details-info/titles";
-import {createDetails} from "./details-info/details";
+import {createPromo} from "./promo";
+import {createTitles} from "./titles";
+import {createDetails} from "./details";
+
 
 /**
  * Создание разметки блока подробной информации о фильме
@@ -8,8 +9,8 @@ import {createDetails} from "./details-info/details";
  * @return {string} разметка блока
  */
 const createDetailsInfo = ({promo, titles, rating, details}) => {
-  return (`
-    <div class="film-details__info-wrap">
+  return (
+    `<div class="film-details__info-wrap">
       ${createPromo(promo)}
       <div class="film-details__info">
         <div class="film-details__info-head">
@@ -20,8 +21,9 @@ const createDetailsInfo = ({promo, titles, rating, details}) => {
         </div>
         ${createDetails(details)}
       </div>
-    </div>
-  `);
+    </div>`
+  );
 };
+
 
 export {createDetailsInfo};

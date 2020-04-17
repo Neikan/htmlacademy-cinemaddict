@@ -1,15 +1,5 @@
-import {CountFilm, KeyCode} from "../../consts";
-import {createElement, renderComponent} from "../../utils";
-import FilmCardComponent from "./film-card";
-import FilmDetailsComponent from "./../film-details/film-details";
+import {createElement} from "../../utils";
 
-/**
- * Создание разметки нескольких карточек фильмов
- * @param {Array} films список фильмов
- * @return {string} разметка нескольких карточек
- */
-const createFilmCards = (films) => films.slice(0, CountFilm.START)
-  .reduce((cards, film) => cards + createFilmCard(film), ``);
 
 /**
  * Создание разметки блока стандартной карточки фильма
@@ -26,7 +16,6 @@ const createFilmCard = ({
   isWatched,
   isFavorite
 }) => {
-
   const ACTIVE_CLASS = ` film-card__controls-item--active`;
   const classMarkup = {
     'addToWatch': isWatch ? ACTIVE_CLASS : ``,
@@ -58,8 +47,6 @@ const createFilmCard = ({
   );
 };
 
-export {createFilmCards};
-
 
 /**
  * Создание класса стандартной карточки фильма
@@ -86,84 +73,3 @@ export default class FilmCard {
     this._element = null;
   }
 }
-
-
-/**
- * Изменение карточки фильна на подробную
- * @param {Object} filmsContainer список фильмов
- * @param {Object} {формы фильма}
- */
-const removeDetails = (filmsContainer, {details}) => {
-  const detailsForm = details.getElement().querySelector(`form`);
-
-  const editFormSubmitHandler = (evt) => {
-    evt.preventDefault();
-    filmsContainer.removeChild(details.getElement());
-  };
-
-  detailsForm.addEventListener(`submit`, editFormSubmitHandler);
-};
-
-/**
- * Изменение карточки фильма на стандартную
- * @param {Object} filmsContainer список фильмов
- * @param {Object} {формы фильма}
- * @param {Function} escKeyDownHandler помощник
- */
-const showDetails = (filmsContainer, {card, details}) => {
-  const poster = card.getElement().querySelector(`.film-card__poster`);
-  const title = card.getElement().querySelector(`.film-card__title`);
-  const comments = card.getElement().querySelector(`.film-card__comments`);
-  const btnCloseDetails = details.getElement().querySelector(`.film-details__close-btn`);
-
-  const removeCardDetails = () => {
-    filmsContainer.removeChild(details.getElement());
-    document.removeEventListener(`keydown`, btnCloseDetailsKeyDownHandler);
-  };
-
-  const btnCloseDetailsClickHandler = () => {
-    if (document.querySelector(`.film-details`)) {
-      removeCardDetails();
-    }
-  };
-
-  const cardClickHandler = () => {
-    filmsContainer.appendChild(details.getElement());
-    btnCloseDetails.addEventListener(`click`, btnCloseDetailsClickHandler);
-    document.addEventListener(`keydown`, btnCloseDetailsKeyDownHandler);
-  };
-
-  const btnCloseDetailsKeyDownHandler = function (evt) {
-    if (evt.keyCode === KeyCode.ESC) {
-      removeCardDetails();
-    }
-  };
-
-  poster.addEventListener(`click`, cardClickHandler);
-  title.addEventListener(`click`, cardClickHandler);
-  comments.addEventListener(`click`, cardClickHandler);
-};
-
-
-const renderFilm = (filmsComponent, film) => {
-  const filmsContainer = filmsComponent.getElement().querySelector(`.films .films-list__container`);
-
-  const filmForm = {
-    card: new FilmCardComponent(film),
-    details: new FilmDetailsComponent(film)
-  };
-
-  const escKeyDownHandler = (evt) => {
-    if (evt.keyCode === KeyCode.ESC) {
-      filmsContainer.removeChild(filmForm.details.getElement());
-      document.removeEventListener(`keydown`, escKeyDownHandler);
-    }
-  };
-
-  removeDetails(filmsContainer, filmForm);
-  showDetails(filmsContainer, filmForm, escKeyDownHandler);
-
-  renderComponent(filmsContainer, filmForm.card.getElement());
-};
-
-export {renderFilm};

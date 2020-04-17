@@ -1,6 +1,7 @@
 import {ProfileRank, Filter} from '../consts.js';
 import {filterCountMenu} from './menu-filters.js';
 
+
 /**
  * Получение ранга профиля пользователя
  * @param {Array} films список фильмов
@@ -23,5 +24,6 @@ const getProfileRank = (films) => {
       return (``);
   }
 };
+
 
 export {getProfileRank};
