@@ -1,12 +1,5 @@
-import {CountFilm} from "../../consts";
+import {createElement} from "../../utils";
 
-/**
- * Создание разметки нескольких карточек фильмов
- * @param {Array} films список фильмов
- * @return {string} разметка нескольких карточек
- */
-const createFilmCards = (films) => films.slice(0, CountFilm.START)
-  .reduce((cards, film) => cards + createFilmCard(film), ``);
 
 /**
  * Создание разметки блока стандартной карточки фильма
@@ -23,7 +16,6 @@ const createFilmCard = ({
   isWatched,
   isFavorite
 }) => {
-
   const ACTIVE_CLASS = ` film-card__controls-item--active`;
   const classMarkup = {
     'addToWatch': isWatch ? ACTIVE_CLASS : ``,
@@ -31,8 +23,8 @@ const createFilmCard = ({
     'markAsFavourite': isFavorite ? ACTIVE_CLASS : ``
   };
 
-  return (`
-    <article class="film-card">
+  return (
+    `<article class="film-card">
       <h3 class="film-card__title">${titles.translate}</h3>
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
@@ -51,8 +43,33 @@ const createFilmCard = ({
         <button class="film-card__controls-item button
           film-card__controls-item--favorite${classMarkup[`markAsFavourite`]}">Mark as favorite</button>
       </form>
-    </article>
-  `);
+    </article>`
+  );
 };
 
-export {createFilmCard, createFilmCards};
+
+/**
+ * Создание класса стандартной карточки фильма
+ */
+export default class FilmCard {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmCard(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

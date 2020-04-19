@@ -1,4 +1,5 @@
-import {createGenresBlock} from "./details/genres";
+import {createGenresBlock} from "./genres";
+
 
 /**
  * Создание разметки блока детальной информации
@@ -6,14 +7,15 @@ import {createGenresBlock} from "./details/genres";
  * @return {string} разметка блока
  */
 const createDetails = (details) => {
-  return (`
-    <table class="film-details__table">
+  return (
+    `<table class="film-details__table">
       ${createRows(getRows(details))}
       ${createGenresBlock(details.genres)}
     </table>
-    ${createDescription(details.description)}
-  `);
+    ${createDescription(details.description)}`
+  );
 };
+
 
 /**
  * Получение массива элементов для таблицы с детальной информацией о фильме
@@ -23,6 +25,7 @@ const createDetails = (details) => {
 const getRows = ({director, screenwriters, actors, releaseDate, duration, country}) =>
   Object.values({director, screenwriters, actors, releaseDate, duration, country});
 
+
 /**
  * Создание разметки строк таблицы
  * @param {Array} rows массив
@@ -30,19 +33,21 @@ const getRows = ({director, screenwriters, actors, releaseDate, duration, countr
  */
 const createRows = (rows) => rows.map(createRow).join(`\n`);
 
+
 /**
  * Создание разметки строки таблицы
  * @param {Object} {данные строки}
  * @return {string} разметка строки
  */
 const createRow = ({name, info}) => {
-  return (`
-    <tr class="film-details__row">
+  return (
+    `<tr class="film-details__row">
       <td class="film-details__term">${name}</td>
       <td class="film-details__cell">${info}</td>
-    </tr>
-  `);
+    </tr>`
+  );
 };
+
 
 /**
  * Создание разметки блока описания фильма
@@ -51,5 +56,6 @@ const createRow = ({name, info}) => {
  */
 const createDescription = (description) =>
   `<p class="film-details__film-description">${description}</p>`;
+
 
 export {createDetails};

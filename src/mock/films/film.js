@@ -37,7 +37,7 @@ const generateFilm = () => {
     },
     titles: {
       translate: titles.translate,
-      titleOrigin: titles.original
+      original: titles.original
     },
     rating: getRandomRating(),
     details: {

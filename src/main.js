@@ -1,13 +1,14 @@
-import {CountFilm, KeyCode} from "./consts";
-import {render} from "./utils";
-import {createProfileRank} from "./components/profile-rank";
-import {createMenu} from "./components/menu";
-import {createSorting} from "./components/films/sorting";
-import {createFilms} from "./components/films";
-import {createStatistic} from "./components/stats";
-import {createFilmDetails} from "./components/films/film-details";
-import {createFilmCard} from "./components/films/film-card";
+import {CountFilm, ExtraName, Sorting, Position} from "./consts";
+import {render, renderComponent, sortingArray} from "./utils";
+import {createProfileRank} from "./components/profile/profile-rank";
+import {createSorting} from "./components/films/components/sorting";
+import {createStatistic} from "./components/stats/stats";
 import {generateFilms} from "./mock/films/film";
+import {renderFilms} from "./helpers/films";
+import MenuComponent from "./components/menu/menu";
+import FilmsComponent from "./components/films/films";
+import FilmsExtraComponent from "./components/films-extra/films-extra";
+
 
 const Nodes = {
   BODY: document.querySelector(`body`),
@@ -16,53 +17,52 @@ const Nodes = {
   FOOTER_STATS: document.querySelector(`.footer__statistics`)
 };
 
-const films = generateFilms(CountFilm.ALL);
-let showingFilmsCount = CountFilm.START;
 
-const removeCardDetails = () => {
-  document.querySelector(`.film-details`).remove();
-  document.removeEventListener(`keydown`, btnCloseDetailsKeyDownHandler);
+/**
+ * Создание контейнера фильмов
+ * @param {Element} container
+ * @param {Object} component
+ * @param {Array} films
+ * @param {string} position
+ * @return {Object}
+ */
+export const createFilmsComponent = (container, component, films, position) => {
+  const newComponent = component;
+  renderComponent(container, newComponent.getElement(), position);
+  renderFilms(newComponent, films);
+  return newComponent;
 };
 
-const showMoreClickHandler = () => {
-  const filmsContainer = document.querySelector(`.films .films-list__container`);
-  const prevTasksCount = showingFilmsCount;
-  showingFilmsCount += CountFilm.BY_BUTTON;
-
-  films.slice(prevTasksCount, showingFilmsCount)
-    .forEach((film) => render(filmsContainer, createFilmCard(film)));
-
-  if (showingFilmsCount >= films.length) {
-    document.querySelector(`.films-list__show-more`).remove();
-  }
-};
-
-const btnCloseDetailsClickHandler = () => {
-  if (document.querySelector(`.film-details`)) {
-    removeCardDetails();
-  }
-};
-
-const btnCloseDetailsKeyDownHandler = function (evt) {
-  if (evt.keyCode === KeyCode.ESC) {
-    removeCardDetails();
-  }
-};
 
 /**
  * Отрисовка компонентов на странице
  */
 const init = () => {
-  render(Nodes.HEADER, createProfileRank(films));
-  render(Nodes.MAIN, createMenu(films));
-  render(Nodes.MAIN, createSorting());
-  render(Nodes.MAIN, createFilms(films));
-  render(Nodes.FOOTER_STATS, createStatistic());
-  render(Nodes.BODY, createFilmDetails(films[0]));
+  const films = generateFilms(CountFilm.ALL);
 
-  document.querySelector(`.films-list__show-more`).addEventListener(`click`, showMoreClickHandler);
-  document.querySelector(`.film-details__close-btn`).addEventListener(`click`, btnCloseDetailsClickHandler);
-  document.addEventListener(`keydown`, btnCloseDetailsKeyDownHandler);
+  render(Nodes.HEADER, createProfileRank(films));
+  renderComponent(Nodes.MAIN, new MenuComponent(films).getElement());
+  render(Nodes.MAIN, createSorting());
+
+  const filmsComponent = createFilmsComponent(Nodes.MAIN, new FilmsComponent(), films);
+  const endFilmList = filmsComponent.getElement().querySelector(`.films-list`);
+
+  createFilmsComponent(
+      endFilmList,
+      new FilmsExtraComponent(ExtraName.COMMENTED),
+      sortingArray(films, Sorting.BY_COMMENTS),
+      Position.AFTER_END
+  );
+
+  createFilmsComponent(
+      endFilmList,
+      new FilmsExtraComponent(ExtraName.RATED),
+      sortingArray(films, Sorting.BY_RATING),
+      Position.AFTER_END
+  );
+
+  render(Nodes.FOOTER_STATS, createStatistic());
 };
+
 
 init();

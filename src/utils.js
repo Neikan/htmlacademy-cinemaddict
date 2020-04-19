@@ -1,5 +1,6 @@
 import {Position, CountCheckFormat, MONTH_NAMES, START_DATE_FILMS, CountFilm} from "./consts";
 
+
 /**
  * Отрисовка элемента страницы ("компонента")
  * @param {Element} container контейнер, в который отрисосывается шаблон
@@ -10,6 +11,7 @@ import {Position, CountCheckFormat, MONTH_NAMES, START_DATE_FILMS, CountFilm} fr
 export const render = (container, template, position = Position.BEFORE_END) =>
   void container.insertAdjacentHTML(position, template);
 
+
 /**
  * Получение случайного числа из диапазона
  * @param {Number} max большее число
@@ -19,6 +21,7 @@ export const render = (container, template, position = Position.BEFORE_END) =>
 export const getRandomInt = (max, min = 0) => {
   return min + Math.floor(Math.random() * (max - min));
 };
+
 
 /**
  * Получение случайного элемента массива
@@ -32,6 +35,7 @@ export const getRandomElement = (array) => array[getRandomInt(array.length)];
  * @return {boolean} полученное логическое значение
  */
 export const getRandomBoolean = () => Math.random() > 0.5;
+
 
 /**
  * Перемешивание массива
@@ -48,6 +52,7 @@ export const getShuffleArray = function (array) {
 
   return array;
 };
+
 
 /**
  * Создание подмассива из массива
@@ -66,6 +71,7 @@ export const getRandomSubArray = (array) => {
   return subArray;
 };
 
+
 /**
  * Сортировка массива объектов по параметру
  * @param {Array} array массив для сортировки
@@ -81,6 +87,7 @@ const choiceType = {
   'forArray': (parameter) => ((a, b) => (b[parameter].length - a[parameter].length))
 };
 
+
 /**
  * Получение случайной даты
  * @param {Date} maxDate
@@ -91,12 +98,14 @@ export const getRandomDate = (maxDate, minDate = new Date([...START_DATE_FILMS])
   return new Date(minDate.getTime() + Math.random() * (maxDate.getTime() - minDate.getTime()));
 };
 
+
 /**
  * Приведение формата часов и минут к формату: 2 часа 3 минуты -> 02:03
  * @param {string} value
  * @return {string}
  */
 const castTimeFormat = (value) => (value < CountCheckFormat.TIME ? `0${value}` : String(value));
+
 
 /**
  * Приведение формата 4х-6ти-значного числа к формату "123 456"
@@ -107,6 +116,7 @@ export const castNumberFormat = (value) => {
   return value > CountCheckFormat.NUMBER ?
     `${Math.trunc(value / CountCheckFormat.NUMBER)}  ${value % CountCheckFormat.NUMBER}` : String(value);
 };
+
 
 /**
  * Получение случайной даты в формате "год/месяц/день часы:минуты"
@@ -123,6 +133,7 @@ export const getCommentDate = (date) => {
   return `${year}/${month}/${day} ${hours}:${minutes}`;
 };
 
+
 /**
  * Получение случайной даты в формате "день месяц год"
  * @param {Date} date дата для приведения формата
@@ -134,4 +145,39 @@ export const getReleaseDate = (date) => {
   const year = date.getFullYear();
 
   return `${day} ${month} ${year}`;
+};
+
+
+/**
+ * Создание DOM-элемента
+ * @param {string} template шаблон-разметка для создания элемента
+ * @return {string} разметка созданного элемента
+ */
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
+
+/**
+ * Отрисовка элемента страницы ("компонента")
+ * @param {Object} container контейнер, в который отрисосывается шаблон
+ * @param {string} element отрисовываемый элемент
+ * @param {string} position место в контейнере для отрисовываемого шаблона
+ * @return {void}
+ */
+export const renderComponent = (container, element, position = Position.BEFORE_END) => {
+  switch (position) {
+    case Position.AFTER_BEGIN:
+      container.prepend(element);
+      break;
+    case Position.AFTER_END:
+      container.after(element);
+      break;
+    case Position.BEFORE_END:
+      container.append(element);
+      break;
+  }
 };

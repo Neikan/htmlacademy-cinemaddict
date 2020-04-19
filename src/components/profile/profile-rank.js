@@ -1,4 +1,5 @@
-import {getProfileRank} from "../mock/rank";
+import {getProfileRank} from "../../mock/rank";
+
 
 /**
  * Создание разметки блока ранга профиля пользователя
@@ -6,12 +7,13 @@ import {getProfileRank} from "../mock/rank";
  * @return {string} разметка блока
  */
 const createProfileRank = (films) => {
-  return (`
-    <section class="header__profile profile">
+  return (
+    `<section class="header__profile profile">
       <p class="profile__rating">${getProfileRank(films)}</p>
       <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-    </section>
-  `);
+    </section>`
+  );
 };
+
 
 export {createProfileRank};

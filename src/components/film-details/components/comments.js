@@ -1,5 +1,6 @@
 import {EMOJIES} from "../../../consts";
-import {createEmojiesBlock} from "./comments/emojies";
+import {createEmojiesBlock} from "./emojies";
+
 
 /**
  * Создание разметки блока комментирования о фильме
@@ -24,6 +25,7 @@ const createCommentBlock = ({comments}) => {
   `);
 };
 
+
 /**
  * Создание разметки списка комментариев
  * @param {Array} comments комментарии
@@ -37,6 +39,7 @@ const createCommentList = (comments) => {
   `);
 };
 
+
 /**
  * Создание разметки нескольких комментариев
  * @param {Array} comments комментарии
@@ -44,14 +47,15 @@ const createCommentList = (comments) => {
  */
 const createComments = (comments) => comments.map(createComment).join(`\n`);
 
+
 /**
  * Создание разметки одного комментария
  * @param {Object} {свойства комментария}
  * @return {string} разметка одного комментария
  */
 const createComment = ({text, emoji, author, date, button}) => {
-  return (`
-    <li class="film-details__comment">
+  return (
+    `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
       </span>
@@ -63,8 +67,9 @@ const createComment = ({text, emoji, author, date, button}) => {
           <button class="film-details__comment-delete">${button}</button>
         </p>
       </div>
-    </li>
-  `);
+    </li>`
+  );
 };
+
 
 export {createCommentBlock};

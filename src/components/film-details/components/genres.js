@@ -6,15 +6,16 @@
 const createGenresBlock = (genres) => {
   const title = genres.length > 1 ? `Genres` : `Genre`;
 
-  return (`
-    <tr class="film-details__row">
+  return (
+    `<tr class="film-details__row">
       <td class="film-details__term">${title}</td>
       <td class="film-details__cell">
         ${createGenres(genres)}
       </td>
-    </tr>
-  `);
+    </tr>`
+  );
 };
+
 
 /**
  * Создание разметки жанра
@@ -23,11 +24,13 @@ const createGenresBlock = (genres) => {
  */
 const createGenre = (genre) => `<span class="film-details__genre">${genre}</span>`;
 
+
 /**
  * Создание разметки перечня жанров
  * @param {Array} genres жанры
  * @return {string} разметка перечня
  */
 const createGenres = (genres) => genres.map(createGenre).join(`\n`);
+
 
 export {createGenresBlock};
