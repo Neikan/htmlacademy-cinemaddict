@@ -4,9 +4,21 @@ import {createElement} from "../../utils";
 
 /**
  * Создание разметки блока фильмов
+ * @param {Array} films фильмы
+ * @return {string}
+ */
+const createFilms = (films) => {
+  const filmsContainer = films.length ? createContainerWithFilms() : createContainerNoFilms();
+
+  return filmsContainer;
+};
+
+
+/**
+ * Создание разметки блока фильмов при наличии фильмов
  * @return {string} разметка блока
  */
-const createFilms = () => {
+const createContainerWithFilms = () => {
   return (
     `<section class="films">
       <section class="films-list">
@@ -19,17 +31,31 @@ const createFilms = () => {
   );
 };
 
+/**
+ * Создание разметки блока фильмов при отсутствии фильмов
+ * @return {string} разметка блока
+ */
+const createContainerNoFilms = () => {
+  return (
+    `<section class="films">
+      <section class="films-list">
+        <h2 class="films-list__title">There are no movies in our database</h2>
+      </section>
+    </section>`
+  );
+};
 
 /**
  * Создание класса блока фильмов
  */
 export default class Films {
-  constructor() {
+  constructor(films) {
+    this._films = films;
     this._element = null;
   }
 
   getTemplate() {
-    return createFilms();
+    return createFilms(this._films);
   }
 
   getElement() {
