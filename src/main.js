@@ -44,22 +44,24 @@ const init = () => {
   renderComponent(Nodes.MAIN, new MenuComponent(films).getElement());
   render(Nodes.MAIN, createSorting());
 
-  const filmsComponent = createFilmsComponent(Nodes.MAIN, new FilmsComponent(), films);
+  const filmsComponent = createFilmsComponent(Nodes.MAIN, new FilmsComponent(films), films);
   const endFilmList = filmsComponent.getElement().querySelector(`.films-list`);
 
-  createFilmsComponent(
-      endFilmList,
-      new FilmsExtraComponent(ExtraName.COMMENTED),
-      sortingArray(films, Sorting.BY_COMMENTS),
-      Position.AFTER_END
-  );
+  if (films.length) {
+    createFilmsComponent(
+        endFilmList,
+        new FilmsExtraComponent(ExtraName.COMMENTED),
+        sortingArray(films, Sorting.BY_COMMENTS),
+        Position.AFTER_END
+    );
 
-  createFilmsComponent(
-      endFilmList,
-      new FilmsExtraComponent(ExtraName.RATED),
-      sortingArray(films, Sorting.BY_RATING),
-      Position.AFTER_END
-  );
+    createFilmsComponent(
+        endFilmList,
+        new FilmsExtraComponent(ExtraName.RATED),
+        sortingArray(films, Sorting.BY_RATING),
+        Position.AFTER_END
+    );
+  }
 
   render(Nodes.FOOTER_STATS, createStatistic());
 };
