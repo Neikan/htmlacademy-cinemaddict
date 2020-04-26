@@ -17,7 +17,7 @@ import {
   getRandomBoolean,
   getRandomDate,
   getReleaseDate,
-} from '../../utils.js';
+} from '../../utils/common';
 
 import {generateComments} from '../comments/comment.js';
 import {getRandomDuration, getRandomDescription, getRandomRating} from './film-utils';

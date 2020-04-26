@@ -1,5 +1,5 @@
 import {KeyCode, CLASS_POINTER} from "../consts";
-import {renderComponent} from "../utils";
+import {renderComponent} from "../utils/common";
 import FilmCardComponent from "../components/film-card/film-card";
 import FilmDetailsComponent from "../components/film-details/film-details";
 

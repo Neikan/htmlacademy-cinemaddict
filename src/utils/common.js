@@ -1,4 +1,4 @@
-import {Position, CountCheckFormat, MONTH_NAMES, START_DATE_FILMS, CountFilm} from "./consts";
+import {Position, CountCheckFormat, MONTH_NAMES, START_DATE_FILMS, CountFilm} from "../consts";
 
 
 /**
@@ -8,7 +8,7 @@ import {Position, CountCheckFormat, MONTH_NAMES, START_DATE_FILMS, CountFilm} fr
  * @param {string} position место в контейнере для отрисовываемого шаблона
  * @return {void}
  */
-export const render = (container, template, position = Position.BEFORE_END) =>
+export const renderMarkup = (container, template, position = Position.BEFORE_END) =>
   void container.insertAdjacentHTML(position, template);
 
 

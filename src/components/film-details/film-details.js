@@ -1,7 +1,7 @@
 import {createDetailsInfo} from "./components/details-info";
 import {createControls} from "./components/controls";
 import {createCommentBlock} from "./components/comments";
-import {createElement} from "../../utils";
+import AbstractComponent from "../abstract/abstract-component";
 
 
 /**
@@ -30,25 +30,14 @@ const createFilmDetails = (film) => {
 /**
  * Создание класса подробной карточки фильма
  */
-export default class FilmDetails {
+export default class FilmDetails extends AbstractComponent {
   constructor(film) {
+    super();
+
     this._film = film;
-    this._element = null;
   }
 
   getTemplate() {
     return createFilmDetails(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
