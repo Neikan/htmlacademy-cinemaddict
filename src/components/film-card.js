@@ -1,4 +1,5 @@
-import AbstractComponent from "../abstract/abstract-component";
+import AbstractComponent from "./abstract/abstract-component";
+import {CLASS_POINTER} from "../consts";
 
 
 /**
@@ -60,5 +61,12 @@ export default class FilmCard extends AbstractComponent {
 
   getTemplate() {
     return createFilmCard(this._film);
+  }
+
+  setClickHandler(handler, cardElement) {
+    const target = this.getElement().querySelector(`.${cardElement}`);
+
+    target.classList.add(CLASS_POINTER);
+    target.addEventListener(`click`, handler);
   }
 }

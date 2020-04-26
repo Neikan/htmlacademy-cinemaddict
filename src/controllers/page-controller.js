@@ -1,21 +1,23 @@
 import {CountFilm, ExtraName, Position, Sorting} from "../consts";
 import {renderFilm} from "../helpers/film";
-import {remove, render} from "../utils/components";
+import {render} from "../utils/components";
 import {sortingArray} from "../utils/common";
-import FilmsComponent from "../components/films/films";
+import {addShowMoreListener} from "../components/show-more-button";
+import FilmsComponent from "../components/films";
 import ShowMoreBtnComponent from "../components/show-more-button";
-import FilmsExtraComponent from "../components/films-extra/films-extra";
+import FilmsExtraComponent from "../components/films-extra";
 import NoFilmsComponent from "../components/no-films";
 import SortingComponent from "../components/sorting";
-import MenuComponent from "../components/menu/menu";
+import MenuComponent from "../components/menu";
 
 
 /**
  * Отрисовка блока фильмов
  * @param {Object} filmsComponent блок фильмов
  * @param {Array} films фильмы
+ * @param {Object} showMoreBtnComponent кнопка показа скрытых фильмов
  */
-const renderFilms = (filmsComponent, films) => {
+const renderFilms = (filmsComponent, films, showMoreBtnComponent) => {
   if (films.length) {
     let showingFilmsCount = CountFilm.START;
 
@@ -23,35 +25,11 @@ const renderFilms = (filmsComponent, films) => {
 
     films.slice(0, showingFilmsCount).map(renderFilmsList());
 
-    if (filmsComponent.getElement().querySelector(`.films-list__show-more`)) {
-      addShowMoreListener(filmsComponent, films, showingFilmsCount, renderFilmsList);
+    if (showMoreBtnComponent) {
+      render(filmsComponent.getElement(), showMoreBtnComponent);
+      addShowMoreListener(showMoreBtnComponent, films, showingFilmsCount, renderFilmsList);
     }
   }
-};
-
-
-/**
- * Добавление лисенера на кнопку показа скрытых фильмов
- * @param {Object} filmsComponent блок фильмов
- * @param {Array} films фильмы
- * @param {Number} showingFilmsCount количество фильмов, ранее отображенных
- * @param {Function} renderFilmList отрисовка списка фильмов
- */
-const addShowMoreListener = (filmsComponent, films, showingFilmsCount, renderFilmList) => {
-  const showMore = filmsComponent.getElement().querySelector(`.films-list__show-more`);
-
-  const showMoreClickHandler = () => {
-    const prevFilmsCount = showingFilmsCount;
-    showingFilmsCount += CountFilm.BY_BUTTON;
-
-    films.slice(prevFilmsCount, showingFilmsCount).map(renderFilmList());
-
-    if (showingFilmsCount >= films.length) {
-      showMore.remove();
-    }
-  };
-
-  showMore.addEventListener(`click`, showMoreClickHandler);
 };
 
 
@@ -74,30 +52,29 @@ export default class BoardController {
 
   render(films) {
     const container = this._container.getElement();
+    render(container, this._menu, Position.BEFORE_BEGIN);
 
     if (films.length) {
-      render(container, this._menu, Position.BEFORE_BEGIN);
       render(container, this._sorting, Position.BEFORE_BEGIN);
       render(container, this._films);
       render(container, this._filmsRated);
       render(container, this._filmsCommented);
 
-      renderFilms(this._films, films);
+      renderFilms(this._films, films, this._showMoreBtn);
       renderFilms(this._filmsRated, sortingArray(films, Sorting.BY_RATING));
       renderFilms(this._filmsCommented, sortingArray(films, Sorting.BY_COMMENTS));
 
     } else {
-      render(container, this._menu, Position.BEFORE_BEGIN);
       render(container, this._noFilms);
     }
   }
 
-  replace() {
-    this.removeData();
-    this.render();
-  }
+  // replace() {
+  //   this.removeData();
+  //   this.render();
+  // }
 
-  removeData() {
-    remove(this._filmsComponent);
-  }
+  // removeData() {
+  //   remove(this._filmsComponent);
+  // }
 }

@@ -1,5 +1,5 @@
-import {CountFilm} from "../../consts";
-import {castNumberFormat} from "../../utils/common";
+import {CountFilm} from "../consts";
+import {castNumberFormat} from "../utils/common";
 
 
 /**

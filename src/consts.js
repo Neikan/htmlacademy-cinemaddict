@@ -85,3 +85,13 @@ export const ExtraName = {
   RATED: `Top rated`,
   COMMENTED: `Most commented`
 };
+
+export const CARD_ELEMENTS = [
+  `film-card__poster`,
+  `film-card__title`,
+  `film-card__comments`
+];
+
+export const DetailsElement = {
+  BTN_CLOSE: `film-details__close-btn`
+};

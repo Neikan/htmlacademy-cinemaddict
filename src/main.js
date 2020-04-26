@@ -1,15 +1,14 @@
 import {CountFilm} from "./consts";
 import {renderMarkup} from "./utils/common";
 import {render} from "./utils/components";
-import {createProfileRank} from "./components/profile/profile-rank";
-import {createStatistic} from "./components/stats/stats";
+import {createProfileRank} from "./components/profile-rank";
+import {createStatistic} from "./components/stats";
 import {generateFilms} from "./mock/films/film";
 import PageComponent from "./components/page";
 import PageController from "./controllers/page-controller";
 
 
 const Nodes = {
-  BODY: document.querySelector(`body`),
   HEADER: document.querySelector(`.header`),
   MAIN: document.querySelector(`.main`),
   FOOTER_STATS: document.querySelector(`.footer__statistics`)

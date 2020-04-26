@@ -1,6 +1,6 @@
-import {Filter} from "../../consts";
-import {filterCountMenu} from "../../mock/menu-filters";
-import AbstractComponent from "../abstract/abstract-component";
+import {Filter} from "../consts";
+import {filterCountMenu} from "../mock/menu-filters";
+import AbstractComponent from "./abstract/abstract-component";
 
 
 /**

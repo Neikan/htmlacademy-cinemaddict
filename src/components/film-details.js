@@ -1,7 +1,8 @@
-import {createDetailsInfo} from "./components/details-info";
-import {createControls} from "./components/controls";
-import {createCommentBlock} from "./components/comments";
-import AbstractComponent from "../abstract/abstract-component";
+import {createDetailsInfo} from "./film-details/details-info";
+import {createControls} from "./film-details/controls";
+import {createCommentBlock} from "./film-details/comments";
+import AbstractComponent from "./abstract/abstract-component";
+import { DetailsElement } from "../consts";
 
 
 /**
@@ -39,5 +40,10 @@ export default class FilmDetails extends AbstractComponent {
 
   getTemplate() {
     return createFilmDetails(this._film);
+  }
+
+  setBtnCloseClickHandler(handler) {
+    this.getElement().querySelector(`.${DetailsElement.BTN_CLOSE}`)
+      .addEventListener(`click`, handler);
   }
 }
