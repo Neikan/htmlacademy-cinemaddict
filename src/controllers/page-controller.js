@@ -37,11 +37,10 @@ const renderFilms = (filmsComponent, films, showMoreBtnComponent) => {
  * Создание контроллера, обеспечивающего отрисовку компонентов на странице
  */
 export default class BoardController {
-  constructor(container, films) {
+  constructor(container) {
     this._container = container;
 
-    this._films = films;
-    this._menu = new MenuComponent(films);
+    this._menu = null;
     this._films = new FilmsComponent();
     this._filmsCommented = new FilmsExtraComponent(ExtraName.COMMENTED);
     this._filmsRated = new FilmsExtraComponent(ExtraName.RATED);
@@ -51,6 +50,7 @@ export default class BoardController {
   }
 
   render(films) {
+    this._menu = new MenuComponent(films);
     const container = this._container.getElement();
     render(container, this._menu, Position.BEFORE_BEGIN);
 
