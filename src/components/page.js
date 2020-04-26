@@ -1,14 +1,14 @@
 import AbstractComponent from "./abstract/abstract-component";
 
 /**
- * Создание разметки блока фильмов
+ * Создание разметки секции фильмов
  * @return {string} разметка блока
  */
 const createPage = () => `<section class="films"></section>`;
 
 
 /**
- * Создание класса блока фильмов
+ * Создание класса секции для управления блоками фильмов
  */
 export default class Page extends AbstractComponent {
   getTemplate() {

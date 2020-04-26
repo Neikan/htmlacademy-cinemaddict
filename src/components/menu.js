@@ -30,7 +30,7 @@ const createMenu = (films) => {
 
 
 /**
- * Создание класса подробной карточки фильма
+ * Создание класса главного меню
  */
 export default class Menu extends AbstractComponent {
   constructor(films) {

@@ -2,7 +2,7 @@ import {createElement} from "../../utils/components";
 
 
 /**
- * Класс абстрактнлшл компонента
+ * Класс абстрактного компонента
  */
 export default class AbstractComponent {
   constructor() {

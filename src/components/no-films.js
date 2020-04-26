@@ -17,7 +17,7 @@ const createContainerNoFilms = () => {
 
 
 /**
- * Создание класса контейнера при отсутствии фильмов
+ * Создание класса блока фильмов при отсутствии фильмов
  */
 export default class NoFilms extends AbstractComponent {
   getTemplate() {

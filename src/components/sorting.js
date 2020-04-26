@@ -17,7 +17,7 @@ const createSorting = () => {
 
 
 /**
- * Создание класса для типов сортировки
+ * Создание класса типов сортировки
  */
 export default class Sorting extends AbstractComponent {
   getTemplate() {

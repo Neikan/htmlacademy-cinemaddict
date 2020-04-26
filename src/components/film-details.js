@@ -1,8 +1,8 @@
 import {createDetailsInfo} from "./film-details/details-info";
 import {createControls} from "./film-details/controls";
 import {createCommentBlock} from "./film-details/comments";
+import {DetailsElement} from "../consts";
 import AbstractComponent from "./abstract/abstract-component";
-import { DetailsElement } from "../consts";
 
 
 /**

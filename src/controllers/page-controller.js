@@ -68,13 +68,4 @@ export default class BoardController {
       render(container, this._noFilms);
     }
   }
-
-  // replace() {
-  //   this.removeData();
-  //   this.render();
-  // }
-
-  // removeData() {
-  //   remove(this._filmsComponent);
-  // }
 }
