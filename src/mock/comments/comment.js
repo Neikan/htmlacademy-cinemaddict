@@ -1,5 +1,5 @@
 import {EMOJIES} from '../../consts.js';
-import {getRandomElement, getRandomDate, getCommentDate} from '../../utils.js';
+import {getRandomElement, getRandomDate, getCommentDate} from '../../utils/common.js';
 import {COMMENT_TEXTS, COMMENT_AUTHORS, START_DATE_COMMENTS} from './comment-consts.js';
 
 

@@ -1,4 +1,5 @@
-import {createElement} from "../../utils";
+import AbstractComponent from "./abstract/abstract-component";
+import {CLASS_POINTER} from "../consts";
 
 
 /**
@@ -51,25 +52,21 @@ const createFilmCard = ({
 /**
  * Создание класса стандартной карточки фильма
  */
-export default class FilmCard {
+export default class FilmCard extends AbstractComponent {
   constructor(film) {
+    super();
+
     this._film = film;
-    this._element = null;
   }
 
   getTemplate() {
     return createFilmCard(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
+  setClickHandler(handler, cardElement) {
+    const target = this.getElement().querySelector(`.${cardElement}`);
 
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+    target.classList.add(CLASS_POINTER);
+    target.addEventListener(`click`, handler);
   }
 }

@@ -1,4 +1,4 @@
-import {EMOJIES} from "../../../consts";
+import {EMOJIES} from "../../consts";
 import {createEmojiesBlock} from "./emojies";
 
 

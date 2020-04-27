@@ -1,6 +1,6 @@
-import {Filter} from "../../consts";
-import {filterCountMenu} from "../../mock/menu-filters";
-import {createElement} from "../../utils";
+import {Filter} from "../consts";
+import {filterCountMenu} from "../mock/menu-filters";
+import AbstractComponent from "./abstract/abstract-component";
 
 
 /**
@@ -30,27 +30,16 @@ const createMenu = (films) => {
 
 
 /**
- * Создание класса подробной карточки фильма
+ * Создание класса главного меню
  */
-export default class Menu {
+export default class Menu extends AbstractComponent {
   constructor(films) {
+    super();
+
     this._films = films;
-    this._element = null;
   }
 
   getTemplate() {
     return createMenu(this._films);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,3 +1,6 @@
+import AbstractComponent from "./abstract/abstract-component";
+
+
 /**
  * Создание разметки блока сортировки фильмов
  * @return {string} разметка блока
@@ -13,4 +16,11 @@ const createSorting = () => {
 };
 
 
-export {createSorting};
+/**
+ * Создание класса типов сортировки
+ */
+export default class Sorting extends AbstractComponent {
+  getTemplate() {
+    return createSorting();
+  }
+}

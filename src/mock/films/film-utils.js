@@ -1,5 +1,5 @@
 import {DESCRIPTION, CountDescription, CountDuration, RATING_MAX} from "./film-consts";
-import {getRandomInt, getShuffleArray} from "../../utils";
+import {getRandomInt, getShuffleArray} from "../../utils/common";
 
 
 /**

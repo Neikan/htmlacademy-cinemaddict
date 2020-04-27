@@ -32,6 +32,7 @@ export const CountCheckFormat = {
 
 export const Position = {
   BEFORE_END: `beforeend`,
+  BEFORE_BEGIN: `beforebegin`,
   AFTER_END: `afterend`,
   AFTER_BEGIN: `afterbegin`
 };
@@ -83,4 +84,14 @@ export const CLASS_POINTER = `pointer`;
 export const ExtraName = {
   RATED: `Top rated`,
   COMMENTED: `Most commented`
+};
+
+export const CARD_ELEMENTS = [
+  `film-card__poster`,
+  `film-card__title`,
+  `film-card__comments`
+];
+
+export const DetailsElement = {
+  BTN_CLOSE: `film-details__close-btn`
 };
