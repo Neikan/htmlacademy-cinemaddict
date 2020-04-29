@@ -28,18 +28,14 @@ export default class FilmController {
     this._filmCardComponent = new FilmCardComponent(filmData);
     this._filmDetailsComponent = new FilmDetailsComponent(filmData);
 
-
-    const filmForm = {
-      card: this._filmCardComponent,
-      details: this._filmDetailsComponent
-    };
+    // const filmForm = {
+    //   card: this._filmCardComponent,
+    //   details: this._filmDetailsComponent
+    // };
 
     // CARD_ELEMENTS.map(showDetails(filmForm, mainContainer, this._escKeyDownHandler));
 
-    render[Position.BEFORE_END](
-        this._pageController.getElement().querySelector(`.films-list__container`),
-        filmForm.card
-    );
+    render[Position.BEFORE_END](this._container, this._filmCardComponent);
   }
 
   _showDetails() {}
