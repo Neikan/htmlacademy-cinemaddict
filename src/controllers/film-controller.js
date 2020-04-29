@@ -10,7 +10,7 @@ const Mode = {
 
 let isRenderedDetails = Flag.NO;
 
-export default class FilmController {
+class FilmController {
   constructor(container, pageController) {
     this._container = container;
 
@@ -24,6 +24,8 @@ export default class FilmController {
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
+
+
   render(filmData) {
     this._filmCardComponent = new FilmCardComponent(filmData);
     this._filmDetailsComponent = new FilmDetailsComponent(filmData);
@@ -80,3 +82,6 @@ export default class FilmController {
     }
   }
 }
+
+
+export {FilmController};

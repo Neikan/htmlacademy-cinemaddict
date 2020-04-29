@@ -8,7 +8,7 @@ import FilmsExtraComponent from "../components/films-extra";
 import NoFilmsComponent from "../components/no-films";
 import SortingComponent from "../components/sorting";
 import MenuComponent from "../components/menu";
-import FilmController from "./film-controller";
+import {FilmController} from "./film-controller";
 
 
 /**
@@ -27,6 +27,19 @@ const renderFilmCards = (filmsList, films, pageController) => {
   });
 };
 
+/**
+ * Отрисовка фильмов в список
+ * @param {Object} filmsList список фильмов
+ * @param {Array} films данные фильмов
+ * @param {Number} prevFilmsCount текущее количество фильмов на странице
+ * @param {Number} showingFilmsCount новое количество фильмов
+ * @param {Object} pageController контроллер страницы
+ */
+const renderFilmsList = (filmsList, films, prevFilmsCount, showingFilmsCount, pageController) => {
+  const newFilms = renderFilmCards(filmsList, films.slice(prevFilmsCount, showingFilmsCount), pageController);
+  pageController._showedFilms = pageController._showedFilms.concat(newFilms);
+};
+
 
 /**
  * Отрисовка блока фильмов
@@ -37,15 +50,13 @@ const renderFilmCards = (filmsList, films, pageController) => {
  */
 const renderFilms = (filmsComponent, films, pageController, showMoreBtnComponent) => {
   let showingFilmsCount = CountFilm.START;
+
   const filmsList = filmsComponent.getElement().querySelector(`.films-list__container`);
-
-  const newFilms = renderFilmCards(filmsList, films.slice(0, showingFilmsCount), pageController);
-  pageController._showedFilms = pageController._showedFilms.concat(newFilms);
-
+  renderFilmsList(filmsList, films, 0, showingFilmsCount, pageController);
 
   if (showMoreBtnComponent && showingFilmsCount < films.length) {
     render[Position.BEFORE_END](filmsComponent.getElement(), showMoreBtnComponent);
-    addShowMoreListener(showMoreBtnComponent, films, showingFilmsCount);
+    addShowMoreListener(filmsList, films, pageController, showingFilmsCount);
   }
 };
 
@@ -53,7 +64,7 @@ const renderFilms = (filmsComponent, films, pageController, showMoreBtnComponent
 /**
  * Создание контроллера, обеспечивающего отрисовку компонентов на странице
  */
-export default class PageController {
+class PageController {
   constructor(container) {
     this._container = container;
 
@@ -117,4 +128,4 @@ export default class PageController {
 }
 
 
-export {renderFilmCards};
+export {PageController, renderFilmCards, renderFilmsList};

@@ -5,7 +5,7 @@ import {createProfileRank} from "./components/profile-rank";
 import {createStatistic} from "./components/stats";
 import {generateFilms} from "./mock/films/film";
 import PageComponent from "./components/page";
-import PageController from "./controllers/page-controller";
+import {PageController} from "./controllers/page-controller";
 
 
 const Nodes = {

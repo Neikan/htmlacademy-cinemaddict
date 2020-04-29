@@ -1,29 +1,29 @@
 import AbstractComponent from "./abstract/component";
 import {CountFilm} from "../consts";
 import {remove} from "../utils/components";
+import {renderFilmsList} from "../controllers/page-controller";
 
 
 /**
  * Добавление лисенера на кнопку показа скрытых фильмов
- * @param {Object} showMoreComponent блок фильмов
- * @param {Array} films фильмы
- * @param {Number} showingFilmsCount количество фильмов, ранее отображенных
- * @param {Function} renderFilmList отрисовка списка фильмов
+ * @param {Object} filmsList блок фильмов
+ * @param {Array} films данные фильмов
+ * @param {Number} pageController котроллер страницы
+ * @param {Function} showingFilmsCount количество показанных фильмов
  */
-const addShowMoreListener = (showMoreComponent, films, showingFilmsCount, renderFilmList) => {
-
+const addShowMoreListener = (filmsList, films, pageController, showingFilmsCount) => {
   const showMoreClickHandler = () => {
     const prevFilmsCount = showingFilmsCount;
     showingFilmsCount += CountFilm.BY_BUTTON;
 
-    films.slice(prevFilmsCount, showingFilmsCount).map(renderFilmList());
+    renderFilmsList(filmsList, films, prevFilmsCount, showingFilmsCount, pageController);
 
     if (showingFilmsCount >= films.length) {
-      remove(showMoreComponent);
+      remove(pageController._showMoreBtn);
     }
   };
 
-  showMoreComponent.setClickHandler(showMoreClickHandler);
+  pageController._showMoreBtn.setClickHandler(showMoreClickHandler);
 };
 
 
@@ -38,6 +38,12 @@ const createShowMore = () => `<button class="films-list__show-more">Show more</b
  * Создание класса кнопки показа скрытых фильмов
  */
 export default class ShowMoreBtn extends AbstractComponent {
+  constructor() {
+    super();
+
+
+  }
+
   getTemplate() {
     return createShowMore();
   }
