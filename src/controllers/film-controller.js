@@ -1,4 +1,4 @@
-import {KeyCode, Position} from "../consts";
+import {KeyCode, Position, CARD_ELEMENTS} from "../consts";
 import {render} from "../utils/components";
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
@@ -23,24 +23,43 @@ export default class FilmController {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
   render(filmData) {
-    // const mainContainer = document.querySelector(`.main`);
-
     this._filmCardComponent = new FilmCardComponent(filmData);
     this._filmDetailsComponent = new FilmDetailsComponent(filmData);
 
-    // const filmForm = {
-    //   card: this._filmCardComponent,
-    //   details: this._filmDetailsComponent
-    // };
-
-    // CARD_ELEMENTS.map(showDetails(filmForm, mainContainer, this._escKeyDownHandler));
+    CARD_ELEMENTS.map((cardElement) => this._showDetails(cardElement));
+    this._filmDetailsComponent.setBtnCloseClickHandler(this._closeDetailsClickHandler());
 
     render[Position.BEFORE_END](this._container, this._filmCardComponent);
   }
 
-  _showDetails() {}
 
-  _closeDetails() {}
+  _closeDetails() {
+    document.querySelector(`.film-details`).remove();
+    document.removeEventListener(`keydown`, this._escKeyDownHandler);
+  }
+
+
+  _closeDetailsClickHandler() {
+    return () => {
+      if (document.querySelector(`.film-details`)) {
+        this._closeDetails();
+      }
+    };
+  }
+
+
+  _showDetails(cardElement) {
+    this._filmCardComponent.setClickHandler(this._showDetailsClickHandler(), cardElement);
+  }
+
+
+  _showDetailsClickHandler() {
+    return () => {
+      render[Position.AFTER_END](
+          this._pageController._container.getElement(), this._filmDetailsComponent);
+      document.addEventListener(`keydown`, this._escKeyDownHandler);
+    };
+  }
 
 
   setDefaultView() {
@@ -52,7 +71,7 @@ export default class FilmController {
 
   _escKeyDownHandler(evt) {
     if (evt.keyCode === KeyCode.ESC) {
-      this._closeDetails();
+      document.querySelector(`.film-details`).remove();
       document.removeEventListener(`keydown`, this._escKeyDownHandler);
     }
   }
