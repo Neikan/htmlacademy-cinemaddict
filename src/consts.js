@@ -95,3 +95,8 @@ export const CARD_ELEMENTS = [
 export const DetailsElement = {
   BTN_CLOSE: `film-details__close-btn`
 };
+
+export const Flag = {
+  YES: true,
+  NO: false
+};

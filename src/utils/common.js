@@ -146,3 +146,12 @@ export const getReleaseDate = (date) => {
 
   return `${day} ${month} ${year}`;
 };
+
+
+/**
+ * Получение индекса элемента
+ * @param {Array} items данные элементов
+ * @param {Object} item данные элемента
+ * @return {Number} индекс
+ */
+export const getIndex = (items, item) => items.indexOf(item);

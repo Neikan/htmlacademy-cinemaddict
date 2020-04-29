@@ -1,6 +1,6 @@
 import {CountFilm, ExtraName, Position, Sorting} from "../consts";
 import {render} from "../utils/components";
-import {sortingArray} from "../utils/common";
+import {sortingArray, getIndex} from "../utils/common";
 import {addShowMoreListener} from "../components/show-more-button";
 import FilmsComponent from "../components/films";
 import ShowMoreBtnComponent from "../components/show-more-button";
@@ -68,6 +68,7 @@ export default class PageController {
     this._sorting = new SortingComponent();
   }
 
+
   render(films) {
     this._filmsData = films;
     const container = this._container.getElement();
@@ -81,10 +82,12 @@ export default class PageController {
     this._renderFilms(container);
   }
 
+
   _renderMenu(container) {
     this._menu = new MenuComponent(this._filmsData);
     render[Position.BEFORE_BEGIN](container, this._menu);
   }
+
 
   _renderFilms(container) {
     render[Position.BEFORE_BEGIN](container, this._sorting);
@@ -94,6 +97,22 @@ export default class PageController {
     renderFilms(this._films, this._filmsData, this, this._showMoreBtn);
     renderFilms(this._filmsRated, sortingArray(this._filmsData, Sorting.BY_RATING), this);
     renderFilms(this._filmsCommented, sortingArray(this._filmsData, Sorting.BY_COMMENTS), this);
+  }
+
+
+  _dataChangeHandler(filmController, oldData, newData) {
+    const index = getIndex(this._filmsData, oldData);
+    if (index === -1) {
+      return;
+    }
+    this._filmsData[index] = newData;
+
+    filmController.render(this._filmsData[index]);
+  }
+
+
+  _viewChangeHandler() {
+    this._showedFilms.map((filmData) => filmData.setDefaultView());
   }
 }
 

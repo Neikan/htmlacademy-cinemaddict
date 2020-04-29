@@ -1,5 +1,5 @@
-import {KeyCode, Position, CARD_ELEMENTS} from "../consts";
-import {render} from "../utils/components";
+import {KeyCode, Position, CARD_ELEMENTS, Flag} from "../consts";
+import {render, remove} from "../utils/components";
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
 
@@ -7,6 +7,8 @@ const Mode = {
   DEFAULT: `default`,
   DETAILS: `details`,
 };
+
+let isRenderedDetails = Flag.NO;
 
 export default class FilmController {
   constructor(container, pageController) {
@@ -34,14 +36,15 @@ export default class FilmController {
 
 
   _closeDetails() {
-    document.querySelector(`.film-details`).remove();
+    remove(this._filmDetailsComponent);
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
+    isRenderedDetails = Flag.NO;
   }
 
 
   _closeDetailsClickHandler() {
     return () => {
-      if (document.querySelector(`.film-details`)) {
+      if (isRenderedDetails) {
         this._closeDetails();
       }
     };
@@ -50,6 +53,7 @@ export default class FilmController {
 
   _showDetails(cardElement) {
     this._filmCardComponent.setClickHandler(this._showDetailsClickHandler(), cardElement);
+    isRenderedDetails = Flag.YES;
   }
 
 
