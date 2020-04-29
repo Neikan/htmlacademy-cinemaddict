@@ -1,4 +1,4 @@
-import {KeyCode, CARD_ELEMENTS} from "../consts";
+import {KeyCode, CARD_ELEMENTS, Position} from "../consts";
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
 import {render} from "../utils/components";
@@ -81,7 +81,7 @@ const renderFilm = (filmsComponent, film) => {
 
   CARD_ELEMENTS.map(showDetails(filmForm, mainContainer, escKeyDownHandler));
 
-  render(
+  render[Position.BEFORE_END](
       filmsComponent.getElement().querySelector(`.films-list__container`),
       filmForm.card
   );

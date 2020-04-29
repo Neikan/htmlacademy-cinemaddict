@@ -26,7 +26,7 @@ const renderFilms = (filmsComponent, films, showMoreBtnComponent) => {
     films.slice(0, showingFilmsCount).map(renderFilmsList());
 
     if (showMoreBtnComponent) {
-      render(filmsComponent.getElement(), showMoreBtnComponent);
+      render[Position.BEFORE_END](filmsComponent.getElement(), showMoreBtnComponent);
       addShowMoreListener(showMoreBtnComponent, films, showingFilmsCount, renderFilmsList);
     }
   }
@@ -52,20 +52,20 @@ export default class BoardController {
   render(films) {
     this._menu = new MenuComponent(films);
     const container = this._container.getElement();
-    render(container, this._menu, Position.BEFORE_BEGIN);
+    render[Position.BEFORE_BEGIN](container, this._menu);
 
     if (films.length) {
-      render(container, this._sorting, Position.BEFORE_BEGIN);
-      render(container, this._films);
-      render(container, this._filmsRated);
-      render(container, this._filmsCommented);
+      render[Position.BEFORE_BEGIN](container, this._sorting);
+      render[Position.BEFORE_END](container, this._films);
+      render[Position.BEFORE_END](container, this._filmsRated);
+      render[Position.BEFORE_END](container, this._filmsCommented);
 
       renderFilms(this._films, films, this._showMoreBtn);
       renderFilms(this._filmsRated, sortingArray(films, Sorting.BY_RATING));
       renderFilms(this._filmsCommented, sortingArray(films, Sorting.BY_COMMENTS));
 
     } else {
-      render(container, this._noFilms);
+      render[Position.BEFORE_END](container, this._noFilms);
     }
   }
 }

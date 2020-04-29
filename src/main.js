@@ -1,4 +1,4 @@
-import {CountFilm} from "./consts";
+import {CountFilm, Position} from "./consts";
 import {renderMarkup} from "./utils/common";
 import {render} from "./utils/components";
 import {createProfileRank} from "./components/profile-rank";
@@ -24,7 +24,7 @@ const init = () => {
   const pageController = new PageController(pageComponent, films);
 
   renderMarkup(Nodes.HEADER, createProfileRank(films));
-  render(Nodes.MAIN, pageComponent);
+  render[Position.BEFORE_END](Nodes.MAIN, pageComponent);
   pageController.render(films);
   renderMarkup(Nodes.FOOTER_STATS, createStatistic());
 };
