@@ -18,17 +18,15 @@ import MenuComponent from "../components/menu";
  * @param {Object} showMoreBtnComponent кнопка показа скрытых фильмов
  */
 const renderFilms = (filmsComponent, films, showMoreBtnComponent) => {
-  if (films.length) {
-    let showingFilmsCount = CountFilm.START;
+  let showingFilmsCount = CountFilm.START;
 
-    const renderFilmsList = () => (film) => renderFilm(filmsComponent, film);
+  const renderFilmsList = () => (film) => renderFilm(filmsComponent, film);
 
-    films.slice(0, showingFilmsCount).map(renderFilmsList());
+  films.slice(0, showingFilmsCount).map(renderFilmsList());
 
-    if (showMoreBtnComponent) {
-      render[Position.BEFORE_END](filmsComponent.getElement(), showMoreBtnComponent);
-      addShowMoreListener(showMoreBtnComponent, films, showingFilmsCount, renderFilmsList);
-    }
+  if (showMoreBtnComponent && showingFilmsCount < films.length) {
+    render[Position.BEFORE_END](filmsComponent.getElement(), showMoreBtnComponent);
+    addShowMoreListener(showMoreBtnComponent, films, showingFilmsCount, renderFilmsList);
   }
 };
 
@@ -54,18 +52,21 @@ export default class BoardController {
     const container = this._container.getElement();
     render[Position.BEFORE_BEGIN](container, this._menu);
 
-    if (films.length) {
-      render[Position.BEFORE_BEGIN](container, this._sorting);
-      render[Position.BEFORE_END](container, this._films);
-      render[Position.BEFORE_END](container, this._filmsRated);
-      render[Position.BEFORE_END](container, this._filmsCommented);
-
-      renderFilms(this._films, films, this._showMoreBtn);
-      renderFilms(this._filmsRated, sortingArray(films, Sorting.BY_RATING));
-      renderFilms(this._filmsCommented, sortingArray(films, Sorting.BY_COMMENTS));
-
-    } else {
+    if (!films.length) {
       render[Position.BEFORE_END](container, this._noFilms);
+      return;
     }
+
+    this._renderFilms(container, films);
+  }
+
+  _renderFilms(container, films) {
+    render[Position.BEFORE_BEGIN](container, this._sorting);
+    render[Position.BEFORE_END](container, this._films);
+    render[Position.BEFORE_END](container, this._filmsRated);
+    render[Position.BEFORE_END](container, this._filmsCommented);
+    renderFilms(this._films, films, this._showMoreBtn);
+    renderFilms(this._filmsRated, sortingArray(films, Sorting.BY_RATING));
+    renderFilms(this._filmsCommented, sortingArray(films, Sorting.BY_COMMENTS));
   }
 }
