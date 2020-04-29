@@ -2,7 +2,7 @@ import {createDetailsInfo} from "./film-details/details-info";
 import {createControls} from "./film-details/controls";
 import {createCommentBlock} from "./film-details/comments";
 import {DetailsElement} from "../consts";
-import AbstractComponent from "./abstract/abstract-component";
+import AbstractSmartComponent from "./abstract/component-smart";
 
 
 /**
@@ -31,16 +31,23 @@ const createFilmDetails = (film) => {
 /**
  * Создание класса подробной карточки фильма
  */
-export default class FilmDetails extends AbstractComponent {
+export default class FilmDetails extends AbstractSmartComponent {
   constructor(film) {
     super();
 
     this._film = film;
   }
 
+
   getTemplate() {
     return createFilmDetails(this._film);
   }
+
+
+  rerender() {
+    super.rerender();
+  }
+
 
   setBtnCloseClickHandler(handler) {
     this.getElement().querySelector(`.${DetailsElement.BTN_CLOSE}`)

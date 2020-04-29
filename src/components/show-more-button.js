@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract/abstract-component";
+import AbstractComponent from "./abstract/component";
 import {CountFilm} from "../consts";
 import {remove} from "../utils/components";
 

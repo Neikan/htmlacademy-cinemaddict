@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract/abstract-component";
+import AbstractComponent from "./abstract/component";
 import {CLASS_POINTER} from "../consts";
 
 
