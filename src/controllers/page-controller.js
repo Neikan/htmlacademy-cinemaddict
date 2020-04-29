@@ -48,9 +48,8 @@ export default class BoardController {
   }
 
   render(films) {
-    this._menu = new MenuComponent(films);
     const container = this._container.getElement();
-    render[Position.BEFORE_BEGIN](container, this._menu);
+    this._renderMenu(films, container);
 
     if (!films.length) {
       render[Position.BEFORE_END](container, this._noFilms);
@@ -58,6 +57,11 @@ export default class BoardController {
     }
 
     this._renderFilms(container, films);
+  }
+
+  _renderMenu(films, container) {
+    this._menu = new MenuComponent(films);
+    render[Position.BEFORE_BEGIN](container, this._menu);
   }
 
   _renderFilms(container, films) {
