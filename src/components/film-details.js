@@ -5,6 +5,41 @@ import {DetailsElement, ControlName, CONTROL_LABEL} from "../consts";
 import AbstractSmartComponent from "./abstract/component-smart";
 
 
+const EMOJI_LABEL_CLASS = `film-details__emoji-label`;
+const ADD_EMOJI_CLASS = `film-details__add-emoji-label`;
+const EMOJI_MARK = `emoji-`;
+
+/**
+ * Создание элемента картинки
+ * @param {string} imageName
+ * @return {Object} созданный элемент
+ */
+const getImageElement = (imageName) => {
+  const imgElement = document.createElement(`img`);
+  imgElement.src = `./images/emoji/${imageName}.png`;
+  imgElement.style.width = `100%`;
+  return imgElement;
+};
+
+
+/**
+ * Создание помощника для добавления смайла в форму нового комментария
+ * @param {*} emojiAddBlock
+ * @return {Function} созданный помощник
+ */
+const getEmojiClickhandler = (emojiAddBlock) => {
+  return (smile) => {
+    smile.addEventListener(`click`, () => {
+      if (emojiAddBlock.firstChild) {
+        emojiAddBlock.removeChild(emojiAddBlock.firstChild);
+      }
+      emojiAddBlock.appendChild(getImageElement(
+          smile.getAttribute(`for`).replace(EMOJI_MARK, ``)));
+    });
+  };
+};
+
+
 /**
  * Создание разметки блока подробной карточки фильма
  * @param {Object} film фильм
@@ -79,5 +114,13 @@ export default class FilmDetails extends AbstractSmartComponent {
         this._film.isWatched = !this._film.isWatched;
       });
 
+    this.setEmojiClickHandler();
+  }
+
+  setEmojiClickHandler() {
+    const emojiAddBlock = this.getElement().querySelector(`.${ADD_EMOJI_CLASS}`);
+
+    [...this.getElement().querySelectorAll(`.${EMOJI_LABEL_CLASS}`)]
+        .map(getEmojiClickhandler(emojiAddBlock));
   }
 }

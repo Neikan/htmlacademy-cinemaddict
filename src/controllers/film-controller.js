@@ -50,7 +50,6 @@ class FilmController {
     this._filmDetails = new FilmDetailsComponent(filmData);
 
     this._setCardHandlers(filmData, mainSection);
-    this._setDetailsHandlers();
     this._replaceOldFilm(oldFilmCard, oldFilmDetails);
   }
 
