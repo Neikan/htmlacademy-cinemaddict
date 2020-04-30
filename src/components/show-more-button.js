@@ -9,14 +9,15 @@ import {renderFilmsList} from "../controllers/page-controller";
  * @param {Object} filmsList блок фильмов
  * @param {Array} films данные фильмов
  * @param {Number} pageController котроллер страницы
+ * @param {Array} showedFilmContollers
  * @param {Function} showingFilmsCount количество показанных фильмов
  */
-const addShowMoreListener = (filmsList, films, pageController, showingFilmsCount) => {
+const addShowMoreListener = (filmsList, films, pageController, showedFilmContollers, showingFilmsCount) => {
   const showMoreClickHandler = () => {
     const prevFilmsCount = showingFilmsCount;
     showingFilmsCount += CountFilm.BY_BUTTON;
 
-    renderFilmsList(filmsList, films, prevFilmsCount, showingFilmsCount, pageController);
+    renderFilmsList(filmsList, films, prevFilmsCount, showingFilmsCount, pageController, showedFilmContollers);
 
     if (showingFilmsCount >= films.length) {
       remove(pageController._showMoreBtn);

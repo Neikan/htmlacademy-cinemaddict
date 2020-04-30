@@ -1,4 +1,4 @@
-import {KeyCode, Position, Attribute} from "../consts";
+import {KeyCode, Position} from "../consts";
 import {render, remove, replace} from "../utils/components";
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
@@ -10,23 +10,10 @@ const Mode = {
   DETAILS: `details`,
 };
 
+
 /**
- * Получение помощника для изменения атрибутов фильма
- * @param {Object} filmController контроллер карточек фильма
- * @param {Object} filmData данные фильма
- * @param {string} attribute изменяемый атрибут фильма
- * @return {Function} созданный помощник
+ * Создание контроллера, управляющего отображением карточек фильмов
  */
-const getHandler = (filmController, filmData, attribute) => {
-  return (evt) => {
-    evt.preventDefault();
-    filmController._dataChangeHandler(filmController, filmData, Object.assign({}, filmData, {
-      [attribute]: !filmData[attribute]
-    }));
-  };
-};
-
-
 class FilmController {
   constructor(container, viewChangeHandler, dataChangeHandler) {
     this._container = container;
@@ -41,6 +28,10 @@ class FilmController {
   }
 
 
+  /**
+   * Метод, обеспечивабщий отрисовку карточек фильма
+   * @param {Object} filmData
+   */
   render(filmData) {
     const oldFilmCard = this._filmCard;
     const oldFilmDetails = this._filmDetails;
@@ -54,15 +45,33 @@ class FilmController {
   }
 
 
-  _setCardHandlers(filmData, mainSection) {
-    this._filmCard.setClickHandler(this._showDetailsClickHandler(mainSection));
-
-    this._filmCard.setBtnWatchlistClickHandler(getHandler(this, filmData, Attribute.IS_WATCH));
-    this._filmCard.setBtnWatchedClickHandler(getHandler(this, filmData, Attribute.IS_WATCHED));
-    this._filmCard.setBtnFavoriteClickHandler(getHandler(this, filmData, Attribute.IS_FAVORITE));
+  /**
+   * Метод, устанавливающий отображение карточки по умолчанию
+   */
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._removeDetails();
+    }
   }
 
 
+  /**
+   * Метод, добавляющий слушателей событий к карточке краткой информации о фильме
+   * @param {Object} filmData данные фильма
+   * @param {Object} mainSection секция для отображения подробной карточки фильма
+   */
+  _setCardHandlers(filmData, mainSection) {
+    this._filmCard.setClickHandler(this._showDetailsClickHandler(mainSection));
+
+    this._filmCard.setBtnWatchlistClickHandler(this._btnWatchlistClickHandler());
+    this._filmCard.setBtnWatchedClickHandler(this._btnWatchedClickHandler());
+    this._filmCard.setBtnFavoriteClickHandler(this._btnWatchedClickHandler());
+  }
+
+
+  /**
+   * Метод, добавляющий слушателей событий к подробной карточке фильма
+   */
   _setDetailsHandlers() {
     this._filmDetails.setBtnCloseClickHandler(() => {
       this._removeDetails();
@@ -72,6 +81,36 @@ class FilmController {
   }
 
 
+  /**
+   * Метод, обеспечивающий обновление карточек контроллера
+   * @param {Object} oldFilmCard
+   * @param {Object} oldFilmDetails
+   */
+  _replaceOldFilm(oldFilmCard, oldFilmDetails) {
+    if (oldFilmCard && oldFilmDetails) {
+      replace(this._filmCard, oldFilmCard);
+      replace(this._filmDetails, oldFilmDetails);
+    } else {
+      render[Position.BEFORE_END](this._container, this._filmCard);
+    }
+  }
+
+
+  /**
+   * Метод, обеспечивающий удаление подробной карточки
+   */
+  _removeDetails() {
+    remove(this._filmDetails);
+    this._mode = Mode.DEFAULT;
+    document.removeEventListener(`keydown`, this._escKeyDownHandler);
+  }
+
+
+  /**
+   * Метод, обеспечивабщий создание помощника для отображение подробной карточки
+   * @param {Object} mainSection секция для отображения подробной карточки фильма
+   * @return {Function} созданный помощник
+   */
   _showDetailsClickHandler(mainSection) {
     return () => {
       render[Position.BEFORE_END](mainSection, this._filmDetails);
@@ -83,30 +122,57 @@ class FilmController {
   }
 
 
-  setDefaultView() {
-    if (this._mode !== Mode.DEFAULT) {
-      this._removeDetails();
-    }
+  /**
+   * Метод, обеспечивающий создание помощника для добавления/удаления фильма
+   * из числа запланированных к просмотру
+   * @param {Object} filmData данные фильма
+   * @return {Function} созданный помощник
+   */
+  _btnWatchlistClickHandler(filmData) {
+    return (evt) => {
+      evt.preventDefault();
+      this._dataChangeHandler(filmData, Object.assign({}, filmData, {
+        isWatch: !filmData.isWatch
+      }));
+    };
   }
 
 
-  _replaceOldFilm(oldFilmCard, oldFilmDetails) {
-    if (oldFilmCard && oldFilmDetails) {
-      replace(this._filmCard, oldFilmCard);
-      replace(this._filmDetails, oldFilmDetails);
-    } else {
-      render[Position.BEFORE_END](this._container, this._filmCard);
-    }
+  /**
+   * Метод, обеспечивающий создание помощника для добавления/удаления фильма
+   * из числа просмотренных
+   * @param {Object} filmData данные фильма
+   * @return {Function} созданный помощник
+   */
+  _btnWatchedClickHandler(filmData) {
+    return (evt) => {
+      evt.preventDefault();
+      this._dataChangeHandler(filmData, Object.assign({}, filmData, {
+        isWatched: !filmData.isWatched
+      }));
+    };
   }
 
 
-  _removeDetails() {
-    remove(this._filmDetails);
-    this._mode = Mode.DEFAULT;
-    document.removeEventListener(`keydown`, this._escKeyDownHandler);
+  /**
+   * Метод, создающий помощника для изменения св
+   * @param {Object} filmData данные фильма
+   * @return {Function} созданный помощник
+   */
+  _btnFavoriteClickHandler(filmData) {
+    return (evt) => {
+      evt.preventDefault();
+      this._dataChangeHandler(filmData, Object.assign({}, filmData, {
+        isFavorite: !filmData.isFavorite
+      }));
+    };
   }
 
 
+  /**
+   * Метод, обеспечивабщий закрытие подробной карточки по нажатии на клавишу Escape
+   * @param {*} evt
+   */
   _escKeyDownHandler(evt) {
     if (evt.keyCode === KeyCode.ESC) {
       this._removeDetails();

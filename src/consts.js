@@ -44,6 +44,8 @@ export const Attribute = {
   IS_FAVORITE: `isFavorite`
 };
 
+export const DETAILS = `details`;
+
 export const Sorting = {
   BY_RATING: {
     type: `forNumber`,
@@ -52,6 +54,10 @@ export const Sorting = {
   BY_COMMENTS: {
     type: `forArray`,
     parameter: `comments`
+  },
+  BY_DATE: {
+    type: `forDate`,
+    parameter: `year`
   }
 };
 

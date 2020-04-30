@@ -55,3 +55,16 @@ export const remove = (component) => {
   component.getElement().remove();
   component.removeElement();
 };
+
+
+/**
+ * Создание элемента картинки
+ * @param {string} imageName название
+ * @return {Object} созданный элемент
+ */
+export const getImageElement = (imageName) => {
+  const imgElement = document.createElement(`img`);
+  imgElement.src = `./images/emoji/${imageName}.png`;
+  imgElement.style.width = `100%`;
+  return imgElement;
+};

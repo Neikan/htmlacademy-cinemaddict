@@ -24,6 +24,11 @@ export default class NoFilms extends AbstractComponent {
     return createContainerNoFilms();
   }
 
+  /**
+   * Метод, обеспечивающий добавление помощника
+   * для отслеживания кликов по элементу
+   * @param {Function} handler
+   */
   setClickHandler(handler) {
     this.getElement().addEventListener(`click`, handler);
   }
