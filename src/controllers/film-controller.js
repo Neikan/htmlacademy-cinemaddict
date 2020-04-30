@@ -1,84 +1,116 @@
-import {KeyCode, Position, CARD_ELEMENTS, Flag} from "../consts";
-import {render, remove} from "../utils/components";
+import {KeyCode, Position, Attribute} from "../consts";
+import {render, remove, replace} from "../utils/components";
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
+
+const NODE_MAIN = `main`;
 
 const Mode = {
   DEFAULT: `default`,
   DETAILS: `details`,
 };
 
-let isRenderedDetails = Flag.NO;
+/**
+ * Получение помощника для изменения атрибутов фильма
+ * @param {Object} filmController контроллер карточек фильма
+ * @param {Object} filmData данные фильма
+ * @param {string} attribute изменяемый атрибут фильма
+ * @return {Function} созданный помощник
+ */
+const getHandler = (filmController, filmData, attribute) => {
+  return (evt) => {
+    evt.preventDefault();
+    filmController._dataChangeHandler(filmController, filmData, Object.assign({}, filmData, {
+      [attribute]: !filmData[attribute]
+    }));
+  };
+};
+
 
 class FilmController {
-  constructor(container, pageController) {
+  constructor(container, viewChangeHandler, dataChangeHandler) {
     this._container = container;
 
     this._mode = Mode.DEFAULT;
-    this._pageController = pageController;
-    this._viewChangeHandler = pageController._viewChangeHandler;
-    this._dataChangeHandler = pageController._dataChangeHandler;
-
-    this._filmCardComponent = null;
-    this._filmDetailsComponent = null;
+    this._viewChangeHandler = viewChangeHandler;
+    this._dataChangeHandler = dataChangeHandler;
+    this._filmCard = null;
+    this._filmDetails = null;
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
 
   render(filmData) {
-    this._filmCardComponent = new FilmCardComponent(filmData);
-    this._filmDetailsComponent = new FilmDetailsComponent(filmData);
+    const oldFilmCard = this._filmCard;
+    const oldFilmDetails = this._filmDetails;
+    const mainSection = document.querySelector(NODE_MAIN);
 
-    CARD_ELEMENTS.map((cardElement) => this._showDetails(cardElement));
-    this._filmDetailsComponent.setBtnCloseClickHandler(this._closeDetailsClickHandler());
+    this._filmCard = new FilmCardComponent(filmData);
+    this._filmDetails = new FilmDetailsComponent(filmData);
 
-    render[Position.BEFORE_END](this._container, this._filmCardComponent);
+    this._setCardHandlers(filmData, mainSection);
+    this._setDetailsHandlers();
+    this._replaceOldFilm(oldFilmCard, oldFilmDetails);
   }
 
 
-  _closeDetails() {
-    remove(this._filmDetailsComponent);
-    document.removeEventListener(`keydown`, this._escKeyDownHandler);
-    isRenderedDetails = Flag.NO;
+  _setCardHandlers(filmData, mainSection) {
+    this._filmCard.setClickHandler(this._showDetailsClickHandler(mainSection));
+
+    this._filmCard.setBtnWatchlistClickHandler(getHandler(this, filmData, Attribute.IS_WATCH));
+    this._filmCard.setBtnWatchedClickHandler(getHandler(this, filmData, Attribute.IS_WATCHED));
+    this._filmCard.setBtnFavoriteClickHandler(getHandler(this, filmData, Attribute.IS_FAVORITE));
   }
 
 
-  _closeDetailsClickHandler() {
+  _setDetailsHandlers() {
+    this._filmDetails.setBtnCloseClickHandler(() => {
+      this._removeDetails();
+    });
+
+    this._filmDetails._subscribeOnEvents();
+  }
+
+
+  _showDetailsClickHandler(mainSection) {
     return () => {
-      if (isRenderedDetails) {
-        this._closeDetails();
-      }
-    };
-  }
-
-
-  _showDetails(cardElement) {
-    this._filmCardComponent.setClickHandler(this._showDetailsClickHandler(), cardElement);
-    isRenderedDetails = Flag.YES;
-  }
-
-
-  _showDetailsClickHandler() {
-    return () => {
-      render[Position.AFTER_END](
-          this._pageController._container.getElement(), this._filmDetailsComponent);
+      render[Position.BEFORE_END](mainSection, this._filmDetails);
+      this._mode = Mode.DETAILS;
       document.addEventListener(`keydown`, this._escKeyDownHandler);
+
+      this._setDetailsHandlers();
     };
   }
 
 
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._closeDetails();
+      this._removeDetails();
     }
+  }
+
+
+  _replaceOldFilm(oldFilmCard, oldFilmDetails) {
+    if (oldFilmCard && oldFilmDetails) {
+      replace(this._filmCard, oldFilmCard);
+      replace(this._filmDetails, oldFilmDetails);
+    } else {
+      render[Position.BEFORE_END](this._container, this._filmCard);
+    }
+  }
+
+
+  _removeDetails() {
+    remove(this._filmDetails);
+    this._mode = Mode.DEFAULT;
+    document.removeEventListener(`keydown`, this._escKeyDownHandler);
   }
 
 
   _escKeyDownHandler(evt) {
     if (evt.keyCode === KeyCode.ESC) {
-      document.querySelector(`.film-details`).remove();
-      document.removeEventListener(`keydown`, this._escKeyDownHandler);
+      this._removeDetails();
     }
   }
 }

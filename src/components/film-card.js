@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract/component";
-import {CLASS_POINTER} from "../consts";
+import {CLASS_POINTER, ControlName, CONTROL_ITEM, Action, CARD_ELEMENTS} from "../consts";
 
 
 /**
@@ -63,10 +63,26 @@ export default class FilmCard extends AbstractComponent {
     return createFilmCard(this._film);
   }
 
-  setClickHandler(handler, cardElement) {
-    const target = this.getElement().querySelector(`.${cardElement}`);
+  setClickHandler(handler) {
+    for (let cardElement of CARD_ELEMENTS) {
+      const target = this.getElement().querySelector(`.${cardElement}`);
+      target.classList.add(CLASS_POINTER);
+      target.addEventListener(`click`, handler);
+    }
+  }
 
-    target.classList.add(CLASS_POINTER);
-    target.addEventListener(`click`, handler);
+  setBtnWatchlistClickHandler(handler) {
+    this.getElement().querySelector(`.${CONTROL_ITEM}${Action.ADD_TO}${ControlName.WATCHLIST}`)
+      .addEventListener(`click`, handler);
+  }
+
+  setBtnWatchedClickHandler(handler) {
+    this.getElement().querySelector(`.${CONTROL_ITEM}${Action.MARK_AS}${ControlName.WATCHED}`)
+      .addEventListener(`click`, handler);
+  }
+
+  setBtnFavoriteClickHandler(handler) {
+    this.getElement().querySelector(`.${CONTROL_ITEM}${ControlName.FAVORITE}`)
+    .addEventListener(`click`, handler);
   }
 }

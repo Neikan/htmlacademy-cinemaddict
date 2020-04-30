@@ -1,7 +1,7 @@
 import {createDetailsInfo} from "./film-details/details-info";
 import {createControls} from "./film-details/controls";
 import {createCommentBlock} from "./film-details/comments";
-import {DetailsElement} from "../consts";
+import {DetailsElement, ControlName, CONTROL_LABEL} from "../consts";
 import AbstractSmartComponent from "./abstract/component-smart";
 
 
@@ -36,11 +36,17 @@ export default class FilmDetails extends AbstractSmartComponent {
     super();
 
     this._film = film;
+    this._comments = film.comments;
   }
 
 
   getTemplate() {
     return createFilmDetails(this._film);
+  }
+
+
+  recoveryListeners() {
+    this._subscribeOnEvents();
   }
 
 
@@ -52,5 +58,26 @@ export default class FilmDetails extends AbstractSmartComponent {
   setBtnCloseClickHandler(handler) {
     this.getElement().querySelector(`.${DetailsElement.BTN_CLOSE}`)
       .addEventListener(`click`, handler);
+  }
+
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    element.querySelector(`.${CONTROL_LABEL}${ControlName.WATCHLIST}`)
+      .addEventListener(`click`, () => {
+        this._film.isWatch = !this._film.isWatch;
+      });
+
+    element.querySelector(`.${CONTROL_LABEL}${ControlName.WATCHED}`)
+      .addEventListener(`click`, () => {
+        this._film.isWatched = !this._film.isWatched;
+      });
+
+    element.querySelector(`.${CONTROL_LABEL}${ControlName.FAVORITE}`)
+      .addEventListener(`click`, () => {
+        this._film.isWatched = !this._film.isWatched;
+      });
+
   }
 }

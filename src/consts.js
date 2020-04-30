@@ -19,7 +19,7 @@ export const MONTH_NAMES = [
 ];
 
 export const CountFilm = {
-  ALL: 22,
+  ALL: 1,
   START: 5,
   BY_BUTTON: 5,
   EXTRA: 2,
@@ -38,7 +38,7 @@ export const Position = {
 };
 
 
-export const Filter = {
+export const Attribute = {
   IS_WATCH: `isWatch`,
   IS_WATCHED: `isWatched`,
   IS_FAVORITE: `isFavorite`
@@ -99,4 +99,19 @@ export const DetailsElement = {
 export const Flag = {
   YES: true,
   NO: false
+};
+
+export const CONTROL_LABEL = `film-details__control-label--`;
+
+export const CONTROL_ITEM = `film-card__controls-item--`;
+
+export const Action = {
+  ADD_TO: `add-to-`,
+  MARK_AS: `mark-as-`
+};
+
+export const ControlName = {
+  WATCHLIST: `watchlist`,
+  WATCHED: `watched`,
+  FAVORITE: `favorite`
 };

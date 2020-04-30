@@ -11,21 +11,27 @@ import MenuComponent from "../components/menu";
 import {FilmController} from "./film-controller";
 
 
+const FILM_LIST_CLASS = `.films-list__container`;
+
 /**
  * Создание контроллера, обеспечивающего отрисовку фильмов
  * @param {Object} filmsList список фильмов
  * @param {Array} films данные фильмов
- * @param {Function} pageController контроллер страницы
- * @return {Object} созданный контроллер
+ * @param {Function} viewChangeHandler метод контроллера страницы,
+ *  обеспечивающий установку отображения контроллера фильма в режим по умолчанию
+ * @param {Function} dataChangeHandler метод контроллера страницы,
+ *  обеспечивающий изменение данных фильма и перерисовку карточки фильма
+ * @return {Array} массив контроллеров карточек фильмов
  */
-const renderFilmCards = (filmsList, films, pageController) => {
+const renderFilmControllers = (filmsList, films, viewChangeHandler, dataChangeHandler) => {
   return films.map((film) => {
-    const filmController = new FilmController(filmsList, pageController);
+    const filmController = new FilmController(filmsList, viewChangeHandler, dataChangeHandler);
     filmController.render(film);
 
     return filmController;
   });
 };
+
 
 /**
  * Отрисовка фильмов в список
@@ -36,22 +42,25 @@ const renderFilmCards = (filmsList, films, pageController) => {
  * @param {Object} pageController контроллер страницы
  */
 const renderFilmsList = (filmsList, films, prevFilmsCount, showingFilmsCount, pageController) => {
-  const newFilms = renderFilmCards(filmsList, films.slice(prevFilmsCount, showingFilmsCount), pageController);
-  pageController._showedFilms = pageController._showedFilms.concat(newFilms);
+  const newFilmContollers = renderFilmControllers(filmsList,
+      films.slice(prevFilmsCount, showingFilmsCount),
+      pageController._viewChangeHandler, pageController._dataChangeHandler
+  );
+  pageController._showedFilmContollers = pageController._showedFilmContollers.concat(newFilmContollers);
 };
 
 
 /**
  * Отрисовка блока фильмов
  * @param {Object} filmsComponent блок фильмов
- * @param {Array} films фильмы
+ * @param {Array} films данные фильмов
  * @param {Object} pageController контроллер страницы
  * @param {Object} showMoreBtnComponent кнопка показа скрытых фильмов
  */
 const renderFilms = (filmsComponent, films, pageController, showMoreBtnComponent) => {
   let showingFilmsCount = CountFilm.START;
 
-  const filmsList = filmsComponent.getElement().querySelector(`.films-list__container`);
+  const filmsList = filmsComponent.getElement().querySelector(FILM_LIST_CLASS);
   renderFilmsList(filmsList, films, 0, showingFilmsCount, pageController);
 
   if (showMoreBtnComponent && showingFilmsCount < films.length) {
@@ -69,7 +78,7 @@ class PageController {
     this._container = container;
 
     this._filmsData = [];
-    this._showedFilms = [];
+    this._showedFilmContollers = [];
     this._menu = null;
     this._films = new FilmsComponent();
     this._filmsCommented = new FilmsExtraComponent(ExtraName.COMMENTED);
@@ -77,6 +86,9 @@ class PageController {
     this._showMoreBtn = new ShowMoreBtnComponent();
     this._noFilms = new NoFilmsComponent();
     this._sorting = new SortingComponent();
+
+    this._dataChangeHandler = this._dataChangeHandler.bind(this);
+    this._viewChangeHandler = this._viewChangeHandler.bind(this);
   }
 
 
@@ -89,7 +101,6 @@ class PageController {
       render[Position.BEFORE_END](container, this._noFilms);
       return;
     }
-
     this._renderFilms(container);
   }
 
@@ -111,21 +122,23 @@ class PageController {
   }
 
 
-  _dataChangeHandler(filmController, oldData, newData) {
+  _dataChangeHandler(filmContoller, oldData, newData) {
     const index = getIndex(this._filmsData, oldData);
     if (index === -1) {
       return;
     }
-    this._filmsData[index] = newData;
+    const newFilmsData = this._filmsData.slice();
+    newFilmsData[index] = newData;
+    this._filmsData = newFilmsData;
 
-    filmController.render(this._filmsData[index]);
+    filmContoller.render(this._filmsData[index]);
   }
 
 
   _viewChangeHandler() {
-    this._showedFilms.map((filmData) => filmData.setDefaultView());
+    this._showedFilmContollers.map((showedFilmContoller) => showedFilmContoller.setDefaultView());
   }
 }
 
 
-export {PageController, renderFilmCards, renderFilmsList};
+export {PageController, renderFilmsList};

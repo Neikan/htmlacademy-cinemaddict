@@ -1,4 +1,4 @@
-import {Filter} from "../consts";
+import {Attribute} from "../consts";
 import {filterCountMenu} from "../mock/menu-filters";
 import AbstractComponent from "./abstract/component";
 
@@ -14,13 +14,13 @@ const createMenu = (films) => {
       <div class="main-navigation__items">
         <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
         <a href="#watchlist" class="main-navigation__item">Watchlist
-          <span class="main-navigation__item-count">${filterCountMenu(films, Filter.IS_WATCH)}</span>
+          <span class="main-navigation__item-count">${filterCountMenu(films, Attribute.IS_WATCH)}</span>
         </a>
         <a href="#history" class="main-navigation__item">History
-          <span class="main-navigation__item-count">${filterCountMenu(films, Filter.IS_WATCHED)}</span>
+          <span class="main-navigation__item-count">${filterCountMenu(films, Attribute.IS_WATCHED)}</span>
         </a>
         <a href="#favorites" class="main-navigation__item">Favorites
-          <span class="main-navigation__item-count">${filterCountMenu(films, Filter.IS_FAVORITE)}</span>
+          <span class="main-navigation__item-count">${filterCountMenu(films, Attribute.IS_FAVORITE)}</span>
         </a>
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
