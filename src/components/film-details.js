@@ -24,7 +24,7 @@ const getImageElement = (imageName) => {
 
 /**
  * Создание помощника для добавления смайла в форму нового комментария
- * @param {*} emojiAddBlock
+ * @param {Object} emojiAddBlock
  * @return {Function} созданный помощник
  */
 const getEmojiClickhandler = (emojiAddBlock) => {
@@ -99,21 +99,9 @@ export default class FilmDetails extends AbstractSmartComponent {
   _subscribeOnEvents() {
     const element = this.getElement();
 
-    element.querySelector(`.${CONTROL_LABEL}${ControlName.WATCHLIST}`)
-      .addEventListener(`click`, () => {
-        this._film.isWatch = !this._film.isWatch;
-      });
-
-    element.querySelector(`.${CONTROL_LABEL}${ControlName.WATCHED}`)
-      .addEventListener(`click`, () => {
-        this._film.isWatched = !this._film.isWatched;
-      });
-
-    element.querySelector(`.${CONTROL_LABEL}${ControlName.FAVORITE}`)
-      .addEventListener(`click`, () => {
-        this._film.isWatched = !this._film.isWatched;
-      });
-
+    changeIsWatch(this, element);
+    changeIsWatched(this, element);
+    changeIsFavorite(this, element);
     this.setEmojiClickHandler();
   }
 
@@ -124,3 +112,42 @@ export default class FilmDetails extends AbstractSmartComponent {
         .map(getEmojiClickhandler(emojiAddBlock));
   }
 }
+
+
+/**
+ * Функция, обеспечивающая добавление/удаление фильма из числа запланированных к просмотру
+ * @param {Object} filmDetails
+ * @param {Object} element
+ */
+const changeIsWatch = (filmDetails, element) => {
+  element.querySelector(`.${CONTROL_LABEL}${ControlName.WATCHLIST}`)
+    .addEventListener(`click`, () => {
+      filmDetails._film.isWatch = !filmDetails._film.isWatch;
+    });
+};
+
+
+/**
+ * Функция, обеспечивающая добавление/удаление фильма из числа просмотренных
+ * @param {Object} filmDetails
+ * @param {Object} element
+ */
+const changeIsWatched = (filmDetails, element) => {
+  element.querySelector(`.${CONTROL_LABEL}${ControlName.WATCHED}`)
+    .addEventListener(`click`, () => {
+      filmDetails._film.isWatched = !filmDetails._film.isWatched;
+    });
+};
+
+
+/**
+ * Функция, обеспечивающая добавление/удаление фильма из числа избранных
+ * @param {Object} filmDetails
+ * @param {Object} element
+ */
+const changeIsFavorite = (filmDetails, element) => {
+  element.querySelector(`.${CONTROL_LABEL}${ControlName.FAVORITE}`)
+    .addEventListener(`click`, () => {
+      filmDetails._film.isFavorite = !filmDetails._film.isFavorite;
+    });
+};
