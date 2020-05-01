@@ -20,8 +20,8 @@ const SortClass = {
  */
 const sortRules = {
   'default': (films) => films,
-  'by-date': (films, count) => sortingArray(films, Sorting.BY_DATE, count),
-  'by-rating': (films, count) => sortingArray(films, Sorting.BY_RATING, count),
+  'by-date': (films, count = films.length) => sortingArray(films, Sorting.BY_DATE, count),
+  'by-rating': (films, count = films.length) => sortingArray(films, Sorting.BY_RATING, count),
 };
 
 
@@ -67,6 +67,17 @@ class SortComponent extends AbstractComponent {
   }
 
 
+  _setActiveClassHandler(evt) {
+    [...this.getElement().querySelectorAll(`.${SortClass.BUTTON}`)].map((button) => {
+      if (button === evt.target) {
+        button.classList.add(SortClass.BUTTON_ACTIVE);
+      } else {
+        button.classList.remove(SortClass.BUTTON_ACTIVE);
+      }
+    });
+  }
+
+
   _clickHandler(handler) {
     return (evt) => {
       evt.preventDefault();
@@ -83,16 +94,6 @@ class SortComponent extends AbstractComponent {
       this._currentSortType = sortType;
       handler(this._currentSortType);
     };
-  }
-
-  _setActiveClassHandler(evt) {
-    [...this.getElement().querySelectorAll(`.${SortClass.BUTTON}`)].map((button) => {
-      if (button === evt.target) {
-        button.classList.add(SortClass.BUTTON_ACTIVE);
-      } else {
-        button.classList.remove(SortClass.BUTTON_ACTIVE);
-      }
-    });
   }
 }
 

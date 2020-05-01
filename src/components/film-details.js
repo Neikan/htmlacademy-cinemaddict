@@ -55,7 +55,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
 
   /**
-   * Метод, обеспечивающий восставновление лисенеров
+   * Метод, обеспечивающий восставновление слушателей
    */
   recoveryListeners() {
     this._subscribeOnEvents();
