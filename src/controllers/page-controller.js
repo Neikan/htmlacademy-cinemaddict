@@ -77,6 +77,26 @@ class PageController {
 
 
   /**
+   * Метод, собирающий данные для отрисовки в единый объект
+   * @param {Object} container контейнер контроллера
+   * @param {Object} filmsComponent компонент-контейнер фильмов
+   * @param {Array} filmsData данные фильмов
+   * @param {Array} filmsContollers контроллеры отрисованных фильмов
+   * @param {Number} countPrevFilms предыдущее количество отрисованных фильмов
+   * @param {Number} countFilms текущее количество отрисованных фильмов
+   * @param {Object} filmList список фильмов в компоненте-контейнере фильмов
+   * @return {Object} созданный объект с данными
+   */
+  _getDataSet(container, filmsComponent, filmsData,
+      filmsContollers, countPrevFilms, countFilms, filmList
+  ) {
+    return {
+      container, filmsComponent, filmsData, filmsContollers, countPrevFilms, countFilms, filmList
+    };
+  }
+
+
+  /**
    * Метод, обеспечивающий создание и отрисовку компонента меню
    * @param {Object} container контейнер контроллера
    */
@@ -101,69 +121,51 @@ class PageController {
    * @param {Object} container контейнер контроллера
    */
   _renderFilms(container) {
-    this._renderFilmsComponent(container, this._filmsCommented,
+    this._renderFilmsComponent(this._getDataSet(container, this._filmsCommented,
         sortingArray(this._filmsData, Sorting.BY_COMMENTS),
-        this._showedFilmCommentedContollers, 0, CountFilm.EXTRA
-    );
-    this._renderFilmsComponent(container, this._filmsRated,
+        this._showedFilmCommentedContollers, 0, CountFilm.EXTRA));
+
+    this._renderFilmsComponent(this._getDataSet(container, this._filmsRated,
         sortingArray(this._filmsData, Sorting.BY_RATING),
-        this._showedFilmRatedContollers, 0, CountFilm.EXTRA
+        this._showedFilmRatedContollers, 0, CountFilm.EXTRA)
     );
-    this._renderFilmsComponent(container, this._films, this._filmsData,
-        this._showedFilmContollers, 0, CountFilm.START
+    this._renderFilmsComponent(this._getDataSet(container, this._films, this._filmsData,
+        this._showedFilmContollers, 0, CountFilm.START)
     );
   }
 
 
   /**
    * Метод, обеспечивающий отрисовку компонента-контейнера фильмов
-   * @param {Object} container контейнер контроллера
-   * @param {Object} filmsComponent компонент-контейнер фильмов
-   * @param {Array} filmsData данные фильмов
-   * @param {Array} filmsContollers контроллеры отрисованных фильмов
-   * @param {Number} countPrevFilms предыдущее количество отрисованных фильмов
-   * @param {Number} countFilms текущее количество отрисованных фильмов
-   * @param {Object} showMoreBtn компонент-кнопка показа скрытых фильмов
+   * @param {Object} dataset объект с данными
    */
-  _renderFilmsComponent(container, filmsComponent, filmsData,
-      filmsContollers, countPrevFilms, countFilms
-  ) {
-    render[Position.AFTER_BEGIN](container, filmsComponent);
-    this._renderFilmsList(filmsComponent, filmsData, filmsContollers,
-        countPrevFilms, countFilms);
+  _renderFilmsComponent(dataset) {
+    render[Position.AFTER_BEGIN](dataset.container, dataset.filmsComponent);
+    this._renderFilmsList(dataset);
   }
 
 
   /**
    * Метод, обеспечивающий отрисовку содержимого компонента-контейнера фильмов
-   * @param {Object} filmsComponent компонент-контейнер фильмов
-   * @param {Array} filmsData данные фильмов
-   * @param {Array} filmsContollers контроллеры отрисованных фильмов
-   * @param {Number} countPrevFilms предыдущее количество отрисованных фильмов
-   * @param {Number} countFilms текущее количество отрисованных фильмов
-   * @param {Object} showMoreBtn компонент-кнопка показа скрытых фильмов
+   * @param {Object} dataset объект с данными
    */
-  _renderFilmsList(filmsComponent, filmsData, filmsContollers, countPrevFilms, countFilms) {
-    const filmsList = filmsComponent.getElement().querySelector(FILM_LIST_CLASS);
-    this._renderFilmControllers(filmsData, filmsContollers, countPrevFilms, countFilms, filmsList);
+  _renderFilmsList(dataset) {
+    dataset.filmsList = dataset.filmsComponent.getElement().querySelector(FILM_LIST_CLASS);
+    this._renderFilmControllers(dataset);
 
-    if (countFilms < filmsData.length) {
-      this._renderShowMoreBtn(filmsComponent, filmsData, filmsContollers, countFilms, filmsList);
+    if (dataset.countFilms < dataset.filmsData.length) {
+      this._renderShowMoreBtn(dataset);
     }
   }
 
 
   /**
    * Метод, обеспечивающий создание и отрисовку контроллеров фильмов
-   * @param {Array} filmsData данные фильмов
-   * @param {Array} filmsContollers контроллеры отрисованных фильмов
-   * @param {Number} countPrevFilms предыдущее количество отрисованных фильмов
-   * @param {Number} countFilms текущее количество отрисованных фильмов
-   * @param {Object} filmsList список фильмов в компоненте-контейнере фильмов
+   * @param {Object} dataset объект с данными
    */
-  _renderFilmControllers(filmsData, filmsContollers, countPrevFilms, countFilms, filmsList) {
-    filmsContollers.concat(renderFilmControllers(
-        filmsList, filmsData.slice(countPrevFilms, countFilms),
+  _renderFilmControllers(dataset) {
+    dataset.filmsContollers.concat(renderFilmControllers(
+        dataset.filmsList, dataset.filmsData.slice(dataset.countPrevFilms, dataset.countFilms),
         this._viewChangeHandler, this._dataChangeHandler
     ));
   }
@@ -171,15 +173,11 @@ class PageController {
 
   /**
    * Метод, обеспечивающий отрисовку компонента-кнопки показа скрытых фильмов
-   * @param {Object} filmsComponent компонент-контейнер фильмов
-   * @param {Array} filmsData данные фильмов
-   * @param {Array} filmsContollers контроллеры отрисованных фильмов
-   * @param {Number} countFilms текущее количество отрисованных фильмов
-   * @param {Object} filmsList список фильмов в компоненте-контейнере фильмов
+   * @param {Object} dataset объект с данными
    */
-  _renderShowMoreBtn(filmsComponent, filmsData, filmsContollers, countFilms, filmsList) {
-    render[Position.BEFORE_END](filmsComponent.getElement(), this._showMoreBtn);
-    this._showMoreBtn.setClickHandler(this._showMoreClickHandler(filmsData, filmsContollers, countFilms, filmsList));
+  _renderShowMoreBtn(dataset) {
+    render[Position.BEFORE_END](dataset.filmsComponent.getElement(), this._showMoreBtn);
+    this._showMoreBtn.setClickHandler(this._showMoreClickHandler(dataset));
   }
 
 
@@ -224,19 +222,16 @@ class PageController {
 
   /**
    * Метод, обеспечивающий создание помощника для отображения скрытых фильмов
-   * @param {Array} filmsData данные фильмов
-   * @param {Array} filmsContollers контроллеры отрисованных фильмов
-   * @param {Number} countFilms текущее количество отрисованных фильмов
-   * @param {Object} filmsList список фильмов в компоненте-контейнере фильмов
+   * @param {Object} dataset объект с данными
    * @return {Function} созданный помощник
    */
-  _showMoreClickHandler(filmsData, filmsContollers, countFilms, filmsList) {
+  _showMoreClickHandler(dataset) {
     return () => {
-      const prevFilmsCount = countFilms;
-      countFilms += CountFilm.BY_BUTTON;
-      this._renderFilmControllers(filmsData, filmsContollers, prevFilmsCount, countFilms, filmsList);
+      dataset.countPrevFilms = dataset.countFilms;
+      dataset.countFilms += CountFilm.BY_BUTTON;
+      this._renderFilmControllers(dataset);
 
-      if (countFilms >= filmsData.length) {
+      if (dataset.countFilms >= dataset.filmsData.length) {
         remove(this._showMoreBtn);
       }
     };
@@ -251,8 +246,8 @@ class PageController {
   _sortTypeChangeHandler(container) {
     return (sortType) => {
       this._resetFilms();
-      this._renderFilmsComponent(container, this._films, sortRules[sortType](this._filmsData),
-          this._showedFilmContollers, 0, CountFilm.START, this._showMoreBtn
+      this._renderFilmsComponent(this._getDataSet(container, this._films, sortRules[sortType](this._filmsData),
+          this._showedFilmContollers, 0, CountFilm.START, this._showMoreBtn)
       );
     };
   }
