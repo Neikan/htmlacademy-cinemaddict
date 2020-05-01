@@ -9,6 +9,11 @@ const SortType = {
   BY_RATING: `by-rating`
 };
 
+const SortClass = {
+  BUTTON: `sort__button`,
+  BUTTON_ACTIVE: `sort__button--active`
+};
+
 
 /**
  * Правила сортировки
@@ -74,9 +79,20 @@ class SortComponent extends AbstractComponent {
         return;
       }
 
+      this._setActiveClassHandler(evt);
       this._currentSortType = sortType;
       handler(this._currentSortType);
     };
+  }
+
+  _setActiveClassHandler(evt) {
+    [...this.getElement().querySelectorAll(`.${SortClass.BUTTON}`)].map((button) => {
+      if (button === evt.target) {
+        button.classList.add(SortClass.BUTTON_ACTIVE);
+      } else {
+        button.classList.remove(SortClass.BUTTON_ACTIVE);
+      }
+    });
   }
 }
 

@@ -65,7 +65,7 @@ class FilmController {
 
     this._filmCard.setBtnWatchlistClickHandler(this._btnWatchlistClickHandler());
     this._filmCard.setBtnWatchedClickHandler(this._btnWatchedClickHandler());
-    this._filmCard.setBtnFavoriteClickHandler(this._btnWatchedClickHandler());
+    this._filmCard.setBtnFavoriteClickHandler(this._btnFavoriteClickHandler());
   }
 
 

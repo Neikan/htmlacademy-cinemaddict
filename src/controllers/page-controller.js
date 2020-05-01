@@ -1,5 +1,5 @@
 import {CountFilm, ExtraName, Position, Sorting} from "../consts";
-import {render} from "../utils/components";
+import {render, remove} from "../utils/components";
 import {sortingArray, getIndex} from "../utils/common";
 import {addShowMoreListener} from "../components/show-more-button";
 import FilmsComponent from "../components/films";
@@ -90,13 +90,13 @@ class PageController {
       return;
     }
     this._renderFilms(container);
-    this._sorting.setSortTypeChangeHandler(this._sortTypeChangeHandler());
+    this._sorting.setSortTypeChangeHandler(this._sortTypeChangeHandler(container));
   }
 
 
   /**
    * Метод, обеспечивающий создание и отрисовку компонента меню
-   * @param {Object} container контейнер для отрисовки
+   * @param {Object} container контейнер контроллера
    */
   _renderMenu(container) {
     this._menu = new MenuComponent(this._filmsData);
@@ -106,38 +106,55 @@ class PageController {
 
   /**
    * Метод, обеспечивающий отрисовку компонентов-контейнеров фильмов
-   * @param {Object} container контейнер для отрисовки
+   * @param {Object} container контейнер контроллера
    */
   _renderFilms(container) {
     render[Position.BEFORE_BEGIN](container, this._sorting);
-    render[Position.BEFORE_END](container, this._films);
-    render[Position.BEFORE_END](container, this._filmsRated);
-    render[Position.BEFORE_END](container, this._filmsCommented);
-    this._renderFilmsComponent(this._films, this._filmsData,
-        this._showedFilmContollers, 0, this._showMoreBtn
-    );
-    this._renderFilmsComponent(this._filmsRated,
-        sortingArray(this._filmsData, Sorting.BY_RATING),
-        this._showedFilmRatedContollers, 0
-    );
-    this._renderFilmsComponent(this._filmsCommented,
+    this._renderFilmsComponent(container, this._filmsCommented,
         sortingArray(this._filmsData, Sorting.BY_COMMENTS),
-        this._showedFilmCommentedContollers, 0
+        this._showedFilmCommentedContollers, 0, CountFilm.EXTRA
+    );
+    this._renderFilmsComponent(container, this._filmsRated,
+        sortingArray(this._filmsData, Sorting.BY_RATING),
+        this._showedFilmRatedContollers, 0, CountFilm.EXTRA
+    );
+    this._renderFilmsComponent(container, this._films, this._filmsData,
+        this._showedFilmContollers, 0, showingFilmsCount, this._showMoreBtn
     );
   }
 
 
   /**
-   * Метод, обеспечивающий отрисовку компонентов-контейнеров фильмов
+   * Метод, обеспечивающий отрисовку компонента-контейнера фильмов
+   * @param {Object} container контейнер контроллера
    * @param {Object} filmsComponent компонент-контейнер фильмов
    * @param {Array} filmsData данные фильмов
    * @param {Array} filmsContollers контроллеры отрисованных фильмов
    * @param {Number} prevFilmsCount предыдущее количество отрисованных фильмов
+   * @param {Number} countShowingFilms текущее количество отрисованных фильмов
    * @param {Object} showMoreBtn компонент-кнопка показа скрытых фильмов
    */
-  _renderFilmsComponent(filmsComponent, filmsData, filmsContollers, prevFilmsCount, showMoreBtn) {
+  _renderFilmsComponent(container, filmsComponent, filmsData, filmsContollers,
+      prevFilmsCount, countShowingFilms, showMoreBtn
+  ) {
+    render[Position.AFTER_BEGIN](container, filmsComponent);
+    this._renderFilmsList(filmsComponent, filmsData, filmsContollers,
+        prevFilmsCount, countShowingFilms, showMoreBtn);
+  }
+
+
+  /**
+   * Метод, обеспечивающий отрисовку содержимого компонента-контейнера фильмов
+   * @param {Object} filmsComponent компонент-контейнер фильмов
+   * @param {Array} filmsData данные фильмов
+   * @param {Array} filmsContollers контроллеры отрисованных фильмов
+   * @param {Number} prevFilmsCount предыдущее количество отрисованных фильмов
+   * @param {Number} countShowingFilms текущее количество отрисованных фильмов
+   * @param {Object} showMoreBtn компонент-кнопка показа скрытых фильмов
+   */
+  _renderFilmsList(filmsComponent, filmsData, filmsContollers, prevFilmsCount, countShowingFilms, showMoreBtn) {
     const filmsList = filmsComponent.getElement().querySelector(FILM_LIST_CLASS);
-    renderFilmsList(filmsList, filmsData, prevFilmsCount, showingFilmsCount, this, filmsContollers);
+    renderFilmsList(filmsList, filmsData, prevFilmsCount, countShowingFilms, this, filmsContollers);
     this._renderShowMoreBtn(filmsComponent, filmsData, filmsContollers, filmsList, showMoreBtn);
   }
 
@@ -155,6 +172,31 @@ class PageController {
       render[Position.BEFORE_END](filmsComponent.getElement(), showMoreBtn);
       addShowMoreListener(filmsList, filmsData, this, filmsContollers, showingFilmsCount);
     }
+  }
+
+
+  /**
+   * Метод, обеспечивающий удаление данных для компонента _films
+   */
+  _resetDataFilms() {
+    this._showedFilmControllers = [];
+    remove(this._films);
+  }
+
+
+  /**
+   * Метод, обеспечивающий создание помощника для отображения отсортированных данных фильмов
+   * @param {Object} container контейнер контроллера
+   * @return {Function} созданный помощник
+   */
+  _sortTypeChangeHandler(container) {
+    return (sortType) => {
+      const sortedFilms = sortRules[sortType](this._filmsData, this._filmsData.length);
+      this._resetDataFilms();
+      this._renderFilmsComponent(container, this._films, sortedFilms,
+          this._showedFilmContollers, 0, showingFilmsCount, this._showMoreBtn
+      );
+    };
   }
 
 
@@ -183,33 +225,6 @@ class PageController {
   _viewChangeHandler() {
     this._showedFilmContollers.map((showedFilmContoller) =>
       showedFilmContoller.setDefaultView());
-  }
-
-
-  /**
-   * Метод, обеспечивающий сортировку и отображение отсортированных данных фильмов
-   */
-  _sortTypeChangeHandler() {
-    showingFilmsCount = CountFilm.START;
-
-    const filmsList = this._films.getElement().querySelector(FILM_LIST_CLASS);
-    const sortClickHandler = (sortType) => {
-      const sortedFilms = sortRules[sortType](this._filmsData, this._filmsData.length);
-
-      filmsList.innerHTML = ``;
-      const newFilmControllers = renderFilmControllers(
-          filmsList, sortedFilms.slice(0, showingFilmsCount),
-          this._viewChangeHandler, this._dataChangeHandler
-      );
-      this._showedFilmControllers = newFilmControllers;
-
-
-      this._renderShowMoreBtn(this._films, sortedFilms,
-          this._showedFilmControllers, filmsList, this._showMoreBtn
-      );
-    };
-
-    this._sorting.setSortTypeChangeHandler(sortClickHandler);
   }
 }
 
