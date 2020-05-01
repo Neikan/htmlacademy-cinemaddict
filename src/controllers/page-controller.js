@@ -154,7 +154,7 @@ class PageController {
 
 
   /**
-   *
+   * Метод, обеспечивающий создание и отрисовку контроллеров фильмов
    * @param {Array} filmsData данные фильмов
    * @param {Array} filmsContollers контроллеры отрисованных фильмов
    * @param {Number} countPrevFilms предыдущее количество отрисованных фильмов
@@ -184,11 +184,41 @@ class PageController {
 
 
   /**
+   * Метод, обеспечивающий обновление контроллера фильма на основе новых данных
+   * @param {Object} filmContoller контроллер карточек фильма
+   * @param {Object} oldData прежние данные фильма
+   * @param {Object} newData обновленные данные фильма
+   */
+  _dataChangeHandler(filmContoller, oldData, newData) {
+    const index = getIndex(this._filmsData, oldData);
+
+    if (index === -1) {
+      return;
+    }
+    const newFilmsData = this._filmsData.slice();
+    newFilmsData[index] = newData;
+    this._filmsData = newFilmsData;
+
+    filmContoller.render(this._filmsData[index]);
+  }
+
+
+  /**
+   * Метод, обеспечивающий отображение каждого контроллера карточек фильма в режиме по умолчанию
+   * @param {Object} FilmsContollers
+   */
+  _viewChangeHandler(FilmsContollers) {
+    FilmsContollers.map((filmContoller) => filmContoller.setDefaultView());
+  }
+
+
+  /**
    * Метод, обеспечивающий удаление данных для компонента _films
    */
   _resetFilms() {
     this._showedFilmControllers = [];
     remove(this._films);
+    remove(this._showMoreBtn);
   }
 
 
@@ -225,35 +255,6 @@ class PageController {
           this._showedFilmContollers, 0, CountFilm.START, this._showMoreBtn
       );
     };
-  }
-
-
-  /**
-   * Метод, обеспечивающий обновление контроллера фильма на основе новых данных
-   * @param {Object} filmContoller контроллер карточек фильма
-   * @param {Object} oldData прежние данные фильма
-   * @param {Object} newData обновленные данные фильма
-   */
-  _dataChangeHandler(filmContoller, oldData, newData) {
-    const index = getIndex(this._filmsData, oldData);
-
-    if (index === -1) {
-      return;
-    }
-    const newFilmsData = this._filmsData.slice();
-    newFilmsData[index] = newData;
-    this._filmsData = newFilmsData;
-
-    filmContoller.render(this._filmsData[index]);
-  }
-
-
-  /**
-   * Метод, обеспечивающий отображение каждого контроллера карточек фильма в режиме по умолчанию
-   * @param {Object} FilmsContollers
-   */
-  _viewChangeHandler(FilmsContollers) {
-    FilmsContollers.map((filmContoller) => filmContoller.setDefaultView());
   }
 }
 

@@ -25,6 +25,10 @@ class FilmController {
     this._filmDetails = null;
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+
+    this._btnWatchlistClickHandler = this._btnWatchlistClickHandler.bind(this);
+    this._btnWatchedClickHandler = this._btnWatchedClickHandler.bind(this);
+    this._btnFavoriteClickHandler = this._btnFavoriteClickHandler.bind(this);
   }
 
 
@@ -63,9 +67,9 @@ class FilmController {
   _setCardHandlers(filmData, mainSection) {
     this._filmCard.setClickHandler(this._showDetailsClickHandler(mainSection));
 
-    this._filmCard.setBtnWatchlistClickHandler(this._btnWatchlistClickHandler());
-    this._filmCard.setBtnWatchedClickHandler(this._btnWatchedClickHandler());
-    this._filmCard.setBtnFavoriteClickHandler(this._btnFavoriteClickHandler());
+    this._filmCard.setBtnWatchlistClickHandler(this._btnWatchlistClickHandler(filmData));
+    this._filmCard.setBtnWatchedClickHandler(this._btnWatchedClickHandler(filmData));
+    this._filmCard.setBtnFavoriteClickHandler(this._btnFavoriteClickHandler(filmData));
   }
 
 
@@ -131,7 +135,7 @@ class FilmController {
   _btnWatchlistClickHandler(filmData) {
     return (evt) => {
       evt.preventDefault();
-      this._dataChangeHandler(filmData, Object.assign({}, filmData, {
+      this._dataChangeHandler(this, filmData, Object.assign({}, filmData, {
         isWatch: !filmData.isWatch
       }));
     };
@@ -139,15 +143,14 @@ class FilmController {
 
 
   /**
-   * Метод, обеспечивающий создание помощника для добавления/удаления фильма
-   * из числа просмотренных
+   * Метод, обеспечивающий создание помощника для добавления/удаления фильма из числа просмотренных
    * @param {Object} filmData данные фильма
    * @return {Function} созданный помощник
    */
   _btnWatchedClickHandler(filmData) {
     return (evt) => {
       evt.preventDefault();
-      this._dataChangeHandler(filmData, Object.assign({}, filmData, {
+      this._dataChangeHandler(this, filmData, Object.assign({}, filmData, {
         isWatched: !filmData.isWatched
       }));
     };
@@ -155,14 +158,14 @@ class FilmController {
 
 
   /**
-   * Метод, создающий помощника для изменения св
+   * Метод, обеспечивающий создание помощника для добавления/удаления фильма из числа избранных
    * @param {Object} filmData данные фильма
    * @return {Function} созданный помощник
    */
   _btnFavoriteClickHandler(filmData) {
     return (evt) => {
       evt.preventDefault();
-      this._dataChangeHandler(filmData, Object.assign({}, filmData, {
+      this._dataChangeHandler(this, filmData, Object.assign({}, filmData, {
         isFavorite: !filmData.isFavorite
       }));
     };
