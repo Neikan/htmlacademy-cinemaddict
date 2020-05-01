@@ -38,11 +38,13 @@ export const Position = {
 };
 
 
-export const Filter = {
+export const Attribute = {
   IS_WATCH: `isWatch`,
   IS_WATCHED: `isWatched`,
   IS_FAVORITE: `isFavorite`
 };
+
+export const DETAILS = `details`;
 
 export const Sorting = {
   BY_RATING: {
@@ -52,6 +54,10 @@ export const Sorting = {
   BY_COMMENTS: {
     type: `forArray`,
     parameter: `comments`
+  },
+  BY_DATE: {
+    type: `forDate`,
+    parameter: `year`
   }
 };
 
@@ -94,4 +100,24 @@ export const CARD_ELEMENTS = [
 
 export const DetailsElement = {
   BTN_CLOSE: `film-details__close-btn`
+};
+
+export const Flag = {
+  YES: true,
+  NO: false
+};
+
+export const CONTROL_LABEL = `film-details__control-label--`;
+
+export const CONTROL_ITEM = `film-card__controls-item--`;
+
+export const Action = {
+  ADD_TO: `add-to-`,
+  MARK_AS: `mark-as-`
+};
+
+export const ControlName = {
+  WATCHLIST: `watchlist`,
+  WATCHED: `watched`,
+  FAVORITE: `favorite`
 };

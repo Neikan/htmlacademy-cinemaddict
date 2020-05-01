@@ -1,8 +1,14 @@
 import {createDetailsInfo} from "./film-details/details-info";
 import {createControls} from "./film-details/controls";
 import {createCommentBlock} from "./film-details/comments";
-import {DetailsElement} from "../consts";
-import AbstractComponent from "./abstract/abstract-component";
+import {DetailsElement, ControlName, CONTROL_LABEL} from "../consts";
+import AbstractSmartComponent from "./abstract/component-smart";
+import {getImageElement} from "../utils/components";
+
+
+const EMOJI_LABEL_CLASS = `film-details__emoji-label`;
+const ADD_EMOJI_CLASS = `film-details__add-emoji-label`;
+const EMOJI_MARK = `emoji-`;
 
 
 /**
@@ -31,19 +37,122 @@ const createFilmDetails = (film) => {
 /**
  * Создание класса подробной карточки фильма
  */
-export default class FilmDetails extends AbstractComponent {
+export default class FilmDetails extends AbstractSmartComponent {
   constructor(film) {
     super();
 
     this._film = film;
+    this._comments = film.comments;
   }
 
+  /**
+   * Метод, обеспечивающий создание компонента по заданному шаблону
+   * @return {Object}
+   */
   getTemplate() {
     return createFilmDetails(this._film);
   }
 
+
+  /**
+   * Метод, обеспечивающий восставновление слушателей
+   */
+  recoveryListeners() {
+    this._subscribeOnEvents();
+  }
+
+
+  /**
+   * Метод, обеспечивающий перерисовку карточки
+   */
+  rerender() {
+    super.rerender();
+  }
+
+
+  /**
+   * Метод, обспечивающий добавление помощника на кнопку закрытия карточки
+   * @param {Function} handler
+   */
   setBtnCloseClickHandler(handler) {
     this.getElement().querySelector(`.${DetailsElement.BTN_CLOSE}`)
       .addEventListener(`click`, handler);
+  }
+
+
+  /**
+   * Метод, обеспечивающий подписку на события на карточке
+   */
+  _subscribeOnEvents() {
+    const element = this.getElement();
+    this._changeIsWatch(element);
+    this._changeIsWatched(element);
+    this._changeIsFavorite(element);
+    this._setEmojiClickHandler();
+  }
+
+
+  /**
+   * Метод, обеспечиваюющий создание помощника для добавления смайла в форму комментария
+   * @param {Object} emojiAddBlock
+   * @return {Function} созданный помощник
+   */
+  _getEmojiClickhandler(emojiAddBlock) {
+    return (smile) => {
+      smile.addEventListener(`click`, () => {
+        if (emojiAddBlock.firstChild) {
+          emojiAddBlock.removeChild(emojiAddBlock.firstChild);
+        }
+        emojiAddBlock.appendChild(getImageElement(
+            smile.getAttribute(`for`).replace(EMOJI_MARK, ``)));
+      });
+    };
+  }
+
+
+  /**
+   * Метод, выполняющий установку смайла в форму комментария
+   */
+  _setEmojiClickHandler() {
+    const emojiAddBlock = this.getElement().querySelector(`.${ADD_EMOJI_CLASS}`);
+
+    [...this.getElement().querySelectorAll(`.${EMOJI_LABEL_CLASS}`)]
+        .map(this._getEmojiClickhandler(emojiAddBlock));
+  }
+
+
+  /**
+   * Метод, обеспечивающий добавление/удаление фильма из числа запланированных к просмотру
+   * @param {Object} element
+   */
+  _changeIsWatch(element) {
+    element.querySelector(`.${CONTROL_LABEL}${ControlName.WATCHLIST}`)
+    .addEventListener(`click`, () => {
+      this._film.isWatch = !this._film.isWatch;
+    });
+  }
+
+
+  /**
+   * Метод, обеспечивающий добавление/удаление фильма из числа просмотренных
+   * @param {Object} element
+   */
+  _changeIsWatched(element) {
+    element.querySelector(`.${CONTROL_LABEL}${ControlName.WATCHED}`)
+    .addEventListener(`click`, () => {
+      this._film.isWatched = !this._film.isWatched;
+    });
+  }
+
+
+  /**
+   * Метод, обеспечивающий добавление/удаление фильма из числа избранных
+   * @param {Object} element
+   */
+  _changeIsFavorite(element) {
+    element.querySelector(`.${CONTROL_LABEL}${ControlName.FAVORITE}`)
+    .addEventListener(`click`, () => {
+      this._film.isFavorite = !this._film.isFavorite;
+    });
   }
 }

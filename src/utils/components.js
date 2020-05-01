@@ -1,6 +1,3 @@
-import {Position} from "../consts";
-
-
 /**
  * Создание DOM-элемента
  * @param {string} template шаблон-разметка для создания элемента
@@ -34,26 +31,19 @@ export const replace = (newComponent, oldComponent) => {
 
 /**
  * Отрисовка компонента на странице
- * @param {Element} container контейнер, в который отрисосывается шаблон
- * @param {string} component отрисовываемый компонент
- * @param {string} position место в контейнере для отрисовываемого шаблона
- * @return {void}
  */
-export const render = (container, component, position = Position.BEFORE_END) => {
-  switch (position) {
-    case Position.AFTER_BEGIN:
-      container.prepend(component.getElement());
-      break;
-    case Position.AFTER_END:
-      container.after(component.getElement());
-      break;
-    case Position.BEFORE_BEGIN:
-      container.before(component.getElement());
-      break;
-    case Position.BEFORE_END:
-      container.append(component.getElement());
-      break;
-  }
+export const render = {
+  'beforebegin': (container, component) =>
+    container.before(component.getElement()),
+
+  'beforeend': (container, component) =>
+    container.append(component.getElement()),
+
+  'afterend': (container, component) =>
+    container.after(component.getElement()),
+
+  'afterbegin': (container, component) =>
+    container.prepend(component.getElement())
 };
 
 
@@ -64,4 +54,17 @@ export const render = (container, component, position = Position.BEFORE_END) => 
 export const remove = (component) => {
   component.getElement().remove();
   component.removeElement();
+};
+
+
+/**
+ * Создание элемента картинки
+ * @param {string} imageName название
+ * @return {Object} созданный элемент
+ */
+export const getImageElement = (imageName) => {
+  const imgElement = document.createElement(`img`);
+  imgElement.src = `./images/emoji/${imageName}.png`;
+  imgElement.style.width = `100%`;
+  return imgElement;
 };

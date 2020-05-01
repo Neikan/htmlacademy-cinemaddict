@@ -8,8 +8,8 @@ import {createEmojiesBlock} from "./emojies";
  * @return {string} разметка блока
  */
 const createCommentBlock = ({comments}) => {
-  return (`
-    <div class="form-details__bottom-container">
+  return (
+    `<div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
         ${createCommentList(comments)}
@@ -21,8 +21,8 @@ const createCommentBlock = ({comments}) => {
           ${createEmojiesBlock(EMOJIES)}
         </div>
       </section>
-    </div>
-  `);
+    </div>`
+  );
 };
 
 
@@ -32,11 +32,11 @@ const createCommentBlock = ({comments}) => {
  * @return {string} разметка списка
  */
 const createCommentList = (comments) => {
-  return (`
-    <ul class="film-details__comments-list">
+  return (
+    `<ul class="film-details__comments-list">
       ${createComments(comments)}
-    </ul>
-  `);
+    </ul>`
+  );
 };
 
 

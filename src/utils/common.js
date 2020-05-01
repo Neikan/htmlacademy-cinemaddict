@@ -1,4 +1,4 @@
-import {Position, CountCheckFormat, MONTH_NAMES, START_DATE_FILMS, CountFilm} from "../consts";
+import {Position, CountCheckFormat, MONTH_NAMES, START_DATE_FILMS, CountFilm, DETAILS} from "../consts";
 
 
 /**
@@ -84,7 +84,9 @@ export const sortingArray = (array, {type, parameter}, count = CountFilm.EXTRA) 
 
 const choiceType = {
   'forNumber': (parameter) => ((a, b) => (b[parameter] - a[parameter])),
-  'forArray': (parameter) => ((a, b) => (b[parameter].length - a[parameter].length))
+  'forArray': (parameter) => ((a, b) => (b[parameter].length - a[parameter].length)),
+  'forDate': (parameter) => ((a, b) =>
+    parseInt(b[DETAILS][parameter], 10) - parseInt(a[DETAILS][parameter], 10))
 };
 
 
@@ -146,3 +148,12 @@ export const getReleaseDate = (date) => {
 
   return `${day} ${month} ${year}`;
 };
+
+
+/**
+ * Получение индекса элемента
+ * @param {Array} items данные элементов
+ * @param {Object} item данные элемента
+ * @return {Number} индекс
+ */
+export const getIndex = (items, item) => items.indexOf(item);
