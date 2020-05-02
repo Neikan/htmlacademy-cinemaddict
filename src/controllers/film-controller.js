@@ -3,7 +3,6 @@ import {render, remove, replace, getItem} from "../utils/components";
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
 import {Comment} from "../components/film-details/comments";
-import {getCommentDate} from "../utils/common";
 
 
 const NODE_MAIN = `main`;
@@ -129,7 +128,8 @@ class FilmController {
       emoji: getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).value,
       text: getItem(container, DetailsElement.COMMENT_INPUT).value,
       author: `Batman`,
-      date: getCommentDate(new Date())
+      // date: getCommentDate(new Date())
+      date: new Date()
     };
   }
 
@@ -143,7 +143,7 @@ class FilmController {
 
     emojiAddBlock.removeChild(emojiAddBlock.firstChild);
     getItem(container, DetailsElement.COMMENT_INPUT).value = null;
-    getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).value.checked = Flag.NO;
+    getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).checked = Flag.NO;
   }
 
 

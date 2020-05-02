@@ -1,6 +1,7 @@
-import {EMOJIES} from "../../consts";
+import {EMOJIES, Sorting} from "../../consts";
 import {createEmojiesBlock} from "./emojies";
 import AbstractComponent from "../abstract/component";
+import {formatDateFromNow, sortingArray} from "../../utils/common";
 
 
 /**
@@ -46,7 +47,8 @@ const createCommentList = (comments) => {
  * @param {Array} comments комментарии
  * @return {string} разметка комментария
  */
-const createComments = (comments) => comments.map(createComment).join(`\n`);
+const createComments = (comments) =>
+  sortingArray(comments, Sorting.BY_COMMENT_DATE, comments.length).map(createComment).join(`\n`);
 
 
 /**
@@ -64,7 +66,7 @@ const createComment = ({text, emoji, author, date}) => {
         <p class="film-details__comment-text">${text}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${date}</span>
+          <span class="film-details__comment-day">${formatDateFromNow(date)}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>

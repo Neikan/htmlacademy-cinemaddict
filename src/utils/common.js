@@ -1,4 +1,5 @@
-import {Position, CountCheckFormat, MONTH_NAMES, START_DATE_FILMS, CountFilm, DETAILS} from "../consts";
+import moment from "moment";
+import {Position, CountCheckFormat, START_DATE_FILMS, CountFilm, DETAILS} from "../consts";
 
 
 /**
@@ -26,7 +27,7 @@ export const getRandomInt = (max, min = 0) => {
 /**
  * Получение случайного элемента массива
  * @param {Array} array массив для получения элемента
- * @return {*} случайный элемент массива
+ * @return {Object} случайный элемент массива
  */
 export const getRandomElement = (array) => array[getRandomInt(array.length)];
 
@@ -83,7 +84,8 @@ export const sortingArray = (array, {type, parameter}, count = CountFilm.EXTRA) 
   [...array].sort(choiceType[type](parameter)).slice(0, count);
 
 const choiceType = {
-  'forNumber': (parameter) => ((a, b) => (b[parameter] - a[parameter])),
+  'forNumberDesc': (parameter) => ((a, b) => (b[parameter] - a[parameter])),
+  'forNumberAsc': (parameter) => ((a, b) => (a[parameter] - b[parameter])),
   'forArray': (parameter) => ((a, b) => (b[parameter].length - a[parameter].length)),
   'forDate': (parameter) => ((a, b) =>
     parseInt(b[DETAILS][parameter], 10) - parseInt(a[DETAILS][parameter], 10))
@@ -102,14 +104,6 @@ export const getRandomDate = (maxDate, minDate = new Date([...START_DATE_FILMS])
 
 
 /**
- * Приведение формата часов и минут к формату: 2 часа 3 минуты -> 02:03
- * @param {string} value
- * @return {string}
- */
-const castTimeFormat = (value) => (value < CountCheckFormat.TIME ? `0${value}` : String(value));
-
-
-/**
  * Приведение формата 4х-6ти-значного числа к формату "123 456"
  * @param {string} value
  * @return {string}
@@ -121,39 +115,26 @@ export const castNumberFormat = (value) => {
 
 
 /**
- * Получение случайной даты в формате "год/месяц/день часы:минуты"
- * @param {Date} date дата для приведения формата
- * @return {string} полученная дата
- */
-export const getCommentDate = (date) => {
-  const day = date.getDate();
-  const month = date.getMonth();
-  const year = date.getFullYear();
-  const hours = castTimeFormat(date.getHours());
-  const minutes = castTimeFormat(date.getMinutes());
-
-  return `${year}/${month}/${day} ${hours}:${minutes}`;
-};
-
-
-/**
- * Получение случайной даты в формате "день месяц год"
- * @param {Date} date дата для приведения формата
- * @return {string} полученная дата
- */
-export const getReleaseDate = (date) => {
-  const day = date.getDate();
-  const month = MONTH_NAMES[date.getMonth()];
-  const year = date.getFullYear();
-
-  return `${day} ${month} ${year}`;
-};
-
-
-/**
  * Получение индекса элемента
  * @param {Array} items данные элементов
  * @param {Object} item данные элемента
  * @return {Number} индекс
  */
 export const getIndex = (items, item) => items.indexOf(item);
+
+
+/**
+ * Приведение даты к необходмому формату
+ * @param {Date} date форматируемая дата
+ * @param {string} formatRule правило форматирования
+ * @return {string} отформатированная дата
+ */
+export const formatDate = (date, formatRule) => moment(date).format(formatRule);
+
+
+/**
+ * Приведение даты к "человеческому" формату
+ * @param {Date} date форматируемая дата
+ * @return {string} отформатированная дата
+ */
+export const formatDateFromNow = (date) => moment(date).fromNow();

@@ -48,7 +48,7 @@ export const DETAILS = `details`;
 
 export const Sorting = {
   BY_RATING: {
-    type: `forNumber`,
+    type: `forNumberDesc`,
     parameter: `rating`
   },
   BY_COMMENTS: {
@@ -58,6 +58,10 @@ export const Sorting = {
   BY_DATE: {
     type: `forDate`,
     parameter: `year`
+  },
+  BY_COMMENT_DATE: {
+    type: `forNumberAsc`,
+    parameter: `date`
   }
 };
 
@@ -126,4 +130,11 @@ export const ControlName = {
   WATCHLIST: `watchlist`,
   WATCHED: `watched`,
   FAVORITE: `favorite`
+};
+
+
+export const FormatRule = {
+  RELEASE_DATE: `DD MMMM YYYY`,
+  RELEASE_YEAR: `YYYY`,
+  COMMENT_DATE: `YYYY/MM/DD HH:MM`
 };
