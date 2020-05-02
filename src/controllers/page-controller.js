@@ -193,13 +193,17 @@ class PageController {
     if (index === -1) {
       return;
     }
-    const newFilmsData = this._filmsData.slice();
-    newFilmsData[index] = newData;
-    this._filmsData = newFilmsData;
 
+    this._updateFilmsData(index, newData);
     filmContoller.render(this._filmsData[index]);
   }
 
+
+  _updateFilmsData(index, newData) {
+    const newFilmsData = this._filmsData.slice();
+    newFilmsData[index] = newData;
+    this._filmsData = newFilmsData;
+  }
 
   /**
    * Метод, обеспечивающий отображение каждого контроллера карточек фильма в режиме по умолчанию

@@ -1,4 +1,4 @@
-export const COUNT_COMMENTS_MAX = 5;
+export const COUNT_COMMENTS_MAX = 20;
 export const RATING_MAX = 10;
 
 export const TITLES = [

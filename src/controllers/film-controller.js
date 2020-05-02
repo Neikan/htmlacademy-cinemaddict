@@ -1,7 +1,9 @@
-import {KeyCode, Position} from "../consts";
-import {render, remove, replace} from "../utils/components";
+import {KeyCode, Position, DetailsElement, Flag} from "../consts";
+import {render, remove, replace, getItem} from "../utils/components";
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
+import {Comment} from "../components/film-details/comments";
+
 
 const NODE_MAIN = `main`;
 
@@ -19,13 +21,14 @@ class FilmController {
     this._container = container;
 
     this._mode = Mode.DEFAULT;
-    this._viewChangeHandler = viewChangeHandler;
-    this._dataChangeHandler = dataChangeHandler;
+    this._filmData = null;
     this._filmCard = null;
     this._filmDetails = null;
+    this._viewChangeHandler = viewChangeHandler;
+    this._dataChangeHandler = dataChangeHandler;
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
-
+    this._ctrlKeyUpHandler = this._ctrlKeyUpHandler.bind(this);
     this._btnWatchlistClickHandler = this._btnWatchlistClickHandler.bind(this);
     this._btnWatchedClickHandler = this._btnWatchedClickHandler.bind(this);
     this._btnFavoriteClickHandler = this._btnFavoriteClickHandler.bind(this);
@@ -37,6 +40,7 @@ class FilmController {
    * @param {Object} filmData
    */
   render(filmData) {
+    this._filmData = filmData;
     const oldFilmCard = this._filmCard;
     const oldFilmDetails = this._filmDetails;
     const mainSection = document.querySelector(NODE_MAIN);
@@ -99,6 +103,49 @@ class FilmController {
     }
   }
 
+  /**
+   * Метод, обеспечивающий добавление нового комментария
+   */
+  _renderNewComment() {
+    const container = this._filmDetails.getElement();
+    const commentData = this._getCommentData(container);
+
+    this._filmData.comments.push(commentData); // переписать потом скорее всего надо будет
+    render[Position.BEFORE_END](
+        getItem(container, DetailsElement.COMMENT_LIST), new Comment(commentData)
+    );
+    this._clearNewCommentForm(container);
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение данных с формы ввода комментария
+   * @param {Object} container
+   * @return {Object} данные для создания комментария
+   */
+  _getCommentData(container) {
+    return {
+      emoji: getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).value,
+      text: getItem(container, DetailsElement.COMMENT_INPUT).value,
+      author: `Batman`,
+      // date: getCommentDate(new Date())
+      date: new Date()
+    };
+  }
+
+
+  /**
+   * Метод, обеспечивающий очистку формы ввода комментария
+   * @param {Object} container
+   */
+  _clearNewCommentForm(container) {
+    const emojiAddBlock = getItem(container, DetailsElement.EMOJI_ADD_BLOCK);
+
+    emojiAddBlock.removeChild(emojiAddBlock.firstChild);
+    getItem(container, DetailsElement.COMMENT_INPUT).value = null;
+    getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).checked = Flag.NO;
+  }
+
 
   /**
    * Метод, обеспечивающий удаление подробной карточки
@@ -107,6 +154,7 @@ class FilmController {
     remove(this._filmDetails);
     this._mode = Mode.DEFAULT;
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
+    document.removeEventListener(`keyup`, this._ctrlKeyUpHandler);
   }
 
 
@@ -120,6 +168,7 @@ class FilmController {
       render[Position.BEFORE_END](mainSection, this._filmDetails);
       this._mode = Mode.DETAILS;
       document.addEventListener(`keydown`, this._escKeyDownHandler);
+      document.addEventListener(`keyup`, this._ctrlKeyUpHandler);
 
       this._setDetailsHandlers();
     };
@@ -173,12 +222,24 @@ class FilmController {
 
 
   /**
-   * Метод, обеспечивабщий закрытие подробной карточки по нажатии на клавишу Escape
-   * @param {*} evt
+   * Метод, обеспечивающий закрытие подробной карточки по нажатию на клавишу Escape
+   * @param {Object} evt
    */
   _escKeyDownHandler(evt) {
     if (evt.keyCode === KeyCode.ESC) {
       this._removeDetails();
+    }
+  }
+
+
+  /**
+   * Метод, обеспечивающий отправку комментария по нажатию комбинации клавиш Ctrl + Enter
+   * @param {Object} evt
+   * @param {Object} filmData
+   */
+  _ctrlKeyUpHandler(evt) {
+    if (evt.keyCode === KeyCode.ENTER && evt.ctrlKey) {
+      this._renderNewComment();
     }
   }
 }

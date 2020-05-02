@@ -1,5 +1,7 @@
-import {EMOJIES} from "../../consts";
+import {EMOJIES, Sorting} from "../../consts";
 import {createEmojiesBlock} from "./emojies";
+import AbstractComponent from "../abstract/component";
+import {formatDateFromNow, sortingArray} from "../../utils/common";
 
 
 /**
@@ -45,7 +47,8 @@ const createCommentList = (comments) => {
  * @param {Array} comments комментарии
  * @return {string} разметка комментария
  */
-const createComments = (comments) => comments.map(createComment).join(`\n`);
+const createComments = (comments) =>
+  sortingArray(comments, Sorting.BY_COMMENT_DATE, comments.length).map(createComment).join(`\n`);
 
 
 /**
@@ -53,7 +56,7 @@ const createComments = (comments) => comments.map(createComment).join(`\n`);
  * @param {Object} {свойства комментария}
  * @return {string} разметка одного комментария
  */
-const createComment = ({text, emoji, author, date, button}) => {
+const createComment = ({text, emoji, author, date}) => {
   return (
     `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
@@ -63,8 +66,8 @@ const createComment = ({text, emoji, author, date, button}) => {
         <p class="film-details__comment-text">${text}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${date}</span>
-          <button class="film-details__comment-delete">${button}</button>
+          <span class="film-details__comment-day">${formatDateFromNow(date)}</span>
+          <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
     </li>`
@@ -72,4 +75,17 @@ const createComment = ({text, emoji, author, date, button}) => {
 };
 
 
-export {createCommentBlock};
+class Comment extends AbstractComponent {
+  constructor(film) {
+    super();
+
+    this._film = film;
+  }
+
+
+  getTemplate() {
+    return createComment(this._film);
+  }
+}
+
+export {Comment, createCommentBlock};

@@ -16,11 +16,12 @@ import {
   getRandomInt,
   getRandomBoolean,
   getRandomDate,
-  getReleaseDate,
+  formatDate,
 } from '../../utils/common';
 
 import {generateComments} from '../comments/comment.js';
 import {getRandomDuration, getRandomDescription, getRandomRating} from './film-utils';
+import {FormatRule} from '../../consts';
 
 /**
  * Генерация фильма
@@ -55,7 +56,7 @@ const generateFilm = () => {
       },
       releaseDate: {
         name: `Release Date`,
-        info: getReleaseDate(randomDate)
+        info: formatDate(randomDate, FormatRule.RELEASE_DATE)
       },
       duration: {
         name: `Runtime`,
@@ -67,7 +68,7 @@ const generateFilm = () => {
       },
       genres: getRandomSubArray(GENRES),
       description: getRandomDescription(),
-      year: randomDate.getFullYear(),
+      year: formatDate(randomDate, FormatRule.RELEASE_YEAR)
     },
     comments: generateComments(getRandomInt(COUNT_COMMENTS_MAX)),
     isWatch: getRandomBoolean(),

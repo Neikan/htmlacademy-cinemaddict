@@ -6,11 +6,6 @@ import AbstractSmartComponent from "./abstract/component-smart";
 import {getImageElement} from "../utils/components";
 
 
-const EMOJI_LABEL_CLASS = `film-details__emoji-label`;
-const ADD_EMOJI_CLASS = `film-details__add-emoji-label`;
-const EMOJI_MARK = `emoji-`;
-
-
 /**
  * Создание разметки блока подробной карточки фильма
  * @param {Object} film фильм
@@ -103,8 +98,7 @@ export default class FilmDetails extends AbstractSmartComponent {
         if (emojiAddBlock.firstChild) {
           emojiAddBlock.removeChild(emojiAddBlock.firstChild);
         }
-        emojiAddBlock.appendChild(getImageElement(
-            smile.getAttribute(`for`).replace(EMOJI_MARK, ``)));
+        emojiAddBlock.appendChild(getImageElement(smile.value));
       });
     };
   }
@@ -114,9 +108,9 @@ export default class FilmDetails extends AbstractSmartComponent {
    * Метод, выполняющий установку смайла в форму комментария
    */
   _setEmojiClickHandler() {
-    const emojiAddBlock = this.getElement().querySelector(`.${ADD_EMOJI_CLASS}`);
+    const emojiAddBlock = this.getElement().querySelector(`.${DetailsElement.EMOJI_ADD_BLOCK}`);
 
-    [...this.getElement().querySelectorAll(`.${EMOJI_LABEL_CLASS}`)]
+    [...this.getElement().querySelectorAll(`.${DetailsElement.EMOJI_ITEM}`)]
         .map(this._getEmojiClickhandler(emojiAddBlock));
   }
 
