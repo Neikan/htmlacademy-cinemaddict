@@ -1,5 +1,6 @@
 import {EMOJIES} from "../../consts";
 import {createEmojiesBlock} from "./emojies";
+import AbstractComponent from "../abstract/component";
 
 
 /**
@@ -53,7 +54,7 @@ const createComments = (comments) => comments.map(createComment).join(`\n`);
  * @param {Object} {свойства комментария}
  * @return {string} разметка одного комментария
  */
-const createComment = ({text, emoji, author, date, button}) => {
+const createComment = ({text, emoji, author, date}) => {
   return (
     `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
@@ -64,7 +65,7 @@ const createComment = ({text, emoji, author, date, button}) => {
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${date}</span>
-          <button class="film-details__comment-delete">${button}</button>
+          <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
     </li>`
@@ -72,4 +73,17 @@ const createComment = ({text, emoji, author, date, button}) => {
 };
 
 
-export {createCommentBlock};
+class Comment extends AbstractComponent {
+  constructor(film) {
+    super();
+
+    this._film = film;
+  }
+
+
+  getTemplate() {
+    return createComment(this._film);
+  }
+}
+
+export {Comment, createCommentBlock};

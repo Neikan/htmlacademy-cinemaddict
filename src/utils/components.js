@@ -65,6 +65,16 @@ export const remove = (component) => {
 export const getImageElement = (imageName) => {
   const imgElement = document.createElement(`img`);
   imgElement.src = `./images/emoji/${imageName}.png`;
-  imgElement.style.width = `100%`;
+  imgElement.width = `55`;
+  imgElement.height = `55`;
+  imgElement.alt = `emoji-${imageName}`;
   return imgElement;
 };
+
+/**
+ * Получение элемента по селектору класса
+ * @param {Object} contaner
+ * @param {string} selector
+ * @return {Object} найденный элемент
+ */
+export const getItem = (contaner, selector) => contaner.querySelector(`.${selector}`);

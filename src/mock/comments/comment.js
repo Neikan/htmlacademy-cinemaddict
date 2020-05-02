@@ -12,8 +12,7 @@ const generateComment = () => {
     text: getRandomElement(COMMENT_TEXTS),
     emoji: getRandomElement(EMOJIES),
     author: getRandomElement(COMMENT_AUTHORS),
-    date: getCommentDate(getRandomDate(new Date(), new Date([...START_DATE_COMMENTS]))),
-    button: `Delete`,
+    date: getCommentDate(getRandomDate(new Date(), new Date([...START_DATE_COMMENTS])))
   };
 };
 

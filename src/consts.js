@@ -98,8 +98,14 @@ export const CARD_ELEMENTS = [
   `film-card__comments`
 ];
 
+
 export const DetailsElement = {
-  BTN_CLOSE: `film-details__close-btn`
+  BTN_CLOSE: `film-details__close-btn`,
+  EMOJI_ITEM: `film-details__emoji-item`,
+  EMOJI_ITEM_CHECKED: `film-details__emoji-item:checked`,
+  EMOJI_ADD_BLOCK: `film-details__add-emoji-label`,
+  COMMENT_INPUT: `film-details__comment-input`,
+  COMMENT_LIST: `film-details__comments-list`
 };
 
 export const Flag = {
