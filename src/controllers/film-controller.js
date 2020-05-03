@@ -40,11 +40,11 @@ class FilmController {
    * @param {Object} filmData
    */
   render(filmData) {
-    this._filmData = filmData;
     const oldFilmCard = this._filmCard;
     const oldFilmDetails = this._filmDetails;
     const mainSection = document.querySelector(NODE_MAIN);
 
+    this._filmData = filmData;
     this._filmCard = new FilmCardComponent(filmData);
     this._filmDetails = new FilmDetailsComponent(filmData);
 
@@ -103,6 +103,7 @@ class FilmController {
     }
   }
 
+
   /**
    * Метод, обеспечивающий добавление нового комментария
    */
@@ -128,7 +129,6 @@ class FilmController {
       emoji: getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).value,
       text: getItem(container, DetailsElement.COMMENT_INPUT).value,
       author: `Batman`,
-      // date: getCommentDate(new Date())
       date: new Date()
     };
   }

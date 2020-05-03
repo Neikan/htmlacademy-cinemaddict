@@ -1,5 +1,5 @@
 import {ProfileRank, Attribute} from '../consts.js';
-import {filterCountMenu} from './menu-filters.js';
+import {filterCountMenu} from '../components/menu.js';
 
 
 /**

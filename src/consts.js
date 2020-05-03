@@ -44,6 +44,8 @@ export const Attribute = {
   IS_FAVORITE: `isFavorite`
 };
 
+export const ATTRIBUTES = [`isWatch`, `isWatched`, `isFavorite`];
+
 export const DETAILS = `details`;
 
 export const Sorting = {
@@ -132,9 +134,15 @@ export const ControlName = {
   FAVORITE: `favorite`
 };
 
-
 export const FormatRule = {
   RELEASE_DATE: `DD MMMM YYYY`,
   RELEASE_YEAR: `YYYY`,
   COMMENT_DATE: `YYYY/MM/DD HH:MM`
+};
+
+export const FilterType = {
+  ALL: `All movies`,
+  WATCHLIST: `Watchlist`,
+  HISTORY: `History`,
+  FAVORITES: `Favorites`,
 };

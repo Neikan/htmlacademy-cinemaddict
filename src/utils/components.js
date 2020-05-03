@@ -78,3 +78,14 @@ export const getImageElement = (imageName) => {
  * @return {Object} найденный элемент
  */
 export const getItem = (contaner, selector) => contaner.querySelector(`.${selector}`);
+
+
+/**
+ * Правила фильтрации
+ */
+export const filterRules = {
+  'All movies': (filmsData) => filmsData,
+  'Watchlist': (filmsData) => filmsData.filter((filmData) => filmData.isWatch),
+  'History': (filmsData) => filmsData.filter((filmData) => filmData.isWatched),
+  'Favorites': (filmsData) => filmsData.filter((filmData) => filmData.isFavorite)
+};

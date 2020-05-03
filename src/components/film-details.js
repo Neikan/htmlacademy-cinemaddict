@@ -40,6 +40,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._comments = film.comments;
   }
 
+
   /**
    * Метод, обеспечивающий создание компонента по заданному шаблону
    * @return {Object}

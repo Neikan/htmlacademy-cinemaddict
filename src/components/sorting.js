@@ -52,32 +52,29 @@ class SortComponent extends AbstractComponent {
   }
 
 
+  /**
+   * Метод, обеспечивающий создание компонента по заданному шаблону
+   * @return {Object}
+   */
   getTemplate() {
     return createSorting();
   }
 
 
-  getSortType() {
-    return this._currentSortType;
-  }
-
-
+  /**
+   * Метод, обеспечивающий добавление слушателей на изменение текущего типа сортировки
+   * @param {Function} handler помощник
+   */
   setSortTypeChangeHandler(handler) {
     this.getElement().addEventListener(`click`, this._clickHandler(handler));
   }
 
 
-  _setActiveClassHandler(evt) {
-    [...this.getElement().querySelectorAll(`.${SortClass.BUTTON}`)].map((button) => {
-      if (button === evt.target) {
-        button.classList.add(SortClass.BUTTON_ACTIVE);
-      } else {
-        button.classList.remove(SortClass.BUTTON_ACTIVE);
-      }
-    });
-  }
-
-
+  /**
+   * Метод, обеспечивающий создание помощника для получения текущего типа сортировки
+   * @param {Function} handler
+   * @return {Function}
+   */
   _clickHandler(handler) {
     return (evt) => {
       evt.preventDefault();
@@ -94,6 +91,21 @@ class SortComponent extends AbstractComponent {
       this._currentSortType = sortType;
       handler(this._currentSortType);
     };
+  }
+
+
+  /**
+   * Метод, обеспечивающий добавление/удаления активного класса с типа сортировки
+   * @param {Object} evt
+   */
+  _setActiveClassHandler(evt) {
+    [...this.getElement().querySelectorAll(`.${SortClass.BUTTON}`)].map((button) => {
+      if (button === evt.target) {
+        button.classList.add(SortClass.BUTTON_ACTIVE);
+      } else {
+        button.classList.remove(SortClass.BUTTON_ACTIVE);
+      }
+    });
   }
 }
 

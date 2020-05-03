@@ -23,6 +23,10 @@ import {generateComments} from '../comments/comment.js';
 import {getRandomDuration, getRandomDescription, getRandomRating} from './film-utils';
 import {FormatRule} from '../../consts';
 
+
+let filmId = 1;
+
+
 /**
  * Генерация фильма
  * @return {Object} созданный фильм
@@ -32,6 +36,7 @@ const generateFilm = () => {
   const randomDate = getRandomDate(new Date());
 
   return {
+    id: filmId++,
     promo: {
       poster: getRandomElement(POSTERS),
       age: getRandomElement(AGE_RATINGS),
