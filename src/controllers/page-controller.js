@@ -229,13 +229,16 @@ class PageController {
    * @param {Object} filmContoller контроллер карточек фильма
    * @param {Object} oldData прежние данные фильма
    * @param {Object} newData обновленные данные фильма
+   * @return {Object}
    */
   _dataChangeHandler(filmContoller, oldData, newData) {
-    const isUpdated = this._filmsModel.updateFilmData(oldData.id, newData);
+    const result = this._filmsModel.updateFilmData(oldData.id, newData);
 
-    if (isUpdated) {
+    if (result.isUpdated) {
       this._updateMenu();
     }
+
+    return result.filmData;
   }
 
 

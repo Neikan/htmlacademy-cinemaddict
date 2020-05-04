@@ -96,7 +96,10 @@ class FilmsModel {
 
     this._updateFilmsData(index, newFilmData);
 
-    return Flag.YES;
+    return {
+      isUpdated: Flag.YES,
+      filmData: newFilmData
+    };
   }
 
 

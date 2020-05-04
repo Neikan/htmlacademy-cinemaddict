@@ -223,13 +223,12 @@ class FilmController {
   /**
    * Метод, обеспечивающий создание помощника для добавления/удаления фильма
    * из запланированного к просмотру
-   * @param {Object} filmData данные фильма
    * @return {Function} созданный помощник
    */
-  _btnWatchlistClickHandler(filmData) {
+  _btnWatchlistClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      this._dataChangeHandler(this, filmData, changeDataRules[Attribute.IS_WATCH](filmData));
+      this._filmData = this._dataChangeHandler(this, this._filmData, changeDataRules[Attribute.IS_WATCH](this._filmData));
       this._updateBtnAndCardClass(evt.target, FilterType.WATCHLIST);
     };
   }
@@ -237,13 +236,12 @@ class FilmController {
 
   /**
    * Метод, обеспечивающий создание помощника для добавления/удаления фильма из просмотренного
-   * @param {Object} filmData данные фильма
    * @return {Function} созданный помощник
    */
-  _btnWatchedClickHandler(filmData) {
+  _btnWatchedClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      this._dataChangeHandler(this, filmData, changeDataRules[Attribute.IS_WATCHED](filmData));
+      this._filmData = this._dataChangeHandler(this, this._filmData, changeDataRules[Attribute.IS_WATCHED](this._filmData));
       this._updateBtnAndCardClass(evt.target, FilterType.HISTORY);
     };
   }
@@ -251,13 +249,12 @@ class FilmController {
 
   /**
    * Метод, обеспечивающий создание помощника для добавления/удаления фильма из избранного
-   * @param {Object} filmData данные фильма
    * @return {Function} созданный помощник
    */
-  _btnFavoriteClickHandler(filmData) {
+  _btnFavoriteClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      this._dataChangeHandler(this, filmData, changeDataRules[Attribute.IS_FAVORITE](filmData));
+      this._filmData = this._dataChangeHandler(this, this._filmData, changeDataRules[Attribute.IS_FAVORITE](this._filmData));
       this._updateBtnAndCardClass(evt.target, FilterType.FAVORITES);
     };
   }
