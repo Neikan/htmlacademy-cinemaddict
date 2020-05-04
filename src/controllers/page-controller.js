@@ -226,12 +226,11 @@ class PageController {
 
   /**
    * Метод, обеспечивающий обновление контроллера фильма на основе новых данных
-   * @param {Object} filmContoller контроллер карточек фильма
    * @param {Object} oldData прежние данные фильма
    * @param {Object} newData обновленные данные фильма
    * @return {Object}
    */
-  _dataChangeHandler(filmContoller, oldData, newData) {
+  _dataChangeHandler(oldData, newData) {
     const result = this._filmsModel.updateFilmData(oldData.id, newData);
 
     if (result.isUpdated) {
