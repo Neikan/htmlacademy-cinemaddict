@@ -19,7 +19,7 @@ export const MONTH_NAMES = [
 ];
 
 export const CountFilm = {
-  ALL: 22,
+  ALL: 12,
   START: 5,
   BY_BUTTON: 5,
   EXTRA: 2,

@@ -1,4 +1,4 @@
-import {CountFilm, ExtraName, Position, Sorting} from "../consts";
+import {CountFilm, ExtraName, Position, Sorting, Flag} from "../consts";
 import {render, remove} from "../utils/components";
 import {sortingArray} from "../utils/common";
 import FilmsComponent from "../components/films";
@@ -20,12 +20,20 @@ const FILM_LIST_CLASS = `.films-list__container`;
  *  обеспечивающий установку отображения контроллера фильма в режим по умолчанию
  * @param {Function} dataChangeHandler метод контроллера страницы,
  *  обеспечивающий изменение данных фильма и перерисовку карточки фильма
- * @param {Object} currentFilter
+ * @param {Function} updateMenuHandler метод котроллера страницы, обеспечивающий обновление меню
+ * @param {Object} currentFilter текущий выбраный фильтр
  * @return {Array} массив контроллеров карточек фильмов
  */
-const renderFilmControllers = (filmsList, filmsData, viewChangeHandler, dataChangeHandler, currentFilter) => {
+const renderFilmControllers = (
+    filmsList, filmsData, viewChangeHandler,
+    dataChangeHandler, updateMenuHandler, currentFilter
+) => {
   return filmsData.map((filmData) => {
-    const filmController = new FilmController(filmsList, viewChangeHandler, dataChangeHandler, currentFilter);
+    const filmController = new FilmController(
+        filmsList, viewChangeHandler, dataChangeHandler,
+        updateMenuHandler, currentFilter
+    );
+
     filmController.render(filmData);
 
     return filmController;
@@ -48,13 +56,14 @@ class PageController {
     this._filmsCommented = new FilmsExtraComponent(ExtraName.COMMENTED);
     this._filmsRated = new FilmsExtraComponent(ExtraName.RATED);
     this._showMoreBtn = new ShowMoreBtn();
-    this._noFilms = new NoFilmsComponent();
+    this._noFilms = null;
     this._sorting = null;
 
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
     this._showMoreClickHandler = this._showMoreClickHandler.bind(this);
     this._dataChangeHandler = this._dataChangeHandler.bind(this);
     this._viewChangeHandler = this._viewChangeHandler.bind(this);
+    this._updateMenu = this._updateMenu.bind(this);
 
     this._filmsModel = filmsModel;
     this._menuController = null;
@@ -72,7 +81,7 @@ class PageController {
     this._renderMenu(container);
 
     if (!this._filmsData.length) {
-      render[Position.BEFORE_END](container, this._noFilms);
+      this._renderNoFilms(container, Flag.NO);
       return;
     }
 
@@ -97,6 +106,18 @@ class PageController {
     return {
       container, filmsComponent, filmsData, filmsContollers, countPrevFilms, countFilms, filmList
     };
+  }
+
+
+  /**
+   * Метод, обеспечивающий создание и отрисовку компонента отсутствия соответствующих
+   *  фильмов фильтру или вообще отсутствия фильмов в базе
+   * @param {Object} container
+   * @param {Boolean} isFilter
+   */
+  _renderNoFilms(container, isFilter) {
+    this._noFilms = new NoFilmsComponent(isFilter);
+    render[Position.BEFORE_BEGIN](container, this._noFilms);
   }
 
 
@@ -200,7 +221,7 @@ class PageController {
   _renderFilmControllers(dataset) {
     dataset.filmsContollers.concat(renderFilmControllers(
         dataset.filmsList, dataset.filmsData.slice(dataset.countPrevFilms, dataset.countFilms),
-        this._viewChangeHandler, this._dataChangeHandler, this._filmsModel.getFilter()
+        this._viewChangeHandler, this._dataChangeHandler, this._updateMenu, this._filmsModel.getFilter()
     ));
   }
 
@@ -226,18 +247,21 @@ class PageController {
 
   /**
    * Метод, обеспечивающий обновление контроллера фильма на основе новых данных
+   * @param {Boolean} isUpdateData флаг, определяющий необходимо ли проводить обновление данных модели
    * @param {Object} oldData прежние данные фильма
    * @param {Object} newData обновленные данные фильма
    * @return {Object}
    */
-  _dataChangeHandler(oldData, newData) {
-    const result = this._filmsModel.updateFilmData(oldData.id, newData);
+  _dataChangeHandler(isUpdateData, oldData, newData) {
+    let resultUpdate = {};
 
-    if (result.isUpdated) {
-      this._updateMenu();
+    if (isUpdateData) {
+      resultUpdate = this._filmsModel.updateFilmData(oldData.id, newData);
     }
 
-    return result.filmData;
+    this._updateMenu();
+
+    return resultUpdate.filmData;
   }
 
 
@@ -257,6 +281,7 @@ class PageController {
     this._showedFilmControllers = [];
     remove(this._films);
     remove(this._showMoreBtn);
+    this._resetNoFilms();
   }
 
 
@@ -266,6 +291,17 @@ class PageController {
   _resetFilmsWithSorting() {
     remove(this._sorting);
     this._resetFilms();
+    this._resetNoFilms();
+  }
+
+
+  /**
+   * Метод, обеспечивающий удаление данных для компонента _noiFilms
+   */
+  _resetNoFilms() {
+    if (this._noFilms) {
+      remove(this._noFilms);
+    }
   }
 
 
@@ -294,7 +330,16 @@ class PageController {
    */
   _sortTypeChangeHandler(container) {
     return (sortType) => {
+      this._filmsData = this._filmsModel.getFilteringFilmsData();
+
       this._resetFilms();
+
+      if (!this._filmsData.length) {
+        this._renderNoFilms(container, Flag.YES);
+        remove(this._sorting);
+        return;
+      }
+
       this._renderFilmsComponent(this._getDataSet(container,
           this._films, sortRules[sortType](this._filmsData),
           this._showedFilmContollers, 0, CountFilm.START, this._showMoreBtn)
@@ -316,6 +361,12 @@ class PageController {
       this._filmsData = this._filmsModel.getFilteringFilmsData();
 
       this._resetFilmsWithSorting();
+
+      if (!this._filmsData.length) {
+        this._renderNoFilms(container, Flag.YES);
+        return;
+      }
+
       this._renderFilmsWithSorting(container);
     };
   }

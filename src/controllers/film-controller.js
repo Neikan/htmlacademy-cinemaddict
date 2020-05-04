@@ -24,7 +24,7 @@ const changeDataRules = {
  * Создание контроллера, управляющего отображением карточек фильмов
  */
 class FilmController {
-  constructor(container, viewChangeHandler, dataChangeHandler, currentFilter) {
+  constructor(container, viewChangeHandler, dataChangeHandler, updateMenuHandler, currentFilter) {
     this._container = container;
 
     this._mode = Mode.DEFAULT;
@@ -33,6 +33,7 @@ class FilmController {
     this._filmDetails = null;
     this._viewChangeHandler = viewChangeHandler;
     this._dataChangeHandler = dataChangeHandler;
+    this._updateMenuHandler = updateMenuHandler;
     this._currentFilter = currentFilter;
 
 
@@ -164,7 +165,7 @@ class FilmController {
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     document.removeEventListener(`keyup`, this._ctrlKeyUpHandler);
 
-    this._filmData = this._dataChangeHandler(this._filmData, this._filmData);
+    this._updateMenuHandler();
     this.render(this._filmData);
   }
 
@@ -231,7 +232,9 @@ class FilmController {
   _btnWatchlistClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      this._filmData = this._dataChangeHandler(this._filmData, changeDataRules[Attribute.IS_WATCH](this._filmData));
+      this._filmData = this._dataChangeHandler(Flag.YES, this._filmData,
+          changeDataRules[Attribute.IS_WATCH](this._filmData)
+      );
       this._updateBtnAndCardClass(evt.target, FilterType.WATCHLIST);
     };
   }
@@ -244,7 +247,9 @@ class FilmController {
   _btnWatchedClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      this._filmData = this._dataChangeHandler(this._filmData, changeDataRules[Attribute.IS_WATCHED](this._filmData));
+      this._filmData = this._dataChangeHandler(Flag.YES, this._filmData,
+          changeDataRules[Attribute.IS_WATCHED](this._filmData)
+      );
       this._updateBtnAndCardClass(evt.target, FilterType.HISTORY);
     };
   }
@@ -257,7 +262,9 @@ class FilmController {
   _btnFavoriteClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      this._filmData = this._dataChangeHandler(this._filmData, changeDataRules[Attribute.IS_FAVORITE](this._filmData));
+      this._filmData = this._dataChangeHandler(Flag.YES, this._filmData,
+          changeDataRules[Attribute.IS_FAVORITE](this._filmData)
+      );
       this._updateBtnAndCardClass(evt.target, FilterType.FAVORITES);
     };
   }
