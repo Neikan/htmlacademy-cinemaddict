@@ -75,9 +75,9 @@ class PageController {
    * @param {Array} films данные фильмов
    */
   render() {
-    this._filmsData = this._filmsModel.getFilteringFilmsData();
     const container = this._container.getElement();
 
+    this._setFilmsData();
     this._renderMenu(container);
 
     if (!this._filmsData.length) {
@@ -86,6 +86,14 @@ class PageController {
     }
 
     this._renderFilms(container);
+  }
+
+
+  /**
+   * Метод, обеспечивающий присвоение данным фильмов в контроолере текущего значения данных из модели
+   */
+  _setFilmsData() {
+    this._filmsData = this._filmsModel.getFilteringFilmsData();
   }
 
 
@@ -247,21 +255,12 @@ class PageController {
 
   /**
    * Метод, обеспечивающий обновление контроллера фильма на основе новых данных
-   * @param {Boolean} isUpdateData флаг, определяющий необходимо ли проводить обновление данных модели
    * @param {Object} oldData прежние данные фильма
    * @param {Object} newData обновленные данные фильма
    * @return {Object}
    */
-  _dataChangeHandler(isUpdateData, oldData, newData) {
-    let resultUpdate = {};
-
-    if (isUpdateData) {
-      resultUpdate = this._filmsModel.updateFilmData(oldData.id, newData);
-    }
-
-    this._updateMenu();
-
-    return resultUpdate.filmData;
+  _dataChangeHandler(oldData, newData) {
+    return this._filmsModel.updateFilmData(oldData.id, newData);
   }
 
 
@@ -330,8 +329,7 @@ class PageController {
    */
   _sortTypeChangeHandler(container) {
     return (sortType) => {
-      this._filmsData = this._filmsModel.getFilteringFilmsData();
-
+      this._setFilmsData();
       this._resetFilms();
 
       if (!this._filmsData.length) {
@@ -356,10 +354,8 @@ class PageController {
    */
   _filterChangeHandler(container) {
     return (filterType) => {
-
       this._filmsModel.setFilter(filterType);
-      this._filmsData = this._filmsModel.getFilteringFilmsData();
-
+      this._setFilmsData();
       this._resetFilmsWithSorting();
 
       if (!this._filmsData.length) {

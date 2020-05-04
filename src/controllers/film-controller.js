@@ -232,9 +232,10 @@ class FilmController {
   _btnWatchlistClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      this._filmData = this._dataChangeHandler(Flag.YES, this._filmData,
+      this._filmData = this._dataChangeHandler(this._filmData,
           changeDataRules[Attribute.IS_WATCH](this._filmData)
       );
+      this._updateMenuHandler();
       this._updateBtnAndCardClass(evt.target, FilterType.WATCHLIST);
     };
   }
@@ -247,9 +248,10 @@ class FilmController {
   _btnWatchedClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      this._filmData = this._dataChangeHandler(Flag.YES, this._filmData,
+      this._filmData = this._dataChangeHandler(this._filmData,
           changeDataRules[Attribute.IS_WATCHED](this._filmData)
       );
+      this._updateMenuHandler();
       this._updateBtnAndCardClass(evt.target, FilterType.HISTORY);
     };
   }
@@ -262,9 +264,10 @@ class FilmController {
   _btnFavoriteClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      this._filmData = this._dataChangeHandler(Flag.YES, this._filmData,
+      this._filmData = this._dataChangeHandler(this._filmData,
           changeDataRules[Attribute.IS_FAVORITE](this._filmData)
       );
+      this._updateMenuHandler();
       this._updateBtnAndCardClass(evt.target, FilterType.FAVORITES);
     };
   }

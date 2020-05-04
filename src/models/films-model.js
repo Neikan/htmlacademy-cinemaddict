@@ -1,4 +1,4 @@
-import {Flag, FilterType, Attribute} from '../consts';
+import {FilterType, Attribute, Flag} from '../consts';
 import {filterRules} from '../utils/components';
 
 
@@ -13,7 +13,7 @@ class FilmsModel {
 
 
   /**
-   * Метод, обеспечивающий присвоение данным модели текущее значение данных фильмов
+   * Метод, обеспечивающий присвоение данным модели текущего значения данных фильмов
    * @param {Array} filmsData
    */
   setFilmsData(filmsData) {
@@ -85,21 +85,18 @@ class FilmsModel {
    * Метод, обеспечивающий обновление данных фильма в исходных данных
    * @param {Number} id идентификатор элемента в массиве данных фильмов
    * @param {Object} newFilmData обновленные данные фильма
-   * @return {Boolean}
+   * @return {Object}
    */
   updateFilmData(id, newFilmData) {
     const index = this._filmsData.findIndex((filmData) => filmData.id === id);
 
     if (index === -1) {
-      return false;
+      return Flag.NO;
     }
 
     this._updateFilmsData(index, newFilmData);
 
-    return {
-      isUpdated: Flag.YES,
-      filmData: newFilmData
-    };
+    return newFilmData;
   }
 
 
