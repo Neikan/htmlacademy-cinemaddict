@@ -93,7 +93,11 @@ export const START_DATE_FILMS = [1970, 1, 1];
 
 export const CLASS_POINTER = `pointer`;
 
-export const CLASS_FILM_OPACITY = `film-card__opacity`;
+export const CLASS_FILM_OPACITY = `film-card--opacity`;
+
+export const ACTIVE_CLASS = `film-card__controls-item--active`;
+
+export const CARD_CLASS = `film-card`;
 
 export const ExtraName = {
   RATED: `Top rated`,

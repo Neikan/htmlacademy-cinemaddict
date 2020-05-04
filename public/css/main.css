@@ -1078,6 +1078,6 @@ button {
 .pointer {
   cursor: pointer;
 }
-.film-card__opacity {
-  opacity: 0.5;
+.film-card--opacity {
+  opacity: 0.3;
 }

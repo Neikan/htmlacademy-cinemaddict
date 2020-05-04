@@ -30,6 +30,11 @@ class FilmsModel {
   }
 
 
+  getFilter() {
+    return this._activeFilter;
+  }
+
+
   /**
    * Метод, обеспечивающий получение полных данных фильмов
    * @return {Array}

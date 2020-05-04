@@ -10,8 +10,7 @@ class MenuController {
   constructor(container, filmModel) {
     this._container = container;
     this._filmModel = filmModel;
-
-    this._activeMenuItem = filmModel._activeMenuItem;
+    this._activeMenuItem = filmModel._activeFilter;
     this._menu = null;
   }
 

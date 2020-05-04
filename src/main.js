@@ -7,7 +7,6 @@ import {generateFilms} from "./mock/films/film";
 import {FilmsModel} from "./models/films-model";
 import PageComponent from "./components/page";
 import {PageController} from "./controllers/page-controller";
-import {MenuController} from "./controllers/menu-controller";
 
 
 const Nodes = {
@@ -26,11 +25,9 @@ const init = () => {
   const filmsModel = new FilmsModel();
   filmsModel.setFilmsData(films);
 
-  const menuController = new MenuController(Nodes.MAIN, filmsModel);
   const pageComponent = new PageComponent();
-  const pageController = new PageController(pageComponent, filmsModel, menuController);
+  const pageController = new PageController(pageComponent, filmsModel);
 
-  menuController.render();
   renderMarkup(Nodes.HEADER, createProfileRank(films));
   render[Position.BEFORE_END](Nodes.MAIN, pageComponent);
   pageController.render();

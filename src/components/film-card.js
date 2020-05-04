@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract/component";
-import {CLASS_POINTER, ControlName, CONTROL_ITEM, Action, CARD_ELEMENTS} from "../consts";
+import {CLASS_POINTER, ControlName, CONTROL_ITEM, Action, CARD_ELEMENTS, ACTIVE_CLASS} from "../consts";
 
 
 /**
@@ -17,11 +17,10 @@ const createFilmCard = ({
   isWatched,
   isFavorite
 }) => {
-  const ACTIVE_CLASS = ` film-card__controls-item--active`;
   const classMarkup = {
-    'addToWatch': isWatch ? ACTIVE_CLASS : ``,
-    'markAsWatched': isWatched ? ACTIVE_CLASS : ``,
-    'markAsFavourite': isFavorite ? ACTIVE_CLASS : ``
+    'addToWatch': isWatch ? ` ` + ACTIVE_CLASS : ``,
+    'markAsWatched': isWatched ? ` ` + ACTIVE_CLASS : ``,
+    'markAsFavourite': isFavorite ? ` ` + ACTIVE_CLASS : ``
   };
 
   return (

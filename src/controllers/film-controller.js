@@ -1,4 +1,4 @@
-import {KeyCode, Position, DetailsElement, Flag, Attribute} from "../consts";
+import {KeyCode, Position, DetailsElement, Flag, Attribute, ACTIVE_CLASS, CLASS_FILM_OPACITY, CARD_CLASS, FilterType} from "../consts";
 import {render, remove, replace, getItem} from "../utils/components";
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
@@ -24,7 +24,7 @@ const changeDataRules = {
  * Создание контроллера, управляющего отображением карточек фильмов
  */
 class FilmController {
-  constructor(container, viewChangeHandler, dataChangeHandler) {
+  constructor(container, viewChangeHandler, dataChangeHandler, currentFilter) {
     this._container = container;
 
     this._mode = Mode.DEFAULT;
@@ -33,6 +33,8 @@ class FilmController {
     this._filmDetails = null;
     this._viewChangeHandler = viewChangeHandler;
     this._dataChangeHandler = dataChangeHandler;
+    this._currentFilter = currentFilter;
+
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._ctrlKeyUpHandler = this._ctrlKeyUpHandler.bind(this);
@@ -165,6 +167,42 @@ class FilmController {
   }
 
 
+  _updateBtnAndCardClass(btn, filterType) {
+    if (this._currentFilter === filterType) {
+      this._changeBtnAndCardClass(btn);
+    } else {
+      this._changeBtnClass(btn);
+    }
+  }
+
+
+  _changeBtnClass(btn) {
+    if (btn.classList.contains(ACTIVE_CLASS)) {
+      btn.classList.remove(`${ACTIVE_CLASS}`);
+    } else {
+      btn.classList.add(`${ACTIVE_CLASS}`);
+    }
+  }
+
+  _changeBtnAndCardClass(btn) {
+    if (btn.classList.contains(ACTIVE_CLASS)) {
+      btn.classList.remove(`${ACTIVE_CLASS}`);
+      btn.closest(`.${CARD_CLASS}`).classList.add(CLASS_FILM_OPACITY);
+    } else {
+      btn.classList.add(`${ACTIVE_CLASS}`);
+      btn.closest(`.${CARD_CLASS}`).classList.remove(CLASS_FILM_OPACITY);
+    }
+  }
+
+  activeBtn(btn) {
+    btn.classList.add(`${ACTIVE_CLASS}`);
+  }
+
+  _inactiveBtn(btn) {
+    btn.classList.remove(`${ACTIVE_CLASS}`);
+  }
+
+
   /**
    * Метод, обеспечивабщий создание помощника для отображение подробной карточки
    * @param {Object} mainSection секция для отображения подробной карточки фильма
@@ -192,6 +230,7 @@ class FilmController {
     return (evt) => {
       evt.preventDefault();
       this._dataChangeHandler(this, filmData, changeDataRules[Attribute.IS_WATCH](filmData));
+      this._updateBtnAndCardClass(evt.target, FilterType.WATCHLIST);
     };
   }
 
@@ -205,6 +244,7 @@ class FilmController {
     return (evt) => {
       evt.preventDefault();
       this._dataChangeHandler(this, filmData, changeDataRules[Attribute.IS_WATCHED](filmData));
+      this._updateBtnAndCardClass(evt.target, FilterType.HISTORY);
     };
   }
 
@@ -218,6 +258,7 @@ class FilmController {
     return (evt) => {
       evt.preventDefault();
       this._dataChangeHandler(this, filmData, changeDataRules[Attribute.IS_FAVORITE](filmData));
+      this._updateBtnAndCardClass(evt.target, FilterType.FAVORITES);
     };
   }
 

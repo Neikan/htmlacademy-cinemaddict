@@ -7,6 +7,7 @@ import FilmsExtraComponent from "../components/films-extra";
 import NoFilmsComponent from "../components/no-films";
 import {SortComponent, sortRules} from "../components/sorting";
 import {FilmController} from "./film-controller";
+import {MenuController} from "./menu-controller";
 
 
 const FILM_LIST_CLASS = `.films-list__container`;
@@ -19,11 +20,12 @@ const FILM_LIST_CLASS = `.films-list__container`;
  *  обеспечивающий установку отображения контроллера фильма в режим по умолчанию
  * @param {Function} dataChangeHandler метод контроллера страницы,
  *  обеспечивающий изменение данных фильма и перерисовку карточки фильма
+ * @param {Object} currentFilter
  * @return {Array} массив контроллеров карточек фильмов
  */
-const renderFilmControllers = (filmsList, filmsData, viewChangeHandler, dataChangeHandler) => {
+const renderFilmControllers = (filmsList, filmsData, viewChangeHandler, dataChangeHandler, currentFilter) => {
   return filmsData.map((filmData) => {
-    const filmController = new FilmController(filmsList, viewChangeHandler, dataChangeHandler);
+    const filmController = new FilmController(filmsList, viewChangeHandler, dataChangeHandler, currentFilter);
     filmController.render(filmData);
 
     return filmController;
@@ -35,7 +37,7 @@ const renderFilmControllers = (filmsList, filmsData, viewChangeHandler, dataChan
  * Создание контроллера, обеспечивающего отрисовку компонентов на странице
  */
 class PageController {
-  constructor(container, filmsModel, menuController) {
+  constructor(container, filmsModel) {
     this._container = container;
 
     this._filmsData = [];
@@ -55,7 +57,7 @@ class PageController {
     this._viewChangeHandler = this._viewChangeHandler.bind(this);
 
     this._filmsModel = filmsModel;
-    this._menuController = menuController;
+    this._menuController = null;
   }
 
 
@@ -66,7 +68,8 @@ class PageController {
   render() {
     this._filmsData = this._filmsModel.getFilteringFilmsData();
     const container = this._container.getElement();
-    this._updateMenu(container);
+
+    this._renderMenu(container);
 
     if (!this._filmsData.length) {
       render[Position.BEFORE_END](container, this._noFilms);
@@ -101,7 +104,9 @@ class PageController {
    * Метод, обеспечивающий обновление компонента меню
    * @param {Object} container контейнер контроллера
    */
-  _updateMenu(container) {
+  _renderMenu(container) {
+    this._menuController = new MenuController(container.parentElement, this._filmsModel);
+    this._menuController.render();
     this._menuController._menu.setFilterChangeHandler(this._filterChangeHandler(container));
   }
 
@@ -195,7 +200,7 @@ class PageController {
   _renderFilmControllers(dataset) {
     dataset.filmsContollers.concat(renderFilmControllers(
         dataset.filmsList, dataset.filmsData.slice(dataset.countPrevFilms, dataset.countFilms),
-        this._viewChangeHandler, this._dataChangeHandler
+        this._viewChangeHandler, this._dataChangeHandler, this._filmsModel.getFilter()
     ));
   }
 
@@ -211,6 +216,15 @@ class PageController {
 
 
   /**
+   * Метод, опеспечивающий обновление меню
+   */
+  _updateMenu() {
+    remove(this._menuController._menu);
+    this._renderMenu(this._container.getElement());
+  }
+
+
+  /**
    * Метод, обеспечивающий обновление контроллера фильма на основе новых данных
    * @param {Object} filmContoller контроллер карточек фильма
    * @param {Object} oldData прежние данные фильма
@@ -220,7 +234,7 @@ class PageController {
     const isUpdated = this._filmsModel.updateFilmData(oldData.id, newData);
 
     if (isUpdated) {
-      filmContoller.render(newData);
+      this._updateMenu();
     }
   }
 
@@ -295,11 +309,11 @@ class PageController {
    */
   _filterChangeHandler(container) {
     return (filterType) => {
+
       this._filmsModel.setFilter(filterType);
       this._filmsData = this._filmsModel.getFilteringFilmsData();
 
       this._resetFilmsWithSorting();
-
       this._renderFilmsWithSorting(container);
     };
   }
