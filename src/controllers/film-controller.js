@@ -79,7 +79,6 @@ class FilmController {
    */
   _setCardHandlers(filmData, mainSection) {
     this._filmCard.setClickHandler(this._showDetailsClickHandler(mainSection));
-
     this._filmCard.setBtnWatchlistClickHandler(this._btnWatchlistClickHandler(filmData));
     this._filmCard.setBtnWatchedClickHandler(this._btnWatchedClickHandler(filmData));
     this._filmCard.setBtnFavoriteClickHandler(this._btnFavoriteClickHandler(filmData));
@@ -164,6 +163,7 @@ class FilmController {
     this._mode = Mode.DEFAULT;
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     document.removeEventListener(`keyup`, this._ctrlKeyUpHandler);
+    this.render(this._filmData);
   }
 
 
@@ -210,6 +210,7 @@ class FilmController {
    */
   _showDetailsClickHandler(mainSection) {
     return () => {
+      this.render(this._filmData);
       render[Position.BEFORE_END](mainSection, this._filmDetails);
       this._mode = Mode.DETAILS;
       document.addEventListener(`keydown`, this._escKeyDownHandler);
