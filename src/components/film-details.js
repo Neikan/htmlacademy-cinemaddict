@@ -117,7 +117,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
 
   /**
-   * Метод, обеспечивающий добавление/удаление фильма из числа запланированных к просмотру
+   * Метод, обеспечивающий добавление/удаление фильма из запланированного к просмотру
    * @param {Object} element
    */
   _changeIsWatch(element) {
@@ -129,7 +129,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
 
   /**
-   * Метод, обеспечивающий добавление/удаление фильма из числа просмотренных
+   * Метод, обеспечивающий добавление/удаление фильма из просмотренного
    * @param {Object} element
    */
   _changeIsWatched(element) {
@@ -141,7 +141,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
 
   /**
-   * Метод, обеспечивающий добавление/удаление фильма из числа избранных
+   * Метод, обеспечивающий добавление/удаление фильма из избранного
    * @param {Object} element
    */
   _changeIsFavorite(element) {

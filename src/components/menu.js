@@ -27,22 +27,24 @@ const getCount = (param) => (count, film) => (film[param] ? ++count : count);
 
 /**
  * Создание разметки блока главного меню
- * @param {Array} filters перечень фильтров с количеством фильмов, им соответствующих
+ * @param {Number} watchlistCount количество фильмов в запланированном к просмотру
+ * @param {Number} watchedCount количество фильмов в просмотренном
+ * @param {Number} favoriteCount количество фильмов в избранном
  * @return {string} разметка блока
  */
-const createMenu = (filters) => {
+const createMenu = (watchlistCount, watchedCount, favoriteCount) => {
   return (
     `<nav class="main-navigation">
       <div class="main-navigation__items">
         <a href="#all" data-filter-type="${FilterType.ALL}" class="main-navigation__item main-navigation__item--active">All movies</a>
         <a href="#watchlist" data-filter-type="${FilterType.WATCHLIST}" class="main-navigation__item">Watchlist
-          <span class="main-navigation__item-count">${filters[0]}</span>
+          <span class="main-navigation__item-count">${watchlistCount}</span>
         </a>
         <a href="#history" data-filter-type="${FilterType.HISTORY}" class="main-navigation__item">History
-          <span class="main-navigation__item-count">${filters[1]}</span>
+          <span class="main-navigation__item-count">${watchedCount}</span>
         </a>
         <a href="#favorites" data-filter-type="${FilterType.FAVORITES}" class="main-navigation__item">Favorites
-          <span class="main-navigation__item-count">${filters[2]}</span>
+          <span class="main-navigation__item-count">${favoriteCount}</span>
         </a>
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
@@ -55,10 +57,12 @@ const createMenu = (filters) => {
  * Создание класса главного меню
  */
 export default class Menu extends AbstractComponent {
-  constructor(filters, activeFilter) {
+  constructor(watchlistCount, watchedCount, favoriteCount, activeFilter) {
     super();
 
-    this._filters = filters;
+    this._watchlistCount = watchlistCount;
+    this._watchedCount = watchedCount;
+    this._favoriteCount = favoriteCount;
     this._currentFilter = activeFilter;
 
     this._clickHandler = this._clickHandler.bind(this);
@@ -70,7 +74,7 @@ export default class Menu extends AbstractComponent {
    * @return {Object}
    */
   getTemplate() {
-    return createMenu(this._filters);
+    return createMenu(this._watchlistCount, this._watchedCount, this._favoriteCount);
   }
 
 

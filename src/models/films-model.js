@@ -1,4 +1,4 @@
-import {Flag, FilterType} from '../consts';
+import {Flag, FilterType, Attribute} from '../consts';
 import {filterRules} from '../utils/components';
 
 
@@ -36,6 +36,33 @@ class FilmsModel {
    */
   getFilmsData() {
     return this._filmsData;
+  }
+
+
+  /**
+   * Метод, обеспечивабщий подсчет фильмов в запланированном к просмотру
+   * @return {Number}
+   */
+  getWatchlistFilms() {
+    return this._filmsData.reduce((count, film) => (film[Attribute.IS_WATCH] ? ++count : count), 0);
+  }
+
+
+  /**
+   * Метод, обеспечивабщий подсчет фильмов в просмотренном
+   * @return {Number}
+   */
+  getWatchedFilms() {
+    return this._filmsData.reduce((count, film) => (film[Attribute.IS_WATCHED] ? ++count : count), 0);
+  }
+
+
+  /**
+   * Метод, обеспечивабщий подсчет фильмов в избранном
+   * @return {Number}
+   */
+  getFavoriteFilms() {
+    return this._filmsData.reduce((count, film) => (film[Attribute.IS_FAVORITE] ? ++count : count), 0);
   }
 
 

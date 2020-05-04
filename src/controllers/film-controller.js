@@ -1,4 +1,4 @@
-import {KeyCode, Position, DetailsElement, Flag} from "../consts";
+import {KeyCode, Position, DetailsElement, Flag, Attribute} from "../consts";
 import {render, remove, replace, getItem} from "../utils/components";
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
@@ -10,6 +10,13 @@ const NODE_MAIN = `main`;
 const Mode = {
   DEFAULT: `default`,
   DETAILS: `details`,
+};
+
+
+const changeDataRules = {
+  'isWatch': (filmData) => Object.assign({}, filmData, {isWatch: !filmData.isWatch}),
+  'isWatched': (filmData) => Object.assign({}, filmData, {isWatched: !filmData.isWatched}),
+  'isFavorite': (filmData) => Object.assign({}, filmData, {isFavorite: !filmData.isFavorite})
 };
 
 
@@ -177,46 +184,40 @@ class FilmController {
 
   /**
    * Метод, обеспечивающий создание помощника для добавления/удаления фильма
-   * из числа запланированных к просмотру
+   * из запланированного к просмотру
    * @param {Object} filmData данные фильма
    * @return {Function} созданный помощник
    */
   _btnWatchlistClickHandler(filmData) {
     return (evt) => {
       evt.preventDefault();
-      this._dataChangeHandler(this, filmData, Object.assign({}, filmData, {
-        isWatch: !filmData.isWatch
-      }));
+      this._dataChangeHandler(this, filmData, changeDataRules[Attribute.IS_WATCH](filmData));
     };
   }
 
 
   /**
-   * Метод, обеспечивающий создание помощника для добавления/удаления фильма из числа просмотренных
+   * Метод, обеспечивающий создание помощника для добавления/удаления фильма из просмотренного
    * @param {Object} filmData данные фильма
    * @return {Function} созданный помощник
    */
   _btnWatchedClickHandler(filmData) {
     return (evt) => {
       evt.preventDefault();
-      this._dataChangeHandler(this, filmData, Object.assign({}, filmData, {
-        isWatched: !filmData.isWatched
-      }));
+      this._dataChangeHandler(this, filmData, changeDataRules[Attribute.IS_WATCHED](filmData));
     };
   }
 
 
   /**
-   * Метод, обеспечивающий создание помощника для добавления/удаления фильма из числа избранных
+   * Метод, обеспечивающий создание помощника для добавления/удаления фильма из избранного
    * @param {Object} filmData данные фильма
    * @return {Function} созданный помощник
    */
   _btnFavoriteClickHandler(filmData) {
     return (evt) => {
       evt.preventDefault();
-      this._dataChangeHandler(this, filmData, Object.assign({}, filmData, {
-        isFavorite: !filmData.isFavorite
-      }));
+      this._dataChangeHandler(this, filmData, changeDataRules[Attribute.IS_FAVORITE](filmData));
     };
   }
 
