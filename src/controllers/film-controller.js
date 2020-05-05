@@ -1,6 +1,6 @@
 import {
   KeyCode, Position, DetailsElement, CardElement, Flag,
-  FilmAttribute, FilterType, ClassMarkup, FilmsElement
+  FilmAttribute, FilterType, ClassMarkup, FilmsBlock
 } from "../consts";
 import {render, remove, replace, getItem} from "../utils/components";
 import FilmCardComponent from "../components/film-card";
@@ -15,20 +15,20 @@ const Mode = {
   DETAILS: `details`,
 };
 
-
 const changeDataRules = {
   'isWatch': (filmData) => Object.assign({}, filmData, {isWatch: !filmData.isWatch}),
   'isWatched': (filmData) => Object.assign({}, filmData, {isWatched: !filmData.isWatched}),
   'isFavorite': (filmData) => Object.assign({}, filmData, {isFavorite: !filmData.isFavorite})
 };
 
+let filmsBlockInitiator = FilmsBlock.DEFAULT;
 
 /**
  * Создание контроллера, управляющего отображением карточек фильмов
  */
 class FilmController {
   constructor(container, viewChangeHandler, dataChangeHandler,
-      updateMenuHandler, updateFilmsHandler, currentFilter
+      updateMenuHandler, updateFilmsHandler, currentFilter, filmsBlock
   ) {
     this._container = container;
 
@@ -41,6 +41,7 @@ class FilmController {
     this._updateMenuHandler = updateMenuHandler;
     this._updateFilmsHandler = updateFilmsHandler;
     this._currentFilter = currentFilter;
+    this._filmsBlock = filmsBlock;
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._ctrlKeyUpHandler = this._ctrlKeyUpHandler.bind(this);
@@ -60,7 +61,7 @@ class FilmController {
     const mainSection = document.querySelector(NODE_MAIN);
 
     this._filmData = filmData;
-    this._filmCard = new FilmCardComponent(filmData);
+    this._filmCard = new FilmCardComponent(filmData, this._filmsBlock);
     this._filmDetails = new FilmDetailsComponent(filmData);
 
     this._setCardHandlers(filmData, mainSection);
@@ -170,19 +171,27 @@ class FilmController {
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     document.removeEventListener(`keyup`, this._ctrlKeyUpHandler);
 
-    this._updateMenuHandler();
     this.render(this._filmData);
-    this._checkActivityCard();
+    this._updateMenuHandler();
+
+    this._updateFilmsHandler(filmsBlockInitiator);
+
+    if (filmsBlockInitiator === FilmsBlock.ALL) {
+      this._checkActivityCard();
+    }
+
+    filmsBlockInitiator = FilmsBlock.DEFAULT;
   }
 
 
   /**
    * Метод, обеспечивающий обновление классов самой карточки фильма и кнопки, добавляющей фильм в какой-либо список
    * @param {Object} btn кнопка
+   * @param {string} filmsBlock название блока фильмов
    * @param {string} filterType примененный фильтр
    */
-  _updateBtnAndCardClass(btn, filterType) {
-    if (this._currentFilter === filterType) {
+  _updateBtnAndCardClass(btn, filmsBlock, filterType) {
+    if (this._currentFilter === filterType && filmsBlock === FilmsBlock.ALL) {
       this._changeBtnAndCardClass(btn);
     } else {
       this._changeBtnClass(btn);
@@ -274,11 +283,14 @@ class FilmController {
    * @return {Function} созданный помощник
    */
   _showDetailsClickHandler(mainSection) {
-    return () => {
+    return (evt) => {
       this.render(this._filmData);
       this._viewChangeHandler();
+      filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
+
       render[Position.BEFORE_END](mainSection, this._filmDetails);
       this._mode = Mode.DETAILS;
+
       document.addEventListener(`keydown`, this._escKeyDownHandler);
       document.addEventListener(`keyup`, this._ctrlKeyUpHandler);
 
@@ -295,13 +307,15 @@ class FilmController {
   _btnWatchlistClickHandler() {
     return (evt) => {
       evt.preventDefault();
+      filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
+
       this._filmData = this._dataChangeHandler(this._filmData,
           changeDataRules[FilmAttribute.IS_WATCH](this._filmData)
       );
-      this._updateMenuHandler();
-      this._updateBtnAndCardClass(evt.target, FilterType.WATCHLIST);
 
-      this._updateFilmsHandler(evt.target.closest(`.films-list--extra`).querySelector(`.films-list__title`).textContent);
+      this._updateMenuHandler();
+      this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.WATCHLIST);
+      this._updateFilmsHandler(filmsBlockInitiator);
     };
   }
 
@@ -313,13 +327,15 @@ class FilmController {
   _btnWatchedClickHandler() {
     return (evt) => {
       evt.preventDefault();
+      filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
+
       this._filmData = this._dataChangeHandler(this._filmData,
           changeDataRules[FilmAttribute.IS_WATCHED](this._filmData)
       );
-      this._updateMenuHandler();
-      this._updateBtnAndCardClass(evt.target, FilterType.HISTORY);
 
-      this._updateFilmsHandler(evt.target.closest(`.films-list--extra`).querySelector(`.films-list__title`).textContent);
+      this._updateMenuHandler();
+      this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.HISTORY);
+      this._updateFilmsHandler(filmsBlockInitiator);
     };
   }
 
@@ -331,13 +347,15 @@ class FilmController {
   _btnFavoriteClickHandler() {
     return (evt) => {
       evt.preventDefault();
+      filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
+
       this._filmData = this._dataChangeHandler(this._filmData,
           changeDataRules[FilmAttribute.IS_FAVORITE](this._filmData)
       );
-      this._updateMenuHandler();
-      this._updateBtnAndCardClass(evt.target, FilterType.FAVORITES);
 
-      this._updateFilmsHandler(evt.target.closest(`.${FilmsElement.EXTRA}`).querySelector(`.${FilmsElement.TITLE}`).textContent);
+      this._updateMenuHandler();
+      this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.FAVORITES);
+      this._updateFilmsHandler(filmsBlockInitiator);
     };
   }
 

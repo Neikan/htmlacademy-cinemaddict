@@ -4,7 +4,8 @@ import {CARD_ELEMENTS, CardElement, ClassMarkup} from "../consts";
 
 /**
  * Создание разметки блока стандартной карточки фильма
- * @param {Object} {свойства фильма}
+ * @param {Object} {данные фильма}
+ * @param {string} filmsBlock название компонента-контейнера фильмов
  * @return {string} разметка блока
  */
 const createFilmCard = ({
@@ -16,7 +17,8 @@ const createFilmCard = ({
   isWatch,
   isWatched,
   isFavorite
-}) => {
+}, filmsBlock
+) => {
   const classMarkup = {
     'addToWatch': isWatch ? ` ` + CardElement.BTN_ACTIVE : ``,
     'markAsWatched': isWatched ? ` ` + CardElement.BTN_ACTIVE : ``,
@@ -24,7 +26,7 @@ const createFilmCard = ({
   };
 
   return (
-    `<article class="film-card">
+    `<article class="film-card" data-films-block="${filmsBlock}">
       <h3 class="film-card__title">${titles.translate}</h3>
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
@@ -52,14 +54,15 @@ const createFilmCard = ({
  * Создание класса стандартной карточки фильма
  */
 export default class FilmCard extends AbstractComponent {
-  constructor(film) {
+  constructor(film, filmsBlock) {
     super();
 
     this._film = film;
+    this._filmsBlock = filmsBlock;
   }
 
   getTemplate() {
-    return createFilmCard(this._film);
+    return createFilmCard(this._film, this._filmsBlock);
   }
 
   setClickHandler(handler) {

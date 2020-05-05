@@ -4,7 +4,7 @@ export const KeyCode = {
 };
 
 export const CountFilm = {
-  ALL: 6,
+  ALL: 55,
   START: 5,
   BY_BUTTON: 5,
   EXTRA: 2,
@@ -77,6 +77,14 @@ export const START_DATE_FILMS = [1970, 1, 1];
 export const ExtraName = {
   RATED: `Top rated`,
   COMMENTED: `Most commented`
+};
+
+
+export const FilmsBlock = {
+  DEFAULT: `default`,
+  ALL: `all-films`,
+  RATED: `top-rated`,
+  COMMENTED: `most-commented`
 };
 
 export const ClassMarkup = {
