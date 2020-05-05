@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract/component";
-import {CLASS_POINTER, ControlName, CONTROL_ITEM, Action, CARD_ELEMENTS, ACTIVE_CLASS} from "../consts";
+import {CARD_ELEMENTS, CardElement, ClassMarkup} from "../consts";
 
 
 /**
@@ -18,9 +18,9 @@ const createFilmCard = ({
   isFavorite
 }) => {
   const classMarkup = {
-    'addToWatch': isWatch ? ` ` + ACTIVE_CLASS : ``,
-    'markAsWatched': isWatched ? ` ` + ACTIVE_CLASS : ``,
-    'markAsFavourite': isFavorite ? ` ` + ACTIVE_CLASS : ``
+    'addToWatch': isWatch ? ` ` + CardElement.BTN_ACTIVE : ``,
+    'markAsWatched': isWatched ? ` ` + CardElement.BTN_ACTIVE : ``,
+    'markAsFavourite': isFavorite ? ` ` + CardElement.BTN_ACTIVE : ``
   };
 
   return (
@@ -65,23 +65,23 @@ export default class FilmCard extends AbstractComponent {
   setClickHandler(handler) {
     for (let cardElement of CARD_ELEMENTS) {
       const target = this.getElement().querySelector(`.${cardElement}`);
-      target.classList.add(CLASS_POINTER);
+      target.classList.add(ClassMarkup.POINTER);
       target.addEventListener(`click`, handler);
     }
   }
 
   setBtnWatchlistClickHandler(handler) {
-    this.getElement().querySelector(`.${CONTROL_ITEM}${Action.ADD_TO}${ControlName.WATCHLIST}`)
+    this.getElement().querySelector(`.${CardElement.BTN_WATCHLIST}`)
       .addEventListener(`click`, handler);
   }
 
   setBtnWatchedClickHandler(handler) {
-    this.getElement().querySelector(`.${CONTROL_ITEM}${Action.MARK_AS}${ControlName.WATCHED}`)
+    this.getElement().querySelector(`.${CardElement.BTN_HISTORY}`)
       .addEventListener(`click`, handler);
   }
 
   setBtnFavoriteClickHandler(handler) {
-    this.getElement().querySelector(`.${CONTROL_ITEM}${ControlName.FAVORITE}`)
+    this.getElement().querySelector(`.${CardElement.BTN_FAVORITE}`)
     .addEventListener(`click`, handler);
   }
 }

@@ -1,4 +1,4 @@
-import {FilterType, Attribute, Flag} from '../consts';
+import {FilterType, FilmAttribute, Flag} from '../consts';
 import {filterRules} from '../utils/components';
 
 
@@ -49,7 +49,7 @@ class FilmsModel {
    * @return {Number}
    */
   getWatchlistFilms() {
-    return this._filmsData.reduce((count, film) => (film[Attribute.IS_WATCH] ? ++count : count), 0);
+    return this._filmsData.reduce((count, film) => (film[FilmAttribute.IS_WATCH] ? ++count : count), 0);
   }
 
 
@@ -58,7 +58,7 @@ class FilmsModel {
    * @return {Number}
    */
   getWatchedFilms() {
-    return this._filmsData.reduce((count, film) => (film[Attribute.IS_WATCHED] ? ++count : count), 0);
+    return this._filmsData.reduce((count, film) => (film[FilmAttribute.IS_WATCHED] ? ++count : count), 0);
   }
 
 
@@ -67,7 +67,7 @@ class FilmsModel {
    * @return {Number}
    */
   getFavoriteFilms() {
-    return this._filmsData.reduce((count, film) => (film[Attribute.IS_FAVORITE] ? ++count : count), 0);
+    return this._filmsData.reduce((count, film) => (film[FilmAttribute.IS_FAVORITE] ? ++count : count), 0);
   }
 
 

@@ -1,4 +1,4 @@
-import {KeyCode, Position, DetailsElement, Flag, Attribute, ACTIVE_CLASS, CLASS_FILM_OPACITY, CARD_CLASS, FilterType} from "../consts";
+import {KeyCode, Position, DetailsElement, CardElement, Flag, FilmAttribute, FilterType, ClassMarkup} from "../consts";
 import {render, remove, replace, getItem} from "../utils/components";
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
@@ -35,7 +35,6 @@ class FilmController {
     this._dataChangeHandler = dataChangeHandler;
     this._updateMenuHandler = updateMenuHandler;
     this._currentFilter = currentFilter;
-
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._ctrlKeyUpHandler = this._ctrlKeyUpHandler.bind(this);
@@ -167,9 +166,15 @@ class FilmController {
 
     this._updateMenuHandler();
     this.render(this._filmData);
+    this._checkActivityCard();
   }
 
 
+  /**
+   * Метод, обеспечивающий обновление классов самой карточки фильма и кнопки, добавляющей фильм в какой-либо список
+   * @param {Object} btn кнопка
+   * @param {string} filterType примененный фильтр
+   */
   _updateBtnAndCardClass(btn, filterType) {
     if (this._currentFilter === filterType) {
       this._changeBtnAndCardClass(btn);
@@ -179,30 +184,81 @@ class FilmController {
   }
 
 
+  /**
+   * Метод, обеспечивающий изменение классов кнопки
+   * @param {Object} btn кнопка
+   */
   _changeBtnClass(btn) {
-    if (btn.classList.contains(ACTIVE_CLASS)) {
-      btn.classList.remove(`${ACTIVE_CLASS}`);
+    if (btn.classList.contains(CardElement.BTN_ACTIVE)) {
+      this._inactiveBtn(btn);
     } else {
-      btn.classList.add(`${ACTIVE_CLASS}`);
+      this._activeBtn(btn);
     }
   }
 
+
+  /**
+   * Метод, обеспечивающий изменение классов кнопки и карточки
+   * @param {Object} btn кнопка
+   */
   _changeBtnAndCardClass(btn) {
-    if (btn.classList.contains(ACTIVE_CLASS)) {
-      btn.classList.remove(`${ACTIVE_CLASS}`);
-      btn.closest(`.${CARD_CLASS}`).classList.add(CLASS_FILM_OPACITY);
+    if (btn.classList.contains(CardElement.BTN_ACTIVE)) {
+      this._inactiveBtn(btn);
+      btn.closest(`.${CardElement.CARD}`).classList.add(ClassMarkup.OPACITY);
     } else {
-      btn.classList.add(`${ACTIVE_CLASS}`);
-      btn.closest(`.${CARD_CLASS}`).classList.remove(CLASS_FILM_OPACITY);
+      this._activeBtn(btn);
+      btn.closest(`.${CardElement.CARD}`).classList.remove(ClassMarkup.OPACITY);
     }
   }
 
-  activeBtn(btn) {
-    btn.classList.add(`${ACTIVE_CLASS}`);
+
+  /**
+   * Метод, обеспечивающий добавление активного класса на кнопку
+   * @param {Object} btn кнопка
+   */
+  _activeBtn(btn) {
+    btn.classList.add(`${CardElement.BTN_ACTIVE}`);
   }
 
+
+  /**
+   * Метод, обеспечивающий удаление активного класса с кнопки
+   * @param {Object} btn кнопка
+   */
   _inactiveBtn(btn) {
-    btn.classList.remove(`${ACTIVE_CLASS}`);
+    btn.classList.remove(`${CardElement.BTN_ACTIVE}`);
+  }
+
+
+  /**
+   * метод, обеспечивающий отметку карточки, как несоответствующей примененному фильтру
+   */
+  _inactiveCard() {
+    this._filmCard.getElement().classList.add(`${ClassMarkup.OPACITY}`);
+  }
+
+
+  /**
+   * Метод, выполняющий проверку должна ли быть карточка активной в примененном фильтре
+   * @param {string} btn
+   * @param {string} filterType
+   */
+  _checkActivity(btn, filterType) {
+    if (this._currentFilter === filterType
+      && !this._filmCard.getElement().querySelector(`.${btn}`).classList.contains(`${CardElement.BTN_ACTIVE}`)
+    ) {
+      this._inactiveCard();
+    }
+  }
+
+
+  /**
+   * Метод, обеспечивающий комплекс проверок должна ли быть карточка активной в примененном фильтре
+   */
+  _checkActivityCard() {
+    this._checkActivity(CardElement.BTN_WATCHLIST, FilterType.WATCHLIST);
+    this._checkActivity(CardElement.BTN_HISTORY, FilterType.HISTORY);
+    this._checkActivity(CardElement.BTN_FAVORITE, FilterType.FAVORITES);
   }
 
 
@@ -233,7 +289,7 @@ class FilmController {
     return (evt) => {
       evt.preventDefault();
       this._filmData = this._dataChangeHandler(this._filmData,
-          changeDataRules[Attribute.IS_WATCH](this._filmData)
+          changeDataRules[FilmAttribute.IS_WATCH](this._filmData)
       );
       this._updateMenuHandler();
       this._updateBtnAndCardClass(evt.target, FilterType.WATCHLIST);
@@ -249,7 +305,7 @@ class FilmController {
     return (evt) => {
       evt.preventDefault();
       this._filmData = this._dataChangeHandler(this._filmData,
-          changeDataRules[Attribute.IS_WATCHED](this._filmData)
+          changeDataRules[FilmAttribute.IS_WATCHED](this._filmData)
       );
       this._updateMenuHandler();
       this._updateBtnAndCardClass(evt.target, FilterType.HISTORY);
@@ -265,7 +321,7 @@ class FilmController {
     return (evt) => {
       evt.preventDefault();
       this._filmData = this._dataChangeHandler(this._filmData,
-          changeDataRules[Attribute.IS_FAVORITE](this._filmData)
+          changeDataRules[FilmAttribute.IS_FAVORITE](this._filmData)
       );
       this._updateMenuHandler();
       this._updateBtnAndCardClass(evt.target, FilterType.FAVORITES);

@@ -3,21 +3,6 @@ export const KeyCode = {
   ESC: 27
 };
 
-export const MONTH_NAMES = [
-  `January`,
-  `February`,
-  `March`,
-  `April`,
-  `May`,
-  `June`,
-  `July`,
-  `August`,
-  `September`,
-  `October`,
-  `November`,
-  `December`,
-];
-
 export const CountFilm = {
   ALL: 12,
   START: 5,
@@ -38,13 +23,11 @@ export const Position = {
 };
 
 
-export const Attribute = {
+export const FilmAttribute = {
   IS_WATCH: `isWatch`,
   IS_WATCHED: `isWatched`,
   IS_FAVORITE: `isFavorite`
 };
-
-export const ATTRIBUTES = [`isWatch`, `isWatched`, `isFavorite`];
 
 export const DETAILS = `details`;
 
@@ -91,17 +74,14 @@ export const EMOJIES = [
 
 export const START_DATE_FILMS = [1970, 1, 1];
 
-export const CLASS_POINTER = `pointer`;
-
-export const CLASS_FILM_OPACITY = `film-card--opacity`;
-
-export const ACTIVE_CLASS = `film-card__controls-item--active`;
-
-export const CARD_CLASS = `film-card`;
-
 export const ExtraName = {
   RATED: `Top rated`,
   COMMENTED: `Most commented`
+};
+
+export const ClassMarkup = {
+  POINTER: `pointer`,
+  OPACITY: `film-card--opacity`,
 };
 
 export const CARD_ELEMENTS = [
@@ -110,6 +90,13 @@ export const CARD_ELEMENTS = [
   `film-card__comments`
 ];
 
+export const CardElement = {
+  CARD: `film-card`,
+  BTN_WATCHLIST: `film-card__controls-item--add-to-watchlist`,
+  BTN_HISTORY: `film-card__controls-item--mark-as-watched`,
+  BTN_FAVORITE: `film-card__controls-item--favorite`,
+  BTN_ACTIVE: `film-card__controls-item--active`,
+};
 
 export const DetailsElement = {
   BTN_CLOSE: `film-details__close-btn`,
@@ -117,27 +104,15 @@ export const DetailsElement = {
   EMOJI_ITEM_CHECKED: `film-details__emoji-item:checked`,
   EMOJI_ADD_BLOCK: `film-details__add-emoji-label`,
   COMMENT_INPUT: `film-details__comment-input`,
-  COMMENT_LIST: `film-details__comments-list`
+  COMMENT_LIST: `film-details__comments-list`,
+  BTN_WATCHLIST: `film-details__control-label--watchlist`,
+  BTN_HISTORY: `film-details__control-label--watched`,
+  BTN_FAVORITE: `film-details__control-label--favorite`
 };
 
 export const Flag = {
   YES: true,
   NO: false
-};
-
-export const CONTROL_LABEL = `film-details__control-label--`;
-
-export const CONTROL_ITEM = `film-card__controls-item--`;
-
-export const Action = {
-  ADD_TO: `add-to-`,
-  MARK_AS: `mark-as-`
-};
-
-export const ControlName = {
-  WATCHLIST: `watchlist`,
-  WATCHED: `watched`,
-  FAVORITE: `favorite`
 };
 
 export const FormatRule = {

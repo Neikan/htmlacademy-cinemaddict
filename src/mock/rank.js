@@ -1,4 +1,4 @@
-import {ProfileRank, Attribute} from '../consts.js';
+import {ProfileRank, FilmAttribute} from '../consts.js';
 import {filterCountMenu} from '../components/menu.js';
 
 
@@ -8,7 +8,7 @@ import {filterCountMenu} from '../components/menu.js';
  * @return {string} ранг профиля пользователя
  */
 const getProfileRank = (films) => {
-  const rank = filterCountMenu(films, Attribute.IS_WATCHED);
+  const rank = filterCountMenu(films, FilmAttribute.IS_WATCHED);
 
   switch (true) {
     case (rank >= ProfileRank.NOVICE.from && rank <= ProfileRank.FUN.from - 1):

@@ -63,7 +63,7 @@ class PageController {
     this._showMoreClickHandler = this._showMoreClickHandler.bind(this);
     this._dataChangeHandler = this._dataChangeHandler.bind(this);
     this._viewChangeHandler = this._viewChangeHandler.bind(this);
-    this._updateMenu = this._updateMenu.bind(this);
+    this._updateMenuHandler = this._updateMenuHandler.bind(this);
 
     this._filmsModel = filmsModel;
     this._menuController = null;
@@ -229,7 +229,8 @@ class PageController {
   _renderFilmControllers(dataset) {
     dataset.filmsContollers.concat(renderFilmControllers(
         dataset.filmsList, dataset.filmsData.slice(dataset.countPrevFilms, dataset.countFilms),
-        this._viewChangeHandler, this._dataChangeHandler, this._updateMenu, this._filmsModel.getFilter()
+        this._viewChangeHandler, this._dataChangeHandler,
+        this._updateMenuHandler, this._filmsModel.getFilter()
     ));
   }
 
@@ -247,7 +248,7 @@ class PageController {
   /**
    * Метод, опеспечивающий обновление меню
    */
-  _updateMenu() {
+  _updateMenuHandler() {
     remove(this._menuController._menu);
     this._renderMenu(this._container.getElement());
   }
@@ -285,7 +286,7 @@ class PageController {
 
 
   /**
-   * Метод, обеспечивающий удаление данных для компонента _films вместе с текущей выбранной сортировкой
+   * Метод, обеспечивающий удаление данных для компонента _films вместе с сортировкой
    */
   _resetFilmsWithSorting() {
     remove(this._sorting);

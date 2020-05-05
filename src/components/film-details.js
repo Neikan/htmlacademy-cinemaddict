@@ -1,7 +1,7 @@
 import {createDetailsInfo} from "./film-details/details-info";
 import {createControls} from "./film-details/controls";
 import {createCommentBlock} from "./film-details/comments";
-import {DetailsElement, ControlName, CONTROL_LABEL} from "../consts";
+import {DetailsElement} from "../consts";
 import AbstractSmartComponent from "./abstract/component-smart";
 import {getImageElement} from "../utils/components";
 
@@ -121,7 +121,7 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @param {Object} element
    */
   _changeIsWatch(element) {
-    element.querySelector(`.${CONTROL_LABEL}${ControlName.WATCHLIST}`)
+    element.querySelector(`.${DetailsElement.BTN_WATCHLIST}`)
     .addEventListener(`click`, () => {
       this._film.isWatch = !this._film.isWatch;
     });
@@ -133,7 +133,7 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @param {Object} element
    */
   _changeIsWatched(element) {
-    element.querySelector(`.${CONTROL_LABEL}${ControlName.WATCHED}`)
+    element.querySelector(`.${DetailsElement.BTN_HISTORY}`)
     .addEventListener(`click`, () => {
       this._film.isWatched = !this._film.isWatched;
     });
@@ -145,7 +145,7 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @param {Object} element
    */
   _changeIsFavorite(element) {
-    element.querySelector(`.${CONTROL_LABEL}${ControlName.FAVORITE}`)
+    element.querySelector(`.${DetailsElement.BTN_FAVORITE}`)
     .addEventListener(`click`, () => {
       this._film.isFavorite = !this._film.isFavorite;
     });
