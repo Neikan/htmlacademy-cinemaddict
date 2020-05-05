@@ -1,18 +1,6 @@
 import AbstractComponent from "./abstract/component";
 import {sortingArray} from "../utils/common";
-import {Sorting} from "../consts";
-
-
-const SortType = {
-  DEFAULT: `default`,
-  BY_DATE: `by-date`,
-  BY_RATING: `by-rating`
-};
-
-const SortClass = {
-  BUTTON: `sort__button`,
-  BUTTON_ACTIVE: `sort__button--active`
-};
+import {SortType, SortClass, SortMethod} from "../consts";
 
 
 /**
@@ -20,21 +8,28 @@ const SortClass = {
  */
 const sortRules = {
   'default': (films) => films,
-  'by-date': (films, count = films.length) => sortingArray(films, Sorting.BY_DATE, count),
-  'by-rating': (films, count = films.length) => sortingArray(films, Sorting.BY_RATING, count),
+  'by-date': (films, count = films.length) => sortingArray(films, SortMethod.BY_DATE, count),
+  'by-rating': (films, count = films.length) => sortingArray(films, SortMethod.BY_RATING, count),
 };
 
 
 /**
  * Создание разметки блока сортировки фильмов
+ * @param {string} sortType примененная сортировка
  * @return {string} разметка блока
  */
-const createSorting = () => {
+const createSorting = (sortType) => {
+  const classMarkup = {
+    DEFAULT: sortType === SortType.DEFAULT ? ` ` + SortClass.BUTTON_ACTIVE : ``,
+    BY_DATE: sortType === SortType.BY_DATE ? ` ` + SortClass.BUTTON_ACTIVE : ``,
+    BY_RATING: sortType === SortType.BY_RATING ? ` ` + SortClass.BUTTON_ACTIVE : ``
+  };
+
   return (
     `<ul class="sort">
-      <li><a href="#" data-sort-type="${SortType.DEFAULT}" class="sort__button sort__button--active">Sort by default</a></li>
-      <li><a href="#" data-sort-type="${SortType.BY_DATE}" class="sort__button">Sort by date</a></li>
-      <li><a href="#" data-sort-type="${SortType.BY_RATING}" class="sort__button">Sort by rating</a></li>
+      <li><a href="#" data-sort-type="${SortType.DEFAULT}" class="sort__button${classMarkup.DEFAULT}">Sort by default</a></li>
+      <li><a href="#" data-sort-type="${SortType.BY_DATE}" class="sort__button${classMarkup.BY_DATE}">Sort by date</a></li>
+      <li><a href="#" data-sort-type="${SortType.BY_RATING}" class="sort__button${classMarkup.BY_RATING}">Sort by rating</a></li>
     </ul>`
   );
 };
@@ -43,10 +38,10 @@ const createSorting = () => {
 /**
  * Создание класса типов сортировки
  */
-class SortComponent extends AbstractComponent {
-  constructor() {
+class Sorting extends AbstractComponent {
+  constructor(sortType) {
     super();
-    this._currentSortType = SortType.DEFAULT;
+    this._currentSortType = sortType;
 
     this._clickHandler = this._clickHandler.bind(this);
   }
@@ -57,7 +52,7 @@ class SortComponent extends AbstractComponent {
    * @return {Object}
    */
   getTemplate() {
-    return createSorting();
+    return createSorting(this._currentSortType);
   }
 
 
@@ -110,4 +105,4 @@ class SortComponent extends AbstractComponent {
 }
 
 
-export {SortComponent, sortRules};
+export {Sorting, sortRules};

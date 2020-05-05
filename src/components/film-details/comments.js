@@ -1,4 +1,4 @@
-import {EMOJIES, Sorting} from "../../consts";
+import {EMOJIES, SortMethod} from "../../consts";
 import {createEmojiesBlock} from "./emojies";
 import AbstractComponent from "../abstract/component";
 import {formatDateFromNow, sortingArray} from "../../utils/common";
@@ -48,7 +48,7 @@ const createCommentList = (comments) => {
  * @return {string} разметка комментария
  */
 const createComments = (comments) =>
-  sortingArray(comments, Sorting.BY_COMMENT_DATE, comments.length).map(createComment).join(`\n`);
+  sortingArray(comments, SortMethod.BY_COMMENT_DATE, comments.length).map(createComment).join(`\n`);
 
 
 /**

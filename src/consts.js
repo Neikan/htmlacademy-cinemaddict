@@ -4,7 +4,7 @@ export const KeyCode = {
 };
 
 export const CountFilm = {
-  ALL: 55,
+  ALL: 5,
   START: 5,
   BY_BUTTON: 5,
   EXTRA: 2,
@@ -31,7 +31,7 @@ export const FilmAttribute = {
 
 export const DETAILS = `details`;
 
-export const Sorting = {
+export const SortMethod = {
   BY_RATING: {
     type: `forNumberDesc`,
     parameter: `rating`
@@ -139,4 +139,16 @@ export const FilterType = {
   WATCHLIST: `Watchlist`,
   HISTORY: `History`,
   FAVORITES: `Favorites`,
+};
+
+
+export const SortType = {
+  DEFAULT: `default`,
+  BY_DATE: `by-date`,
+  BY_RATING: `by-rating`
+};
+
+export const SortClass = {
+  BUTTON: `sort__button`,
+  BUTTON_ACTIVE: `sort__button--active`
 };

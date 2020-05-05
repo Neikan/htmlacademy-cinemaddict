@@ -1,6 +1,7 @@
-import {FilterType, FilmAttribute, Flag, Sorting} from '../consts';
+import {FilterType, FilmAttribute, Flag, SortMethod} from '../consts';
 import {filterRules} from '../utils/components';
 import {sortingArray} from '../utils/common';
+import {sortRules} from '../components/sorting';
 
 
 /**
@@ -54,7 +55,7 @@ class FilmsModel {
    * @return {Array} отсортированные данные
    */
   getSortedFilmsDataByRating() {
-    return sortingArray(this._filmsData, Sorting.BY_RATING);
+    return sortingArray(this._filmsData, SortMethod.BY_RATING);
   }
 
 
@@ -63,7 +64,17 @@ class FilmsModel {
    * @return {Array}
    */
   getSortedFilmsDataByComments() {
-    return sortingArray(this._filmsData, Sorting.BY_COMMENTS);
+    return sortingArray(this._filmsData, SortMethod.BY_COMMENTS);
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение отсортированных по количеству комментариев данных фильмов
+   * @param {string} sortType примененный тип сортировки
+   * @return {Array}
+   */
+  getSortedFilmsData(sortType) {
+    return sortRules[sortType](this._filmsData);
   }
 
 
@@ -96,11 +107,12 @@ class FilmsModel {
 
   /**
    * Метод, обеспечивающий получение отфильтрованных данных фильмов
-   * @param {string} filterType название фильтр
+   * @param {string} sortType применная сортировка
+   * @param {string} filterType примененный фильтр
    * @return {Array} отфильтрованный массив данных
    */
-  getFilteringFilmsData(filterType = this._activeFilter) {
-    return filterRules[filterType](this._filmsData);
+  getFilteringFilmsData(sortType, filterType = this._activeFilter) {
+    return sortRules[sortType](filterRules[filterType](this._filmsData));
   }
 
 
