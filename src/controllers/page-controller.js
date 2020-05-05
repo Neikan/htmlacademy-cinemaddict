@@ -447,7 +447,7 @@ class PageController {
 
       this._showedFilmContollers = this._renderFilmsComponent(this._getDataSet(container,
           this._films, sortRules[sortType](this._filmsData),
-          this._showedFilmContollers, 0, this._countFilms = CountFilm.START, this._showMoreBtn), Position.AFTER_BEGIN
+          this._showedFilmContollers, 0, this._countFilms = CountFilm.START, FilmsBlock.ALL), Position.AFTER_BEGIN
       );
     };
   }
