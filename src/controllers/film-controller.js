@@ -270,6 +270,7 @@ class FilmController {
   _showDetailsClickHandler(mainSection) {
     return () => {
       this.render(this._filmData);
+      this._viewChangeHandler();
       render[Position.BEFORE_END](mainSection, this._filmDetails);
       this._mode = Mode.DETAILS;
       document.addEventListener(`keydown`, this._escKeyDownHandler);

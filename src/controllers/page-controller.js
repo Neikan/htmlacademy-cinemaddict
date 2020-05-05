@@ -156,9 +156,9 @@ class PageController {
    * @param {Object} container контейнер контроллера
    */
   _renderFilmsCommented(container) {
-    this._renderFilmsComponent(this._getDataSet(container, this._filmsCommented,
-        sortingArray(this._filmsData, Sorting.BY_COMMENTS),
-        this._showedFilmCommentedContollers, 0, CountFilm.EXTRA)
+    this._showedFilmCommentedContollers = this._renderFilmsComponent(
+        this._getDataSet(container, this._filmsCommented, sortingArray(this._filmsData, Sorting.BY_COMMENTS),
+            this._showedFilmCommentedContollers, 0, CountFilm.EXTRA)
     );
   }
 
@@ -168,9 +168,9 @@ class PageController {
    * @param {Object} container контейнер контроллера
    */
   _renderFilmsRated(container) {
-    this._renderFilmsComponent(this._getDataSet(container, this._filmsRated,
-        sortingArray(this._filmsData, Sorting.BY_RATING),
-        this._showedFilmRatedContollers, 0, CountFilm.EXTRA)
+    this._showedFilmRatedContollers = this._renderFilmsComponent(
+        this._getDataSet(container, this._filmsRated, sortingArray(this._filmsData, Sorting.BY_RATING),
+            this._showedFilmRatedContollers, 0, CountFilm.EXTRA)
     );
   }
 
@@ -192,7 +192,7 @@ class PageController {
    */
   _renderFilmsWithSorting(container) {
     this._renderSorting(container);
-    this._renderFilmsComponent(this._getDataSet(container, this._films,
+    this._showedFilmContollers = this._renderFilmsComponent(this._getDataSet(container, this._films,
         this._filmsData, this._showedFilmContollers, 0, CountFilm.START)
     );
   }
@@ -201,10 +201,13 @@ class PageController {
   /**
    * Метод, обеспечивающий отрисовку компонента-контейнера фильмов
    * @param {Object} dataset объект с данными
+   * @return {Array} массив контроллеров фильмов
    */
   _renderFilmsComponent(dataset) {
     render[Position.AFTER_BEGIN](dataset.container, dataset.filmsComponent);
     this._renderFilmsList(dataset);
+
+    return dataset.filmsContollers;
   }
 
 
@@ -227,7 +230,7 @@ class PageController {
    * @param {Object} dataset объект с данными
    */
   _renderFilmControllers(dataset) {
-    dataset.filmsContollers.concat(renderFilmControllers(
+    dataset.filmsContollers = dataset.filmsContollers.concat(renderFilmControllers(
         dataset.filmsList, dataset.filmsData.slice(dataset.countPrevFilms, dataset.countFilms),
         this._viewChangeHandler, this._dataChangeHandler,
         this._updateMenuHandler, this._filmsModel.getFilter()
@@ -258,7 +261,7 @@ class PageController {
    * Метод, обеспечивающий обновление контроллера фильма на основе новых данных
    * @param {Object} oldData прежние данные фильма
    * @param {Object} newData обновленные данные фильма
-   * @return {Object}
+   * @return {Object} обновленные данные фильма
    */
   _dataChangeHandler(oldData, newData) {
     return this._filmsModel.updateFilmData(oldData.id, newData);
@@ -269,8 +272,12 @@ class PageController {
    * Метод, обеспечивающий отображение каждого контроллера карточек фильма в режиме по умолчанию
    * @param {Object} FilmsContollers
    */
-  _viewChangeHandler(FilmsContollers) {
-    FilmsContollers.map((filmContoller) => filmContoller.setDefaultView());
+  _viewChangeHandler() {
+    let allFilmControllers = this._showedFilmContollers
+        .concat(this._showedFilmRatedContollers)
+        .concat(this._showedFilmCommentedContollers);
+
+    allFilmControllers.map((filmContoller) => filmContoller.setDefaultView());
   }
 
 
