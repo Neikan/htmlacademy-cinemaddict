@@ -22,7 +22,7 @@ const createContainerNoFilms = (isFilter) => {
 /**
  * Создание класса блока фильмов при отсутствии фильмов
  */
-export default class NoFilms extends AbstractComponent {
+class NoFilms extends AbstractComponent {
   constructor(isFilter) {
     super();
 
@@ -43,3 +43,6 @@ export default class NoFilms extends AbstractComponent {
     this.getElement().addEventListener(`click`, handler);
   }
 }
+
+
+export {NoFilms};

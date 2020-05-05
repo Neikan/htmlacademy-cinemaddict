@@ -19,8 +19,11 @@ const createFilms = () => {
 /**
  * Создание класса блока фильмов
  */
-export default class Films extends AbstractComponent {
+class Films extends AbstractComponent {
   getTemplate() {
     return createFilms();
   }
 }
+
+
+export {Films};

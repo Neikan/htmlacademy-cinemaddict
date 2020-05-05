@@ -1,16 +1,5 @@
 import AbstractComponent from "./abstract/component";
-import {sortingArray} from "../utils/common";
-import {SortType, SortClass, SortMethod} from "../consts";
-
-
-/**
- * Правила сортировки
- */
-const sortRules = {
-  'default': (films) => films,
-  'by-date': (films, count = films.length) => sortingArray(films, SortMethod.BY_DATE, count),
-  'by-rating': (films, count = films.length) => sortingArray(films, SortMethod.BY_RATING, count),
-};
+import {SortType, SortClass} from "../consts";
 
 
 /**
@@ -105,4 +94,4 @@ class Sorting extends AbstractComponent {
 }
 
 
-export {Sorting, sortRules};
+export {Sorting};

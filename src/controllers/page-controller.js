@@ -1,9 +1,9 @@
 import {CountFilm, ExtraName, Position, Flag, FilmsBlock, SortType} from "../consts";
 import {render, remove} from "../utils/components";
-import FilmsComponent from "../components/films";
+import {Films} from "../components/films";
 import {ShowMoreBtn} from "../components/show-more-button";
-import FilmsExtraComponent from "../components/films-extra";
-import NoFilmsComponent from "../components/no-films";
+import {FilmsExtra} from "../components/films-extra";
+import {NoFilms} from "../components/no-films";
 import {Sorting} from "../components/sorting";
 import {FilmController} from "./film-controller";
 import {MenuController} from "./menu-controller";
@@ -53,14 +53,14 @@ class PageController {
     this._showedFilmContollers = [];
     this._showedFilmRatedContollers = [];
     this._showedFilmCommentedContollers = [];
-    this._films = new FilmsComponent();
-    this._filmsCommented = new FilmsExtraComponent(ExtraName.COMMENTED);
-    this._filmsRated = new FilmsExtraComponent(ExtraName.RATED);
+    this._films = new Films();
+    this._filmsCommented = new FilmsExtra(ExtraName.COMMENTED);
+    this._filmsRated = new FilmsExtra(ExtraName.RATED);
     this._showMoreBtn = new ShowMoreBtn();
     this._noFilms = null;
     this._sorting = null;
-    this._sortType = SortType.DEFAULT;
-    this._countFilms = CountFilm.START;
+    this._sortType = null;
+    this._countFilms = 0;
 
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
     this._showMoreClickHandler = this._showMoreClickHandler.bind(this);
@@ -81,6 +81,7 @@ class PageController {
   render() {
     const container = this._container.getElement();
 
+    this._setDefaults();
     this._setFilmsData();
     this._renderMenu(container);
 
@@ -89,7 +90,7 @@ class PageController {
       return;
     }
 
-    this._renderFilms(container);
+    this._renderFilmsBlocks(container);
   }
 
 
@@ -98,6 +99,15 @@ class PageController {
    */
   _setFilmsData() {
     this._filmsData = this._filmsModel.getFilteringFilmsData(this._sortType);
+  }
+
+
+  /**
+   * Метод, обеспечивающий установку значений по умолчанию
+   */
+  _setDefaults() {
+    this._countFilms = CountFilm.START;
+    this._sortType = SortType.DEFAULT;
   }
 
 
@@ -129,7 +139,7 @@ class PageController {
    * @param {Boolean} isFilter флаг, определяющий применен ли фильтр
    */
   _renderNoFilms(container, isFilter) {
-    this._noFilms = new NoFilmsComponent(isFilter);
+    this._noFilms = new NoFilms(isFilter);
     render[Position.BEFORE_BEGIN](container, this._noFilms);
   }
 
@@ -149,7 +159,7 @@ class PageController {
    * Метод, обеспечивающий отрисовку компонентов-контейнеров фильмов
    * @param {Object} container контейнер контроллера
    */
-  _renderFilms(container) {
+  _renderFilmsBlocks(container) {
     this._renderFilmsCommented(container);
     this._renderFilmsRated(container);
     this._renderFilmsWithSorting(container);
@@ -189,6 +199,22 @@ class PageController {
 
 
   /**
+   * Метод, обеспечивающий отрисовку компонента всех фильмов
+   * @param {Object} container контейнер контроллера
+   * @param {string} position позиция отрисовываемого блока
+   */
+  _renderFilms(container, position = Position.AFTER_BEGIN) {
+    this._showedFilmContollers = this._renderFilmsComponent(
+        this._getDataSet(
+            container, this._films, this._filmsModel.getFilteringFilmsData(this._sortType),
+            this._showedFilmContollers, 0, this._countFilms, FilmsBlock.ALL
+        ),
+        position
+    );
+  }
+
+
+  /**
    * Метод, обеспечивающий отрисовку компонента сортировки и добавление слушателей на него
    * @param {Object} container контейнер контроллера
    */
@@ -204,15 +230,9 @@ class PageController {
    * @param {Object} container контейнер контроллера
    * @param {string} position позиция отрисовываемого блока
    */
-  _renderFilmsWithSorting(container, position = Position.AFTER_BEGIN) {
+  _renderFilmsWithSorting(container) {
     this._renderSorting(container);
-    this._showedFilmContollers = this._renderFilmsComponent(
-        this._getDataSet(
-            container, this._films, this._filmsData,
-            this._showedFilmContollers, 0, this._countFilms, FilmsBlock.ALL
-        ),
-        position
-    );
+    this._renderFilms(container);
   }
 
 
@@ -440,6 +460,7 @@ class PageController {
     return (sortType) => {
       this._resetFilms();
       this._sortType = sortType;
+      this._countFilms = CountFilm.START;
 
       if (!this._filmsData.length) {
         this._renderNoFilms(container, Flag.YES);
@@ -447,10 +468,7 @@ class PageController {
         return;
       }
 
-      this._showedFilmContollers = this._renderFilmsComponent(this._getDataSet(container,
-          this._films, this._filmsModel.getFilteringFilmsData(this._sortType),
-          this._showedFilmContollers, 0, this._countFilms = CountFilm.START, FilmsBlock.ALL), Position.AFTER_BEGIN
-      );
+      this._renderFilms(container);
     };
   }
 
@@ -463,10 +481,11 @@ class PageController {
    */
   _filterChangeHandler(container) {
     return (filterType) => {
-      this._countFilms = CountFilm.START;
-      this._sortType = SortType.DEFAULT;
-      this._filmsModel.setFilter(filterType);
+      this._setDefaults();
       this._setFilmsData();
+
+      this._filmsModel.setFilter(filterType);
+
       this._resetFilmsWithSorting();
 
       if (!this._filmsData.length) {

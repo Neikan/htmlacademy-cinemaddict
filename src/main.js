@@ -2,10 +2,10 @@ import {CountFilm, Position} from "./consts";
 import {renderMarkup} from "./utils/common";
 import {render} from "./utils/components";
 import {createProfileRank} from "./components/profile-rank";
-import {createStatistic} from "./components/stats";
+import {createFooter} from "./components/footer";
 import {generateFilms} from "./mock/films/film";
 import {FilmsModel} from "./models/films-model";
-import PageComponent from "./components/page";
+import {Page} from "./components/page";
 import {PageController} from "./controllers/page-controller";
 
 
@@ -25,13 +25,13 @@ const init = () => {
   const filmsModel = new FilmsModel();
   filmsModel.setFilmsData(films);
 
-  const pageComponent = new PageComponent();
+  const pageComponent = new Page();
   const pageController = new PageController(pageComponent, filmsModel);
 
   renderMarkup(Nodes.HEADER, createProfileRank(films));
   render[Position.BEFORE_END](Nodes.MAIN, pageComponent);
   pageController.render();
-  renderMarkup(Nodes.FOOTER_STATS, createStatistic());
+  renderMarkup(Nodes.FOOTER_STATS, createFooter(filmsModel.getFilmsData().length));
 };
 
 

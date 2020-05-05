@@ -1,7 +1,6 @@
 import {FilterType, FilmAttribute, Flag, SortMethod} from '../consts';
-import {filterRules} from '../utils/components';
+import {filterRules, sortRules} from '../utils/components';
 import {sortingArray} from '../utils/common';
-import {sortRules} from '../components/sorting';
 
 
 /**

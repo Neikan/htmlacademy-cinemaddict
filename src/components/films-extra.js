@@ -20,7 +20,7 @@ const createFilmsExtra = (title) => {
 /**
  * Создание класса блока фильмов
  */
-export default class FilmsExtra extends AbstractComponent {
+class FilmsExtra extends AbstractComponent {
   constructor(title) {
     super();
 
@@ -31,3 +31,6 @@ export default class FilmsExtra extends AbstractComponent {
     return createFilmsExtra(this._title);
   }
 }
+
+
+export {FilmsExtra};
