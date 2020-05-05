@@ -4,7 +4,7 @@ export const KeyCode = {
 };
 
 export const CountFilm = {
-  ALL: 12,
+  ALL: 6,
   START: 5,
   BY_BUTTON: 5,
   EXTRA: 2,
@@ -89,6 +89,11 @@ export const CARD_ELEMENTS = [
   `film-card__title`,
   `film-card__comments`
 ];
+
+export const FilmsElement = {
+  EXTRA: `films-list--extra`,
+  TITLE: `films-list__title`
+};
 
 export const CardElement = {
   CARD: `film-card`,

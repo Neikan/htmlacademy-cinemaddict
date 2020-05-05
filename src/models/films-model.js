@@ -1,5 +1,6 @@
-import {FilterType, FilmAttribute, Flag} from '../consts';
+import {FilterType, FilmAttribute, Flag, Sorting} from '../consts';
 import {filterRules} from '../utils/components';
+import {sortingArray} from '../utils/common';
 
 
 /**
@@ -23,13 +24,17 @@ class FilmsModel {
 
   /**
    * Метод, обспечивающий присвоение фильтру текущего значения
-   * @param {string} filterType
+   * @param {string} filterType примененный фильтр
    */
   setFilter(filterType) {
     this._activeFilter = filterType;
   }
 
 
+  /**
+   * Метод, обеспечивающий получение значения фильтра
+   * @return {string} фильтр
+   */
   getFilter() {
     return this._activeFilter;
   }
@@ -37,7 +42,7 @@ class FilmsModel {
 
   /**
    * Метод, обеспечивающий получение полных данных фильмов
-   * @return {Array}
+   * @return {Array} отсортированные данные
    */
   getFilmsData() {
     return this._filmsData;
@@ -45,8 +50,26 @@ class FilmsModel {
 
 
   /**
+   * Метод, обеспечивающий получение отсортированных по рейтингу данных фильмов
+   * @return {Array} отсортированные данные
+   */
+  getSortedFilmsDataByRating() {
+    return sortingArray(this._filmsData, Sorting.BY_RATING);
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение отсортированных по количеству комментариев данных фильмов
+   * @return {Array}
+   */
+  getSortedFilmsDataByComments() {
+    return sortingArray(this._filmsData, Sorting.BY_COMMENTS);
+  }
+
+
+  /**
    * Метод, обеспечивабщий подсчет фильмов в запланированном к просмотру
-   * @return {Number}
+   * @return {Number} количество фильмов
    */
   getWatchlistFilms() {
     return this._filmsData.reduce((count, film) => (film[FilmAttribute.IS_WATCH] ? ++count : count), 0);
@@ -55,7 +78,7 @@ class FilmsModel {
 
   /**
    * Метод, обеспечивабщий подсчет фильмов в просмотренном
-   * @return {Number}
+   * @return {Number} количество фильмов
    */
   getWatchedFilms() {
     return this._filmsData.reduce((count, film) => (film[FilmAttribute.IS_WATCHED] ? ++count : count), 0);
@@ -64,7 +87,7 @@ class FilmsModel {
 
   /**
    * Метод, обеспечивабщий подсчет фильмов в избранном
-   * @return {Number}
+   * @return {Number} количество фильмов
    */
   getFavoriteFilms() {
     return this._filmsData.reduce((count, film) => (film[FilmAttribute.IS_FAVORITE] ? ++count : count), 0);

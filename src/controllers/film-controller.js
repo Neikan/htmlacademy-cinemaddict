@@ -1,4 +1,7 @@
-import {KeyCode, Position, DetailsElement, CardElement, Flag, FilmAttribute, FilterType, ClassMarkup} from "../consts";
+import {
+  KeyCode, Position, DetailsElement, CardElement, Flag,
+  FilmAttribute, FilterType, ClassMarkup, FilmsElement
+} from "../consts";
 import {render, remove, replace, getItem} from "../utils/components";
 import FilmCardComponent from "../components/film-card";
 import FilmDetailsComponent from "../components/film-details";
@@ -24,7 +27,9 @@ const changeDataRules = {
  * Создание контроллера, управляющего отображением карточек фильмов
  */
 class FilmController {
-  constructor(container, viewChangeHandler, dataChangeHandler, updateMenuHandler, currentFilter) {
+  constructor(container, viewChangeHandler, dataChangeHandler,
+      updateMenuHandler, updateFilmsHandler, currentFilter
+  ) {
     this._container = container;
 
     this._mode = Mode.DEFAULT;
@@ -34,6 +39,7 @@ class FilmController {
     this._viewChangeHandler = viewChangeHandler;
     this._dataChangeHandler = dataChangeHandler;
     this._updateMenuHandler = updateMenuHandler;
+    this._updateFilmsHandler = updateFilmsHandler;
     this._currentFilter = currentFilter;
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
@@ -294,6 +300,8 @@ class FilmController {
       );
       this._updateMenuHandler();
       this._updateBtnAndCardClass(evt.target, FilterType.WATCHLIST);
+
+      this._updateFilmsHandler(evt.target.closest(`.films-list--extra`).querySelector(`.films-list__title`).textContent);
     };
   }
 
@@ -310,6 +318,8 @@ class FilmController {
       );
       this._updateMenuHandler();
       this._updateBtnAndCardClass(evt.target, FilterType.HISTORY);
+
+      this._updateFilmsHandler(evt.target.closest(`.films-list--extra`).querySelector(`.films-list__title`).textContent);
     };
   }
 
@@ -326,6 +336,8 @@ class FilmController {
       );
       this._updateMenuHandler();
       this._updateBtnAndCardClass(evt.target, FilterType.FAVORITES);
+
+      this._updateFilmsHandler(evt.target.closest(`.${FilmsElement.EXTRA}`).querySelector(`.${FilmsElement.TITLE}`).textContent);
     };
   }
 
