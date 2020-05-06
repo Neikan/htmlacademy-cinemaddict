@@ -276,8 +276,9 @@ class FilmController {
    */
   _showDetailsClickHandler(mainSection) {
     return (evt) => {
-      this.render(this._filmData);
       this._viewChangeHandler();
+      this.render(this._filmData);
+
       filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
 
       render[Position.BEFORE_END](mainSection, this._filmDetails);

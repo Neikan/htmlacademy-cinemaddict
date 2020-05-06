@@ -50,7 +50,7 @@ class PageController {
     this._container = container;
 
     this._filmsModel = filmsModel;
-    this._showedFilmContollers = [];
+    this._showedFilmControllers = [];
     this._showedFilmRatedContollers = [];
     this._showedFilmCommentedContollers = [];
     this._films = new Films();
@@ -198,10 +198,10 @@ class PageController {
    * @param {string} position позиция отрисовываемого блока
    */
   _renderFilms(container, position = Position.AFTER_BEGIN) {
-    this._showedFilmContollers = this._renderFilmsComponent(
+    this._showedFilmControllers = this._renderFilmsComponent(
         this._getDataSet(
             container, this._films, this._filmsModel.getFilteringFilmsData(),
-            this._showedFilmContollers, 0, this._countFilms, FilmsBlock.ALL
+            this._showedFilmControllers, 0, this._countFilms, FilmsBlock.ALL
         ),
         position
     );
@@ -347,8 +347,8 @@ class PageController {
    * @param {Object} container контейнер контроллера
    */
   _updateFilmsIfTargetAllFilms(container) {
-    remove(this._filmsRated);
-    remove(this._filmsCommented);
+    this._resetFilmsRated();
+    this._resetFilmsCommented();
     this._renderFilmsRated(container, Position.BEFORE_END);
     this._renderFilmsCommented(container, Position.BEFORE_END);
   }
@@ -449,7 +449,7 @@ class PageController {
    * @param {Object} FilmsContollers
    */
   _viewChangeHandler() {
-    let allFilmControllers = this._showedFilmContollers
+    let allFilmControllers = this._showedFilmControllers
         .concat(this._showedFilmRatedContollers)
         .concat(this._showedFilmCommentedContollers);
 
