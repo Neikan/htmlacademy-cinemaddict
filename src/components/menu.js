@@ -85,12 +85,14 @@ class Menu extends AbstractComponent {
    */
   _clickHandler(handler) {
     return (evt) => {
-      if (evt.target.tagName !== `A`) {
+      const target = evt.target.closest(`.${FilterClass.ITEM}`);
+
+      if (target.tagName !== `A`) {
         return;
       }
 
       this._setActiveClassHandler(evt);
-      this._filterType = evt.target.dataset.filterType;
+      this._filterType = target.dataset.filterType;
       handler(this._filterType);
     };
   }
@@ -102,7 +104,7 @@ class Menu extends AbstractComponent {
    */
   _setActiveClassHandler(evt) {
     [...this.getElement().querySelectorAll(`.${FilterClass.ITEM}`)].map((menuItem) => {
-      if (menuItem === evt.target) {
+      if (menuItem === evt.target.closest(`.${FilterClass.ITEM}`)) {
         menuItem.classList.add(`${FilterClass.ITEM_ACTIVE}`);
       } else {
         menuItem.classList.remove(`${FilterClass.ITEM_ACTIVE}`);
