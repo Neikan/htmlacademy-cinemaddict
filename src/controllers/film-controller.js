@@ -171,7 +171,7 @@ class FilmController {
     document.removeEventListener(`keyup`, this._ctrlKeyUpHandler);
 
     this.render(this._filmData);
-    this._updatePageHandler(filmsBlockInitiator);
+    this._pageUpdateHandler(filmsBlockInitiator);
 
     if (filmsBlockInitiator === FilmsBlock.ALL) {
       this._checkActivityCard();
@@ -310,7 +310,7 @@ class FilmController {
           changeDataRules[FilmAttribute.IS_WATCH](this._filmData)
       );
 
-      this._updatePageHandler(filmsBlockInitiator);
+      this._pageUpdateHandler(filmsBlockInitiator);
       this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.WATCHLIST);
     };
   }
@@ -329,7 +329,7 @@ class FilmController {
           changeDataRules[FilmAttribute.IS_WATCHED](this._filmData)
       );
 
-      this._updatePageHandler(filmsBlockInitiator);
+      this._pageUpdateHandler(filmsBlockInitiator);
       this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.HISTORY);
     };
   }
@@ -348,7 +348,7 @@ class FilmController {
           changeDataRules[FilmAttribute.IS_FAVORITE](this._filmData)
       );
 
-      this._updatePageHandler(filmsBlockInitiator);
+      this._pageUpdateHandler(filmsBlockInitiator);
       this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.FAVORITES);
 
     };

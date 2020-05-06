@@ -173,6 +173,10 @@ class PageController {
    * @param {string} position позиция отрисовываемого блока
    */
   _renderFilmsRated(container, position = Position.AFTER_BEGIN) {
+    if (this._filmsModel.getIsRatingFilms()) {
+      return;
+    }
+
     this._showedFilmRatedContollers = this._renderFilmsComponent(
         this._getDataSet(
             container, this._filmsRated, this._filmsModel.getSortedFilmsDataByRating(),
@@ -362,6 +366,10 @@ class PageController {
    * Метод, обеспечивающий удаление данных для компонента _filmsRated
    */
   _resetFilmsRated() {
+    if (this._filmsModel.getIsRatingFilms()) {
+      return;
+    }
+
     this._showedFilmRatedContollers = [];
     remove(this._filmsRated);
   }

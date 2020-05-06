@@ -134,6 +134,11 @@ class FilmsModel {
   }
 
 
+  getIsRatingFilms() {
+    return this._filmsData.every((film) => film.rating === 0);
+  }
+
+
   /**
    * Метод, обеспечивающий обновление данных фильма в исходных данных
    * @param {Number} id идентификатор элемента в массиве данных фильмов
