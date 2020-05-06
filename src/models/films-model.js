@@ -1,4 +1,4 @@
-import {FilterType, FilmAttribute, Flag, SortMethod} from '../consts';
+import {FilterType, FilmAttribute, Flag, SortMethod, SortType} from '../consts';
 import {filterRules, sortRules} from '../utils/components';
 import {sortingArray} from '../utils/common';
 
@@ -9,12 +9,13 @@ import {sortingArray} from '../utils/common';
 class FilmsModel {
   constructor() {
     this._filmsData = [];
-    this._activeFilter = FilterType.ALL;
+    this._filterType = FilterType.ALL;
+    this._sortType = SortType.DEFAULT;
   }
 
 
   /**
-   * Метод, обеспечивающий присвоение данным модели текущего значения данных фильмов
+   * Метод, обеспечивающий присвоение данным модели действительных значений данных фильмов
    * @param {Array} filmsData
    */
   setFilmsData(filmsData) {
@@ -23,20 +24,20 @@ class FilmsModel {
 
 
   /**
-   * Метод, обспечивающий присвоение фильтру текущего значения
+   * Метод, обспечивающий присвоение фильтру примененного значения
    * @param {string} filterType примененный фильтр
    */
-  setFilter(filterType) {
-    this._activeFilter = filterType;
+  setFilterType(filterType) {
+    this._filterType = filterType;
   }
 
 
   /**
-   * Метод, обеспечивающий получение значения фильтра
-   * @return {string} фильтр
+   * Метод, обспечивающий присвоение сортировке примененного значения
+   * @param {string} sortType примененный тип сортировки
    */
-  getFilter() {
-    return this._activeFilter;
+  setSortType(sortType) {
+    this._sortType = sortType;
   }
 
 
@@ -46,6 +47,24 @@ class FilmsModel {
    */
   getFilmsData() {
     return this._filmsData;
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение значения фильтра
+   * @return {string} фильтр
+   */
+  getFilterType() {
+    return this._filterType;
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение значения сортировки
+   * @return {string} тип сортировки
+   */
+  getSortType() {
+    return this._sortType;
   }
 
 
@@ -72,8 +91,8 @@ class FilmsModel {
    * @param {string} sortType примененный тип сортировки
    * @return {Array}
    */
-  getSortedFilmsData(sortType) {
-    return sortRules[sortType](this._filmsData);
+  getSortedFilmsData() {
+    return sortRules[this._sortType](this._filmsData);
   }
 
 
@@ -110,8 +129,8 @@ class FilmsModel {
    * @param {string} filterType примененный фильтр
    * @return {Array} отфильтрованный массив данных
    */
-  getFilteringFilmsData(sortType, filterType = this._activeFilter) {
-    return sortRules[sortType](filterRules[filterType](this._filmsData));
+  getFilteringFilmsData() {
+    return sortRules[this._sortType](filterRules[this._filterType](this._filmsData));
   }
 
 

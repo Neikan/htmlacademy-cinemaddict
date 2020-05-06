@@ -65,13 +65,13 @@ const createMenu = (watchlistCount, watchedCount, favoriteCount, currentFilter) 
  * Создание класса главного меню
  */
 export default class Menu extends AbstractComponent {
-  constructor(watchlistCount, watchedCount, favoriteCount, activeFilter) {
+  constructor(watchlistCount, watchedCount, favoriteCount, filterType) {
     super();
 
     this._watchlistCount = watchlistCount;
     this._watchedCount = watchedCount;
     this._favoriteCount = favoriteCount;
-    this._currentFilter = activeFilter;
+    this._filterType = filterType;
 
     this._clickHandler = this._clickHandler.bind(this);
   }
@@ -82,7 +82,8 @@ export default class Menu extends AbstractComponent {
    * @return {Object}
    */
   getTemplate() {
-    return createMenu(this._watchlistCount, this._watchedCount, this._favoriteCount, this._currentFilter);
+    return createMenu(this._watchlistCount, this._watchedCount,
+        this._favoriteCount, this._filterType);
   }
 
 
@@ -107,8 +108,8 @@ export default class Menu extends AbstractComponent {
       }
 
       this._setActiveClassHandler(evt);
-      this._currentFilter = evt.target.dataset.filterType;
-      handler(this._currentFilter);
+      this._filterType = evt.target.dataset.filterType;
+      handler(this._filterType);
     };
   }
 

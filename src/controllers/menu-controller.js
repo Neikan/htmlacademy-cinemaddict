@@ -7,10 +7,9 @@ import {render, replace} from "../utils/components";
  * Создание класса контроллера меню
  */
 class MenuController {
-  constructor(container, filmModel) {
+  constructor(container, filmsModel) {
     this._container = container;
-    this._filmModel = filmModel;
-    this._activeMenuItem = filmModel._activeFilter;
+    this._filmModel = filmsModel;
     this._menu = null;
   }
 
@@ -25,7 +24,7 @@ class MenuController {
         this._filmModel.getWatchlistFilms(),
         this._filmModel.getWatchedFilms(),
         this._filmModel.getFavoriteFilms(),
-        this._activeMenuItem);
+        this._filmModel.getFilterType());
 
     this._replace(this._container, oldMenu);
   }
