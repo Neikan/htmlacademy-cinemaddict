@@ -28,7 +28,7 @@ let filmsBlockInitiator = FilmsBlock.DEFAULT;
  */
 class FilmController {
   constructor(container, viewChangeHandler, dataChangeHandler,
-      updateMenuHandler, updateFilmsHandler, currentFilter, filmsBlock
+      pageUpdateHandler, filterType, filmsBlock
   ) {
     this._container = container;
 
@@ -38,9 +38,8 @@ class FilmController {
     this._filmDetails = null;
     this._viewChangeHandler = viewChangeHandler;
     this._dataChangeHandler = dataChangeHandler;
-    this._updateMenuHandler = updateMenuHandler;
-    this._updateFilmsHandler = updateFilmsHandler;
-    this._currentFilter = currentFilter;
+    this._pageUpdateHandler = pageUpdateHandler;
+    this._filterType = filterType;
     this._filmsBlock = filmsBlock;
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
@@ -172,9 +171,7 @@ class FilmController {
     document.removeEventListener(`keyup`, this._ctrlKeyUpHandler);
 
     this.render(this._filmData);
-    this._updateMenuHandler();
-
-    this._updateFilmsHandler(filmsBlockInitiator);
+    this._updatePageHandler(filmsBlockInitiator);
 
     if (filmsBlockInitiator === FilmsBlock.ALL) {
       this._checkActivityCard();
@@ -191,7 +188,7 @@ class FilmController {
    * @param {string} filterType примененный фильтр
    */
   _updateBtnAndCardClass(btn, filmsBlock, filterType) {
-    if (this._currentFilter === filterType && filmsBlock === FilmsBlock.ALL) {
+    if (this._filterType === filterType && filmsBlock === FilmsBlock.ALL) {
       this._changeBtnAndCardClass(btn);
     } else {
       this._changeBtnClass(btn);
@@ -259,7 +256,7 @@ class FilmController {
    * @param {string} filterType
    */
   _checkActivity(btn, filterType) {
-    if (this._currentFilter === filterType
+    if (this._filterType === filterType
       && !this._filmCard.getElement().querySelector(`.${btn}`).classList.contains(`${CardElement.BTN_ACTIVE}`)
     ) {
       this._inactiveCard();
@@ -313,9 +310,8 @@ class FilmController {
           changeDataRules[FilmAttribute.IS_WATCH](this._filmData)
       );
 
-      this._updateMenuHandler();
+      this._updatePageHandler(filmsBlockInitiator);
       this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.WATCHLIST);
-      this._updateFilmsHandler(filmsBlockInitiator);
     };
   }
 
@@ -333,9 +329,8 @@ class FilmController {
           changeDataRules[FilmAttribute.IS_WATCHED](this._filmData)
       );
 
-      this._updateMenuHandler();
+      this._updatePageHandler(filmsBlockInitiator);
       this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.HISTORY);
-      this._updateFilmsHandler(filmsBlockInitiator);
     };
   }
 
@@ -353,9 +348,9 @@ class FilmController {
           changeDataRules[FilmAttribute.IS_FAVORITE](this._filmData)
       );
 
-      this._updateMenuHandler();
+      this._updatePageHandler(filmsBlockInitiator);
       this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.FAVORITES);
-      this._updateFilmsHandler(filmsBlockInitiator);
+
     };
   }
 
