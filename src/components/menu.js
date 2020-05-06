@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract/component";
+import {AbstractComponent} from "./abstract/component";
 import {FilterType} from "../consts";
 
 
@@ -6,24 +6,6 @@ const FilterClass = {
   ITEM: `main-navigation__item`,
   ITEM_ACTIVE: `main-navigation__item--active`
 };
-
-
-/**
- * Получение количества элементов, соответствующих параметру фильтрации
- * @param {Array} films список фильмов
- * @param {string} param параметр фильтрации
- * @return {Number} количество соответствующих элементов
- */
-const filterCountMenu = (films, param) => films.reduce(getCount(param), 0);
-
-
-/**
- * Проверка элемента и изменение счетчика по ее результатам
- * @param {string} param параметр проверки
- * @return {Number} значение счетчика
- */
-const getCount = (param) => (count, film) => (film[param] ? ++count : count);
-
 
 /**
  * Создание разметки блока главного меню
@@ -64,7 +46,7 @@ const createMenu = (watchlistCount, watchedCount, favoriteCount, currentFilter) 
 /**
  * Создание класса главного меню
  */
-export default class Menu extends AbstractComponent {
+class Menu extends AbstractComponent {
   constructor(watchlistCount, watchedCount, favoriteCount, filterType) {
     super();
 
@@ -130,4 +112,4 @@ export default class Menu extends AbstractComponent {
 }
 
 
-export {Menu, filterCountMenu};
+export {Menu};

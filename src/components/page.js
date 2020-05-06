@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract/component";
+import {AbstractComponent} from "./abstract/component";
 
 /**
  * Создание разметки секции фильмов

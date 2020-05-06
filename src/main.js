@@ -28,7 +28,7 @@ const init = () => {
   const pageComponent = new Page();
   const pageController = new PageController(pageComponent, filmsModel);
 
-  renderMarkup(Nodes.HEADER, createProfileRank(films));
+  renderMarkup(Nodes.HEADER, createProfileRank(filmsModel.getWatchedFilms()));
   render[Position.BEFORE_END](Nodes.MAIN, pageComponent);
   pageController.render();
   renderMarkup(Nodes.FOOTER_STATS, createFooter(films.length));

@@ -1,7 +1,7 @@
+import {AbstractComponent} from "../abstract/component";
 import {EMOJIES, SortMethod} from "../../consts";
-import {createEmojiesBlock} from "./emojies";
-import AbstractComponent from "../abstract/component";
 import {formatDateFromNow, sortingArray} from "../../utils/common";
+import {createEmojiesBlock} from "./emojies";
 
 
 /**

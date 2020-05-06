@@ -1,11 +1,11 @@
+import {FilmCard} from "../components/film-card";
+import {FilmDetails} from "../components/film-details";
+import {Comment} from "../components/film-details/comments";
 import {
   KeyCode, Position, DetailsElement, CardElement, Flag,
   FilmAttribute, FilterType, ClassMarkup, FilmsBlock
 } from "../consts";
 import {render, remove, replace, getItem} from "../utils/components";
-import FilmCardComponent from "../components/film-card";
-import FilmDetailsComponent from "../components/film-details";
-import {Comment} from "../components/film-details/comments";
 
 
 const NODE_MAIN = `main`;
@@ -61,8 +61,8 @@ class FilmController {
     const mainSection = document.querySelector(NODE_MAIN);
 
     this._filmData = filmData;
-    this._filmCard = new FilmCardComponent(filmData, this._filmsBlock);
-    this._filmDetails = new FilmDetailsComponent(filmData);
+    this._filmCard = new FilmCard(filmData, this._filmsBlock);
+    this._filmDetails = new FilmDetails(filmData);
 
     this._setCardHandlers(filmData, mainSection);
     this._replaceOldFilm(oldFilmCard, oldFilmDetails);

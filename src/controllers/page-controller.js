@@ -1,12 +1,12 @@
-import {CountFilm, ExtraName, Position, Flag, FilmsBlock, SortType} from "../consts";
-import {render, remove} from "../utils/components";
+import {MenuController} from "./menu-controller";
+import {FilmController} from "./film-controller";
 import {Films} from "../components/films";
-import {ShowMoreBtn} from "../components/show-more-button";
 import {FilmsExtra} from "../components/films-extra";
 import {NoFilms} from "../components/no-films";
+import {ShowMoreBtn} from "../components/show-more-button";
 import {Sorting} from "../components/sorting";
-import {FilmController} from "./film-controller";
-import {MenuController} from "./menu-controller";
+import {CountFilm, ExtraName, Position, Flag, FilmsBlock, SortType} from "../consts";
+import {render, remove} from "../utils/components";
 
 
 const FILM_LIST_CLASS = `.films-list__container`;
