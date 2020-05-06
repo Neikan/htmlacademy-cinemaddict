@@ -78,7 +78,7 @@ class FilmsModel {
 
   /**
    * Метод, обеспечивающий получение отсортированных по количеству комментариев данных фильмов
-   * @return {Array}
+   * @return {Array} отсортированные данные
    */
   getSortedFilmsDataByComments() {
     return sortRules[SortType.BY_COMMENTS](this.getCommentedFilmsData()).slice(0, CountFilm.EXTRA);
@@ -88,7 +88,7 @@ class FilmsModel {
   /**
    * Метод, обеспечивающий получение отсортированных по количеству комментариев данных фильмов
    * @param {string} sortType примененный тип сортировки
-   * @return {Array}
+   * @return {Array} отсортированные данные
    */
   getSortedFilmsData() {
     return sortRules[this._sortType](this._filmsData);
@@ -124,8 +124,6 @@ class FilmsModel {
 
   /**
    * Метод, обеспечивающий получение отфильтрованных данных фильмов
-   * @param {string} sortType применная сортировка
-   * @param {string} filterType примененный фильтр
    * @return {Array} отфильтрованный массив данных
    */
   getFilteringFilmsData() {
