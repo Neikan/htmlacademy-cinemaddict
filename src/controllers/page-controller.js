@@ -288,18 +288,32 @@ class PageController {
 
 
   /**
+   * Метод, обеспечивающий отрисовку компонента-контейнера фильмов или компонента их отсутствия
+   * @param {Object} container
+   */
+  _renderFilmsOrNoFilms(container) {
+    if (!this._filmsData.length) {
+      this._renderNoFilms(container, Flag.YES);
+      remove(this._sorting);
+    } else {
+      this._renderFilmsWithSorting(container);
+    }
+  }
+
+
+  /**
    * Метод, обеспечивабщий обновление блоков фильмов при изменении фильма в другом блоке
    * @param {string} filmsBlockInitiator название блока, в котором произошло изменение фильма
    * @param {Object} container контейнер контроллера
    */
   _updateFilms(filmsBlockInitiator, container) {
-    if (filmsBlockInitiator === FilmsBlock.RATED) {
-      this._updateFilmsIfTargetRated(container);
-    } else if (filmsBlockInitiator === FilmsBlock.COMMENTED) {
-      this._updateFilmsIfTargetCommented(container);
-    } else {
-      this._updateFilmsIfTargetAllFilms(container);
-    }
+    const updateRules = {
+      'all-films': () => this._updateFilmsIfTargetAllFilms(container),
+      'top-rated': () => this._updateFilmsIfTargetRated(container),
+      'most-commented': () => this._updateFilmsIfTargetCommented(container)
+    };
+
+    updateRules[filmsBlockInitiator]();
   }
 
 
@@ -310,7 +324,7 @@ class PageController {
   _updateFilmsIfTargetRated(container) {
     this._resetFilmsWithSorting();
     this._resetFilmsCommented();
-    this._renderFilmsWithSorting(container);
+    this._renderFilmsOrNoFilms(container);
     this._renderFilmsCommented(container, Position.BEFORE_END);
   }
 
@@ -323,7 +337,7 @@ class PageController {
     this._resetFilmsWithSorting();
     this._resetFilmsRated();
     this._renderFilmsRated(container, Position.AFTER_BEGIN);
-    this._renderFilmsWithSorting(container);
+    this._renderFilmsOrNoFilms(container);
   }
 
 
@@ -458,17 +472,10 @@ class PageController {
    */
   _sortTypeChangeHandler(container) {
     return (sortType) => {
-      this._resetFilms();
       this._sortType = sortType;
       this._countFilms = CountFilm.START;
-
-      if (!this._filmsData.length) {
-        this._renderNoFilms(container, Flag.YES);
-        remove(this._sorting);
-        return;
-      }
-
-      this._renderFilms(container);
+      this._resetFilmsWithSorting();
+      this._renderFilmsOrNoFilms(container);
     };
   }
 
@@ -482,18 +489,10 @@ class PageController {
   _filterChangeHandler(container) {
     return (filterType) => {
       this._setDefaults();
-      this._setFilmsData();
-
       this._filmsModel.setFilter(filterType);
-
+      this._setFilmsData();
       this._resetFilmsWithSorting();
-
-      if (!this._filmsData.length) {
-        this._renderNoFilms(container, Flag.YES);
-        return;
-      }
-
-      this._renderFilmsWithSorting(container);
+      this._renderFilmsOrNoFilms(container);
     };
   }
 }

@@ -4,7 +4,7 @@ export const KeyCode = {
 };
 
 export const CountFilm = {
-  ALL: 5,
+  ALL: 8,
   START: 5,
   BY_BUTTON: 5,
   EXTRA: 2,

@@ -31,7 +31,7 @@ const init = () => {
   renderMarkup(Nodes.HEADER, createProfileRank(films));
   render[Position.BEFORE_END](Nodes.MAIN, pageComponent);
   pageController.render();
-  renderMarkup(Nodes.FOOTER_STATS, createFooter(filmsModel.getFilmsData().length));
+  renderMarkup(Nodes.FOOTER_STATS, createFooter(films.length));
 };
 
 
