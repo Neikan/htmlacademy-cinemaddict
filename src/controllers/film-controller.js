@@ -3,17 +3,12 @@ import {FilmDetails} from "../components/film-details";
 import {Comment} from "../components/film-details/comments";
 import {
   KeyCode, Position, DetailsElement, CardElement, Flag,
-  FilmAttribute, FilterType, ClassMarkup, FilmsBlock
+  FilmAttribute, FilterType, ClassMarkup, FilmsBlock, Mode
 } from "../consts";
 import {render, remove, replace, getItem} from "../utils/components";
 
 
 const NODE_MAIN = `main`;
-
-const Mode = {
-  DEFAULT: `default`,
-  DETAILS: `details`,
-};
 
 const changeDataRules = {
   'isWatch': (filmData) => Object.assign({}, filmData, {isWatch: !filmData.isWatch}),
@@ -166,17 +161,17 @@ class FilmController {
    */
   _removeDetails() {
     remove(this._filmDetails);
-    this._mode = Mode.DEFAULT;
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     document.removeEventListener(`keyup`, this._ctrlKeyUpHandler);
 
     this.render(this._filmData);
-    this._pageUpdateHandler(filmsBlockInitiator);
+    this._pageUpdateHandler(filmsBlockInitiator, this._mode);
 
     if (filmsBlockInitiator === FilmsBlock.ALL) {
       this._checkActivityCard();
     }
 
+    this._mode = Mode.DEFAULT;
     filmsBlockInitiator = FilmsBlock.DEFAULT;
   }
 

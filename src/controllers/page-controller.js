@@ -5,11 +5,12 @@ import {FilmsExtra} from "../components/films-extra";
 import {NoFilms} from "../components/no-films";
 import {ShowMoreBtn} from "../components/show-more-button";
 import {Sorting} from "../components/sorting";
-import {CountFilm, ExtraName, Position, Flag, FilmsBlock, SortType} from "../consts";
+import {
+  CountFilm, ExtraName, Position, Flag, FilmsBlock,
+  SortType, Mode, FilmsElement
+} from "../consts";
 import {render, remove} from "../utils/components";
 
-
-const FILM_LIST_CLASS = `.films-list__container`;
 
 /**
  * Создание контроллера, обеспечивающего отрисовку фильмов
@@ -248,10 +249,10 @@ class PageController {
    * @param {Object} dataset объект с данными
    */
   _renderFilmsList(dataset) {
-    dataset.filmsList = dataset.filmsComponent.getElement().querySelector(FILM_LIST_CLASS);
+    dataset.filmsList = dataset.filmsComponent.getElement().querySelector(FilmsElement.FILM_LIST);
     this._renderFilmControllers(dataset);
 
-    if (dataset.countFilms < dataset.filmsData.length) {
+    if (dataset.countFilms < dataset.filmsData.length && dataset.filmsBlock === FilmsBlock.ALL) {
       this._renderShowMoreBtn(dataset);
     }
   }
@@ -298,12 +299,13 @@ class PageController {
    * Метод, обеспечивабщий обновление блоков фильмов при изменении фильма в другом блоке
    * @param {string} filmsBlockInitiator название блока, в котором произошло изменение фильма
    * @param {Object} container контейнер контроллера
+   * @param {string} mode режим карточки, в которой были инициированы изменения
    */
-  _updateFilmsBlocks(filmsBlockInitiator, container) {
+  _updateFilmsBlocks(filmsBlockInitiator, container, mode) {
     const updateRules = {
       'all-films': () => this._updateFilmsIfTargetAllFilms(container),
       'top-rated': () => this._updateFilmsIfTargetRated(container),
-      'most-commented': () => this._updateFilmsIfTargetCommented(container)
+      'most-commented': () => this._updateFilmsIfTargetCommented(container, mode)
     };
 
     updateRules[filmsBlockInitiator]();
@@ -325,12 +327,18 @@ class PageController {
   /**
    * Метод, обеспечивабщий обновление блоков фильмов при изменении фильма в блоке самыз комментируемых фильмов
    * @param {Object} container контейнер контроллера
+   * @param {string} mode режим карточки, в которой были инициированы изменения
    */
-  _updateFilmsIfTargetCommented(container) {
+  _updateFilmsIfTargetCommented(container, mode) {
     this._resetFilmsWithSorting();
     this._resetFilmsRated();
     this._renderFilmsRated(container, Position.AFTER_BEGIN);
     this._renderFilmsOrNoFilms(container);
+
+    if (mode === Mode.DETAILS) {
+      this._resetFilmsCommented();
+      this._renderFilmsCommented(container, Position.BEFORE_END);
+    }
   }
 
 
@@ -414,13 +422,14 @@ class PageController {
   /**
    * Метод, обеспечивающий обновление страницы
    * @param {string} filmsBlockInitiator название блока, в котором произошло изменение фильма
+   * @param {string} mode режим карточки, в которой были инициированы изменения
    */
-  _pageUpdateHandler(filmsBlockInitiator) {
+  _pageUpdateHandler(filmsBlockInitiator, mode) {
     const container = this._container.getElement();
 
     remove(this._menuController._menu);
     this._renderMenu(container);
-    this._updateFilmsBlocks(filmsBlockInitiator, container);
+    this._updateFilmsBlocks(filmsBlockInitiator, container, mode);
   }
 
 

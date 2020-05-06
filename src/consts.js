@@ -100,7 +100,8 @@ export const CARD_ELEMENTS = [
 
 export const FilmsElement = {
   EXTRA: `films-list--extra`,
-  TITLE: `films-list__title`
+  TITLE: `films-list__title`,
+  FILM_LIST: `.films-list__container`
 };
 
 export const CardElement = {
@@ -154,4 +155,9 @@ export const SortType = {
 export const SortClass = {
   BUTTON: `sort__button`,
   BUTTON_ACTIVE: `sort__button--active`
+};
+
+export const Mode = {
+  DEFAULT: `default`,
+  DETAILS: `details`,
 };

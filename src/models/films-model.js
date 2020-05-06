@@ -1,4 +1,4 @@
-import {FilterType, FilmAttribute, Flag, SortType} from '../consts';
+import {FilterType, FilmAttribute, Flag, SortType, CountFilm} from '../consts';
 import {filterRules, sortRules} from '../utils/components';
 
 
@@ -72,7 +72,7 @@ class FilmsModel {
    * @return {Array} отсортированные данные
    */
   getSortedFilmsDataByRating() {
-    return sortRules[SortType.BY_RATING](this.getRatedFilmsData());
+    return sortRules[SortType.BY_RATING](this.getRatedFilmsData()).slice(0, CountFilm.EXTRA);
   }
 
 
@@ -81,7 +81,7 @@ class FilmsModel {
    * @return {Array}
    */
   getSortedFilmsDataByComments() {
-    return sortRules[SortType.BY_COMMENTS](this.getCommentedFilmsData());
+    return sortRules[SortType.BY_COMMENTS](this.getCommentedFilmsData()).slice(0, CountFilm.EXTRA);
   }
 
 
