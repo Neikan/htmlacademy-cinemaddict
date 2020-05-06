@@ -68,7 +68,7 @@ class FilmController {
    */
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._removeDetails();
+      this._closeDetails();
     }
   }
 
@@ -157,22 +157,30 @@ class FilmController {
 
 
   /**
-   * Метод, обеспечивающий удаление подробной карточки
+   * Метод, обеспечивающий удаление подробной карточки при закрытии по кнопке или по нажатию на клавишу Escape
    */
   _removeDetails() {
+    this._pageUpdateHandler(filmsBlockInitiator, this._mode);
+    this._closeDetails();
+    filmsBlockInitiator = FilmsBlock.DEFAULT;
+  }
+
+
+  /**
+   * Метод, обеспечивающий закрытие подробной карточки при клике на другую
+   */
+  _closeDetails() {
     remove(this._filmDetails);
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     document.removeEventListener(`keyup`, this._ctrlKeyUpHandler);
 
     this.render(this._filmData);
-    this._pageUpdateHandler(filmsBlockInitiator, this._mode);
 
     if (filmsBlockInitiator === FilmsBlock.ALL) {
       this._checkActivityCard();
     }
 
     this._mode = Mode.DEFAULT;
-    filmsBlockInitiator = FilmsBlock.DEFAULT;
   }
 
 
