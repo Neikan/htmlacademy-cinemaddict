@@ -157,6 +157,10 @@ class PageController {
    * @param {string} position позиция отрисовываемого блока
    */
   _renderFilmsCommented(container, position = Position.AFTER_BEGIN) {
+    if (!this._filmsModel.getCommentedFilmsData().length) {
+      return;
+    }
+
     this._showedFilmCommentedContollers = this._renderFilmsComponent(
         this._getDataSet(
             container, this._filmsCommented, this._filmsModel.getSortedFilmsDataByComments(),
@@ -173,7 +177,7 @@ class PageController {
    * @param {string} position позиция отрисовываемого блока
    */
   _renderFilmsRated(container, position = Position.AFTER_BEGIN) {
-    if (this._filmsModel.getIsRatingFilms()) {
+    if (!this._filmsModel.getRatedFilmsData().length) {
       return;
     }
 
@@ -357,6 +361,10 @@ class PageController {
    * Метод, обеспечивающий удаление данных для компонента _filmsCommented
    */
   _resetFilmsCommented() {
+    if (!this._filmsModel.getCommentedFilmsData().length) {
+      return;
+    }
+
     this._showedFilmCommentedContollers = [];
     remove(this._filmsCommented);
   }
@@ -366,13 +374,14 @@ class PageController {
    * Метод, обеспечивающий удаление данных для компонента _filmsRated
    */
   _resetFilmsRated() {
-    if (this._filmsModel.getIsRatingFilms()) {
+    if (!this._filmsModel.getRatedFilmsData().length) {
       return;
     }
 
     this._showedFilmRatedContollers = [];
     remove(this._filmsRated);
   }
+
 
   /**
    * Метод, обеспечивающий сброс сортировки

@@ -85,7 +85,9 @@ export const filterRules = {
   'All movies': (filmsData) => filmsData,
   'Watchlist': (filmsData) => filmsData.filter((filmData) => filmData.isWatch),
   'History': (filmsData) => filmsData.filter((filmData) => filmData.isWatched),
-  'Favorites': (filmsData) => filmsData.filter((filmData) => filmData.isFavorite)
+  'Favorites': (filmsData) => filmsData.filter((filmData) => filmData.isFavorite),
+  'Rated': (filmsData) => filmsData.filter((filmData) => filmData.rating !== 0),
+  'Commented': (filmsData) => filmsData.filter((filmData) => filmData.comments.length !== 0)
 };
 
 
@@ -96,4 +98,5 @@ export const sortRules = {
   'default': (films) => films,
   'by-date': (films, count = films.length) => sortingArray(films, SortMethod.BY_DATE, count),
   'by-rating': (films, count = films.length) => sortingArray(films, SortMethod.BY_RATING, count),
+  'by-comments': (films, count = films.length) => sortingArray(films, SortMethod.BY_COMMENTS, count)
 };

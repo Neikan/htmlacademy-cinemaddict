@@ -1,6 +1,5 @@
-import {FilterType, FilmAttribute, Flag, SortMethod, SortType} from '../consts';
+import {FilterType, FilmAttribute, Flag, SortType} from '../consts';
 import {filterRules, sortRules} from '../utils/components';
-import {sortingArray} from '../utils/common';
 
 
 /**
@@ -73,7 +72,7 @@ class FilmsModel {
    * @return {Array} отсортированные данные
    */
   getSortedFilmsDataByRating() {
-    return sortingArray(this._filmsData, SortMethod.BY_RATING);
+    return sortRules[SortType.BY_RATING](this.getRatedFilmsData());
   }
 
 
@@ -82,7 +81,7 @@ class FilmsModel {
    * @return {Array}
    */
   getSortedFilmsDataByComments() {
-    return sortingArray(this._filmsData, SortMethod.BY_COMMENTS);
+    return sortRules[SortType.BY_COMMENTS](this.getCommentedFilmsData());
   }
 
 
@@ -134,8 +133,21 @@ class FilmsModel {
   }
 
 
-  getIsRatingFilms() {
-    return this._filmsData.every((film) => film.rating === 0);
+  /**
+   * Метод, выполняющий проверку наличия фильмов с рейтигом среди данных
+   * @return {Boolean} результат проверки
+   */
+  getRatedFilmsData() {
+    return filterRules[FilterType.RATED](this._filmsData);
+  }
+
+
+  /**
+   * Метод, выполняющий проверку наличия фильмов с рейтигом среди данных
+   * @return {Boolean} результат проверки
+   */
+  getCommentedFilmsData() {
+    return filterRules[FilterType.COMMENTED](this._filmsData);
   }
 
 
