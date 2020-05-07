@@ -1,26 +1,19 @@
 import {AbstractComponent} from "./abstract/component";
-import {FilterType} from "../consts";
+import {FilterType, MenuElement} from "../consts";
 
-
-const FilterClass = {
-  ITEM: `main-navigation__item`,
-  ITEM_ACTIVE: `main-navigation__item--active`
-};
 
 /**
  * Создание разметки блока главного меню
- * @param {Number} watchlistCount количество фильмов в запланированном к просмотру
- * @param {Number} watchedCount количество фильмов в просмотренном
- * @param {Number} favoriteCount количество фильмов в избранном
- * @param {string} currentFilter
+ * @param {Object} countsFilmsByFilters количества фильмов, соответствующих фильтрам
+ * @param {string} filterType примененный фильтр
  * @return {string} разметка блока
  */
-const createMenu = (watchlistCount, watchedCount, favoriteCount, currentFilter) => {
+const createMenu = (countsFilmsByFilters, filterType) => {
   const classMarkup = {
-    ALL: currentFilter === FilterType.ALL ? ` ` + FilterClass.ITEM_ACTIVE : ``,
-    WATCHLIST: currentFilter === FilterType.WATCHLIST ? ` ` + FilterClass.ITEM_ACTIVE : ``,
-    HISTORY: currentFilter === FilterType.HISTORY ? ` ` + FilterClass.ITEM_ACTIVE : ``,
-    FAVORITES: currentFilter === FilterType.FAVORITES ? ` ` + FilterClass.ITEM_ACTIVE : ``
+    ALL: filterType === FilterType.ALL ? ` ` + MenuElement.ITEM_ACTIVE : ``,
+    WATCHLIST: filterType === FilterType.WATCHLIST ? ` ` + MenuElement.ITEM_ACTIVE : ``,
+    HISTORY: filterType === FilterType.HISTORY ? ` ` + MenuElement.ITEM_ACTIVE : ``,
+    FAVORITES: filterType === FilterType.FAVORITES ? ` ` + MenuElement.ITEM_ACTIVE : ``
   };
 
   return (
@@ -28,13 +21,13 @@ const createMenu = (watchlistCount, watchedCount, favoriteCount, currentFilter) 
       <div class="main-navigation__items">
         <a href="#all" data-filter-type="${FilterType.ALL}" class="main-navigation__item${classMarkup.ALL}">All movies</a>
         <a href="#watchlist" data-filter-type="${FilterType.WATCHLIST}" class="main-navigation__item${classMarkup.WATCHLIST}">Watchlist
-          <span class="main-navigation__item-count">${watchlistCount}</span>
+          <span class="main-navigation__item-count">${countsFilmsByFilters.WATCHLIST}</span>
         </a>
         <a href="#history" data-filter-type="${FilterType.HISTORY}" class="main-navigation__item${classMarkup.HISTORY}">History
-          <span class="main-navigation__item-count">${watchedCount}</span>
+          <span class="main-navigation__item-count">${countsFilmsByFilters.HISTORY}</span>
         </a>
         <a href="#favorites" data-filter-type="${FilterType.FAVORITES}" class="main-navigation__item${classMarkup.FAVORITES}">Favorites
-          <span class="main-navigation__item-count">${favoriteCount}</span>
+          <span class="main-navigation__item-count">${countsFilmsByFilters.FAVORITES}</span>
         </a>
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
@@ -47,12 +40,10 @@ const createMenu = (watchlistCount, watchedCount, favoriteCount, currentFilter) 
  * Создание класса главного меню
  */
 class Menu extends AbstractComponent {
-  constructor(watchlistCount, watchedCount, favoriteCount, filterType) {
+  constructor(countsFilmsByFilters, filterType) {
     super();
 
-    this._watchlistCount = watchlistCount;
-    this._watchedCount = watchedCount;
-    this._favoriteCount = favoriteCount;
+    this._countsFilmsByFilters = countsFilmsByFilters;
     this._filterType = filterType;
 
     this._clickHandler = this._clickHandler.bind(this);
@@ -64,8 +55,7 @@ class Menu extends AbstractComponent {
    * @return {Object}
    */
   getTemplate() {
-    return createMenu(this._watchlistCount, this._watchedCount,
-        this._favoriteCount, this._filterType);
+    return createMenu(this._countsFilmsByFilters, this._filterType);
   }
 
 
@@ -85,7 +75,7 @@ class Menu extends AbstractComponent {
    */
   _clickHandler(handler) {
     return (evt) => {
-      const target = evt.target.closest(`.${FilterClass.ITEM}`);
+      const target = evt.target.closest(`.${MenuElement.ITEM}`);
 
       if (target.tagName !== `A`) {
         return;
@@ -103,11 +93,11 @@ class Menu extends AbstractComponent {
    * @param {Object} evt событие
    */
   _setActiveClassHandler(evt) {
-    [...this.getElement().querySelectorAll(`.${FilterClass.ITEM}`)].map((menuItem) => {
-      if (menuItem === evt.target.closest(`.${FilterClass.ITEM}`)) {
-        menuItem.classList.add(`${FilterClass.ITEM_ACTIVE}`);
+    [...this.getElement().querySelectorAll(`.${MenuElement.ITEM}`)].map((menuItem) => {
+      if (menuItem === evt.target.closest(`.${MenuElement.ITEM}`)) {
+        menuItem.classList.add(`${MenuElement.ITEM_ACTIVE}`);
       } else {
-        menuItem.classList.remove(`${FilterClass.ITEM_ACTIVE}`);
+        menuItem.classList.remove(`${MenuElement.ITEM_ACTIVE}`);
       }
     });
   }

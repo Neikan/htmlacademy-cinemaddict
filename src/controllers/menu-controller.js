@@ -21,9 +21,7 @@ class MenuController {
     const oldMenu = this._menu;
 
     this._menu = new Menu(
-        this._filmModel.getWatchlistFilms(),
-        this._filmModel.getWatchedFilms(),
-        this._filmModel.getFavoriteFilms(),
+        this._filmModel.getCountsFilmsByFilters(),
         this._filmModel.getFilterType());
 
     this._replace(this._container, oldMenu);

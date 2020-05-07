@@ -16,7 +16,6 @@ import {render, remove} from "../utils/components";
 const Nodes = {
   HEADER: document.querySelector(`.header`),
   MAIN: document.querySelector(`.main`),
-  FOOTER_STATS: document.querySelector(`.footer__statistics`)
 };
 
 
@@ -144,7 +143,7 @@ class PageController {
    * Метод, обеспечивающий отрисовку компонента ранга профиля пользователя
    */
   _renderProfileRank() {
-    this._countWatchedFilms = this._filmsModel.getWatchedFilms();
+    this._countWatchedFilms = this._filmsModel.getCountsFilmsByFilters().HISTORY;
     this._profileRank = new ProfileRank(this._countWatchedFilms);
     render[Position.BEFORE_END](Nodes.HEADER, this._profileRank);
   }
@@ -220,7 +219,7 @@ class PageController {
   _renderFilms(container, position = Position.AFTER_BEGIN) {
     this._showedFilmControllers = this._renderFilmsComponent(
         this._getDataSet(
-            container, this._films, this._filmsModel.getFilteringFilmsData(),
+            container, this._films, this._filmsModel.getFilteredFilmsData(),
             this._showedFilmControllers, 0, this._countFilms, FilmsBlock.ALL
         ),
         position
@@ -306,7 +305,7 @@ class PageController {
    * @param {Object} container контейнер контроллера
    */
   _renderFilmsOrNoFilms(container) {
-    if (!this._filmsModel.getFilteringFilmsData().length) {
+    if (!this._filmsModel.getFilteredFilmsData().length) {
       this._renderNoFilms(container, Flag.YES);
       this._resetSorting();
     } else {
@@ -319,7 +318,7 @@ class PageController {
    * Метод, обеспечивающий обновление компонента ранга профиля пользователя в случае изменения просмотренных фильмов
    */
   _updateProfileRank() {
-    if (this._countWatchedFilms === this._filmsModel.getWatchedFilms()) {
+    if (this._countWatchedFilms === this._filmsModel.getCountsFilmsByFilters().HISTORY) {
       return;
     }
 

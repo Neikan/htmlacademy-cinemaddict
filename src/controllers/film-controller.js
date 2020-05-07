@@ -18,6 +18,7 @@ const changeDataRules = {
 
 let filmsBlockInitiator = FilmsBlock.DEFAULT;
 
+
 /**
  * Создание контроллера, управляющего отображением карточек фильмов
  */
@@ -260,7 +261,8 @@ class FilmController {
    */
   _checkActivity(btn, filterType) {
     if (this._filterType === filterType
-      && !this._filmCard.getElement().querySelector(`.${btn}`).classList.contains(`${CardElement.BTN_ACTIVE}`)
+      && !this._filmCard.getElement().querySelector(`.${btn}`)
+              .classList.contains(`${CardElement.BTN_ACTIVE}`)
     ) {
       this._inactiveCard();
     }

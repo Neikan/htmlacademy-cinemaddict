@@ -9,7 +9,6 @@ import {PageController} from "./controllers/page-controller";
 
 
 const Nodes = {
-  HEADER: document.querySelector(`.header`),
   MAIN: document.querySelector(`.main`),
   FOOTER_STATS: document.querySelector(`.footer__statistics`)
 };

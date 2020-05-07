@@ -86,39 +86,17 @@ class FilmsModel {
 
 
   /**
-   * Метод, обеспечивающий получение отсортированных по количеству комментариев данных фильмов
-   * @param {string} sortType примененный тип сортировки
-   * @return {Array} отсортированные данные
+   * Метод, обеспечивающий получение количества фильмов, соответствующих фильтрам
+   * @return {Object}
    */
-  getSortedFilmsData() {
-    return sortRules[this._sortType](this._filmsData);
-  }
+  getCountsFilmsByFilters() {
+    const getCount = (param) => (count, film) => film[param] ? ++count : count;
 
-
-  /**
-   * Метод, обеспечивабщий подсчет фильмов в запланированном к просмотру
-   * @return {Number} количество фильмов
-   */
-  getWatchlistFilms() {
-    return this._filmsData.reduce((count, film) => (film[FilmAttribute.IS_WATCH] ? ++count : count), 0);
-  }
-
-
-  /**
-   * Метод, обеспечивабщий подсчет фильмов в просмотренном
-   * @return {Number} количество фильмов
-   */
-  getWatchedFilms() {
-    return this._filmsData.reduce((count, film) => (film[FilmAttribute.IS_WATCHED] ? ++count : count), 0);
-  }
-
-
-  /**
-   * Метод, обеспечивабщий подсчет фильмов в избранном
-   * @return {Number} количество фильмов
-   */
-  getFavoriteFilms() {
-    return this._filmsData.reduce((count, film) => (film[FilmAttribute.IS_FAVORITE] ? ++count : count), 0);
+    return {
+      WATCHLIST: this._filmsData.reduce(getCount(FilmAttribute.IS_WATCH), 0),
+      HISTORY: this._filmsData.reduce(getCount(FilmAttribute.IS_WATCHED), 0),
+      FAVORITES: this._filmsData.reduce(getCount(FilmAttribute.IS_FAVORITE), 0)
+    };
   }
 
 
@@ -126,7 +104,7 @@ class FilmsModel {
    * Метод, обеспечивающий получение отфильтрованных данных фильмов
    * @return {Array} отфильтрованный массив данных
    */
-  getFilteringFilmsData() {
+  getFilteredFilmsData() {
     return sortRules[this._sortType](filterRules[this._filterType](this._filmsData));
   }
 

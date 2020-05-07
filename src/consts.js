@@ -124,6 +124,11 @@ export const DetailsElement = {
   BTN_FAVORITE: `film-details__control-label--favorite`
 };
 
+export const MenuElement = {
+  ITEM: `main-navigation__item`,
+  ITEM_ACTIVE: `main-navigation__item--active`
+};
+
 export const Flag = {
   YES: true,
   NO: false
