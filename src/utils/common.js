@@ -121,10 +121,10 @@ export const castNumberFormat = (value) => {
 /**
  * Получение индекса элемента
  * @param {Array} items данные элементов
- * @param {Object} item данные элемента
+ * @param {Object} id идентификатор элемента
  * @return {Number} индекс
  */
-export const getIndex = (items, item) => items.indexOf(item);
+export const getIndex = (items, id) => items.findIndex((item) => item.id === id);
 
 
 /**

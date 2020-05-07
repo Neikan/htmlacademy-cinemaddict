@@ -147,8 +147,14 @@ export default class FilmController {
   _addNewComment(container, emojiAddBlock, textArea) {
     if (emojiAddBlock.childNodes.length && textArea.value !== ``) {
       const commentData = this._getCommentData(container);
-      render[Position.BEFORE_END](getItem(container, DetailsElement.COMMENT_LIST), new Comment(commentData));
+
+      render[Position.BEFORE_END](
+          getItem(container, DetailsElement.COMMENT_LIST), new Comment(commentData)
+      );
+
       this._filmData.comments.push(commentData);
+      container.querySelector(`.${DetailsElement.COMMENT_COUNT}`)
+        .textContent = this._filmData.comments.length;
     }
   }
 
@@ -183,7 +189,8 @@ export default class FilmController {
 
 
   /**
-   * Метод, обеспечивающий удаление подробной карточки при закрытии по кнопке или по нажатию на клавишу Escape
+   * Метод, обеспечивающий удаление подробной карточки при закрытии по кнопке
+   * или по нажатию на клавишу Escape
    */
   _removeDetails() {
     this._pageUpdateHandler(filmsBlockInitiator, this._mode);
@@ -211,7 +218,8 @@ export default class FilmController {
 
 
   /**
-   * Метод, обеспечивающий обновление классов самой карточки фильма и кнопки, добавляющей фильм в какой-либо список
+   * Метод, обеспечивающий обновление классов самой карточки фильма и кнопки,
+   *  добавляющей фильм в какой-либо список
    * @param {Object} btn кнопка
    * @param {string} filmsBlock название блока фильмов
    * @param {string} filterType примененный фильтр

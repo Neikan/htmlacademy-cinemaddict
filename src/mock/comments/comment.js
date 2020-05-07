@@ -9,7 +9,7 @@ import {COMMENT_TEXTS, COMMENT_AUTHORS, START_DATE_COMMENTS} from './comment-con
  */
 const generateComment = () => {
   return {
-    commentId: generateId(),
+    id: generateId(),
     text: getRandomElement(COMMENT_TEXTS),
     emoji: getRandomElement(EMOJIES),
     author: getRandomElement(COMMENT_AUTHORS),

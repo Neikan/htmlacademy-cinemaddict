@@ -7,9 +7,9 @@ import {formatDateFromNow} from "../../utils/common";
  * @param {Object} {свойства комментария}
  * @return {string} разметка одного комментария
  */
-const createComment = ({commentId, text, emoji, author, date}) => {
+const createComment = ({id, text, emoji, author, date}) => {
   return (
-    `<li class="film-details__comment" data-comment-id="${commentId}">
+    `<li class="film-details__comment" data-comment-id="${id}">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
       </span>

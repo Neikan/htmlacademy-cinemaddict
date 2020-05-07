@@ -1,5 +1,6 @@
 import {FilterType, FilmAttribute, Flag, SortType, CountFilm} from '../consts';
 import {filterRules, sortRules} from '../utils/components';
+import {getIndex} from '../utils/common';
 
 
 /**
@@ -134,7 +135,7 @@ export default class FilmsModel {
    * @return {Object}
    */
   updateFilmData(id, newFilmData) {
-    const index = this._filmsData.findIndex((filmData) => filmData.id === id);
+    const index = getIndex(this._filmsData, id);
 
     if (index === -1) {
       return Flag.NO;

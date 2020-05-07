@@ -4,6 +4,7 @@ import {createControls} from "./film-details/controls";
 import {createCommentBlock} from "./film-details/comments";
 import {DetailsElement} from "../consts";
 import {getImageElement} from "../utils/components";
+import {getIndex} from "../utils/common";
 
 
 /**
@@ -86,6 +87,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._changeIsFavorite(element);
     this._setEmojiClickHandler();
     this._setTextAreaInputHandler();
+    this._setDeleteCommentClickHandler();
   }
 
 
@@ -107,6 +109,15 @@ export default class FilmDetails extends AbstractSmartComponent {
     const textArea = this.getElement().querySelector(`.${DetailsElement.COMMENT_INPUT}`);
 
     textArea.addEventListener(`input`, this._getTextAreaInputHandler(textArea));
+  }
+
+
+  /**
+   * Метод, обеспечивающий добавление слушателей на кнопки удаления комментариев
+   */
+  _setDeleteCommentClickHandler() {
+    [...this.getElement().querySelectorAll(`.${DetailsElement.BTN_COMMENT_DELETE}`)]
+        .map(this._getDeleteCommentClickHandler());
   }
 
 
@@ -143,6 +154,44 @@ export default class FilmDetails extends AbstractSmartComponent {
         textArea.classList.remove(DetailsElement.ERROR);
       }
     };
+  }
+
+
+  /**
+   * Метод, обеспечивающий создание помощника для удаления комментария
+   * @return {Function} созданный помощник
+   */
+  _getDeleteCommentClickHandler() {
+    return (btn) => {
+      btn.addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+
+        this._removeComment(evt.target.closest(`.${DetailsElement.COMMENT_ITEM}`));
+        this._updateCommentsCount();
+      });
+
+    };
+  }
+
+
+  /**
+   * Метод, выполняющий обновление текущего количества комментариев
+   */
+  _updateCommentsCount() {
+    this.getElement().querySelector(`.${DetailsElement.COMMENT_COUNT}`)
+      .textContent = this._filmData.comments.length;
+  }
+
+
+  /**
+   * Метод, выполняющий удаление комментария
+   * @param {Object} target
+   */
+  _removeComment(target) {
+    this._filmData.comments.splice(
+        getIndex(this._filmData.comments, target.dataset.commentId), 1
+    );
+    target.remove();
   }
 
 
