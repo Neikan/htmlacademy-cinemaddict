@@ -5,11 +5,19 @@ import {FilmsExtra} from "../components/films-extra";
 import {NoFilms} from "../components/no-films";
 import {ShowMoreBtn} from "../components/show-more-button";
 import {Sorting} from "../components/sorting";
+import {ProfileRank} from "../components/profile-rank";
 import {
   CountFilm, ExtraName, Position, Flag, FilmsBlock,
   SortType, Mode, FilmsElement
 } from "../consts";
 import {render, remove} from "../utils/components";
+
+
+const Nodes = {
+  HEADER: document.querySelector(`.header`),
+  MAIN: document.querySelector(`.main`),
+  FOOTER_STATS: document.querySelector(`.footer__statistics`)
+};
 
 
 /**
@@ -57,10 +65,12 @@ class PageController {
     this._filmsCommented = new FilmsExtra(ExtraName.COMMENTED);
     this._filmsRated = new FilmsExtra(ExtraName.RATED);
     this._showMoreBtn = new ShowMoreBtn();
+    this._profileRank = null;
     this._noFilms = null;
     this._sorting = null;
     this._menuController = null;
     this._countFilms = CountFilm.START;
+    this._countWatchedFilms = 0;
 
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
     this._showMoreClickHandler = this._showMoreClickHandler.bind(this);
@@ -72,11 +82,11 @@ class PageController {
 
   /**
    * Метод, обеспечивающий отрисовку данных фильмов
-   * @param {Array} films данные фильмов
    */
   render() {
     const container = this._container.getElement();
 
+    this._renderProfileRank();
     this._renderMenu(container);
 
     if (!this._filmsModel.getFilmsData().length) {
@@ -131,13 +141,23 @@ class PageController {
 
 
   /**
-   * Метод, обеспечивающий обновление компонента меню
+   * Метод, обеспечивающий отрисовку компонента ранга профиля пользователя
+   */
+  _renderProfileRank() {
+    this._countWatchedFilms = this._filmsModel.getWatchedFilms();
+    this._profileRank = new ProfileRank(this._countWatchedFilms);
+    render[Position.BEFORE_END](Nodes.HEADER, this._profileRank);
+  }
+
+
+  /**
+   * Метод, обеспечивающий отрисовку компонента меню
    * @param {Object} container контейнер контроллера
    */
   _renderMenu(container) {
     this._menuController = new MenuController(container.parentElement, this._filmsModel);
     this._menuController.render();
-    this._menuController._menu.setFilterChangeHandler(this._filterTypeChangeHandler(container));
+    this._menuController.getMenu().setFilterChangeHandler(this._filterTypeChangeHandler(container));
   }
 
 
@@ -283,7 +303,7 @@ class PageController {
 
   /**
    * Метод, обеспечивающий отрисовку компонента-контейнера фильмов или компонента их отсутствия
-   * @param {Object} container
+   * @param {Object} container контейнер контроллера
    */
   _renderFilmsOrNoFilms(container) {
     if (!this._filmsModel.getFilteringFilmsData().length) {
@@ -292,6 +312,30 @@ class PageController {
     } else {
       this._renderFilmsWithSorting(container);
     }
+  }
+
+
+  /**
+   * Метод, обеспечивающий обновление компонента ранга профиля пользователя в случае изменения просмотренных фильмов
+   */
+  _updateProfileRank() {
+    if (this._countWatchedFilms === this._filmsModel.getWatchedFilms()) {
+      return;
+    }
+
+    remove(this._profileRank);
+    this._countWatchedFilms = 0;
+    this._renderProfileRank();
+  }
+
+
+  /**
+   * Метод, обеспечивабщий обновление компонента меню
+   * @param {Object} container контейнер контроллера
+   */
+  _updateMenu(container) {
+    remove(this._menuController.getMenu());
+    this._renderMenu(container);
   }
 
 
@@ -427,8 +471,8 @@ class PageController {
   _pageUpdateHandler(filmsBlockInitiator, mode) {
     const container = this._container.getElement();
 
-    remove(this._menuController._menu);
-    this._renderMenu(container);
+    this._updateProfileRank();
+    this._updateMenu(container);
     this._updateFilmsBlocks(filmsBlockInitiator, container, mode);
   }
 

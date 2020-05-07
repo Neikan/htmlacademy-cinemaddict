@@ -31,6 +31,15 @@ class MenuController {
 
 
   /**
+   * Метод, обеспечивающий получение текущего компонента меню
+   * @return {Object} меню
+   */
+  getMenu() {
+    return this._menu;
+  }
+
+
+  /**
    * Метод, обеспечивающий обновление меню
    * @param {Object} container
    * @param {Object} oldMenu

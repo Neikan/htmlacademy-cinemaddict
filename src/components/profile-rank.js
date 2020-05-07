@@ -1,4 +1,5 @@
-import {ProfileRank} from '../consts.js';
+import {AbstractComponent} from './abstract/component.js';
+import {RankDescription} from '../consts.js';
 
 
 /**
@@ -8,14 +9,14 @@ import {ProfileRank} from '../consts.js';
  */
 const getProfileRank = (countWatchedFilms) => {
   switch (true) {
-    case (countWatchedFilms >= ProfileRank.NOVICE.from && countWatchedFilms <= ProfileRank.FUN.from - 1):
-      return ProfileRank.NOVICE.rank;
+    case (countWatchedFilms >= RankDescription.NOVICE.from && countWatchedFilms <= RankDescription.FUN.from - 1):
+      return RankDescription.NOVICE.rank;
 
-    case (countWatchedFilms >= ProfileRank.FUN.from && countWatchedFilms <= ProfileRank.MOVIE_BUFF.from - 1):
-      return ProfileRank.FUN.rank;
+    case (countWatchedFilms >= RankDescription.FUN.from && countWatchedFilms <= RankDescription.MOVIE_BUFF.from - 1):
+      return RankDescription.FUN.rank;
 
-    case (countWatchedFilms >= ProfileRank.MOVIE_BUFF.from):
-      return ProfileRank.MOVIE_BUFF.rank;
+    case (countWatchedFilms >= RankDescription.MOVIE_BUFF.from):
+      return RankDescription.MOVIE_BUFF.rank;
 
     default:
       return (``);
@@ -39,3 +40,24 @@ const createProfileRank = (countWatchedFilms) => {
 
 
 export {createProfileRank};
+
+
+class ProfileRank extends AbstractComponent {
+  constructor(countWatchedFilms) {
+    super();
+
+    this._countWatchedFilms = countWatchedFilms;
+  }
+
+
+  /**
+   * Метод, обеспечивающий создание компонента по заданному шаблону
+   * @return {Object}
+   */
+  getTemplate() {
+    return createProfileRank(this._countWatchedFilms);
+  }
+}
+
+
+export {ProfileRank};

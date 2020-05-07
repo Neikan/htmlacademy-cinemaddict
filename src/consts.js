@@ -50,7 +50,7 @@ export const SortMethod = {
   }
 };
 
-export const ProfileRank = {
+export const RankDescription = {
   NOVICE: {
     rank: `Novice`,
     from: 1,
