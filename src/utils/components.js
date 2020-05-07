@@ -1,3 +1,7 @@
+import {sortingArray} from "./common";
+import {SortMethod} from "../consts";
+
+
 /**
  * Создание DOM-элемента
  * @param {string} template шаблон-разметка для создания элемента
@@ -33,17 +37,10 @@ export const replace = (newComponent, oldComponent) => {
  * Отрисовка компонента на странице
  */
 export const render = {
-  'beforebegin': (container, component) =>
-    container.before(component.getElement()),
-
-  'beforeend': (container, component) =>
-    container.append(component.getElement()),
-
-  'afterend': (container, component) =>
-    container.after(component.getElement()),
-
-  'afterbegin': (container, component) =>
-    container.prepend(component.getElement())
+  'beforebegin': (container, component) => container.before(component.getElement()),
+  'beforeend': (container, component) => container.append(component.getElement()),
+  'afterend': (container, component) => container.after(component.getElement()),
+  'afterbegin': (container, component) => container.prepend(component.getElement())
 };
 
 
@@ -58,8 +55,8 @@ export const remove = (component) => {
 
 
 /**
- * Создание элемента картинки
- * @param {string} imageName название
+ * Создание элемента изображения
+ * @param {string} imageName название изображения
  * @return {Object} созданный элемент
  */
 export const getImageElement = (imageName) => {
@@ -71,10 +68,35 @@ export const getImageElement = (imageName) => {
   return imgElement;
 };
 
+
 /**
  * Получение элемента по селектору класса
- * @param {Object} contaner
- * @param {string} selector
+ * @param {Object} contaner контейнер, в котором выполняется поиск
+ * @param {string} selector параметр поиска
  * @return {Object} найденный элемент
  */
 export const getItem = (contaner, selector) => contaner.querySelector(`.${selector}`);
+
+
+/**
+ * Правила фильтрации
+ */
+export const filterRules = {
+  'All movies': (filmsData) => filmsData,
+  'Watchlist': (filmsData) => filmsData.filter((filmData) => filmData.isWatch),
+  'History': (filmsData) => filmsData.filter((filmData) => filmData.isWatched),
+  'Favorites': (filmsData) => filmsData.filter((filmData) => filmData.isFavorite),
+  'Rated': (filmsData) => filmsData.filter((filmData) => filmData.rating !== 0),
+  'Commented': (filmsData) => filmsData.filter((filmData) => filmData.comments.length !== 0)
+};
+
+
+/**
+ * Правила сортировки
+ */
+export const sortRules = {
+  'default': (films) => films,
+  'by-date': (films, count = films.length) => sortingArray(films, SortMethod.BY_DATE, count),
+  'by-rating': (films, count = films.length) => sortingArray(films, SortMethod.BY_RATING, count),
+  'by-comments': (films, count = films.length) => sortingArray(films, SortMethod.BY_COMMENTS, count)
+};

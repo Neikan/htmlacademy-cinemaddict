@@ -1,5 +1,5 @@
 import {EMOJIES} from '../../consts.js';
-import {getRandomElement, getRandomDate} from '../../utils/common.js';
+import {getRandomElement, getRandomDate, generateId} from '../../utils/common.js';
 import {COMMENT_TEXTS, COMMENT_AUTHORS, START_DATE_COMMENTS} from './comment-consts.js';
 
 
@@ -9,6 +9,7 @@ import {COMMENT_TEXTS, COMMENT_AUTHORS, START_DATE_COMMENTS} from './comment-con
  */
 const generateComment = () => {
   return {
+    id: generateId(),
     text: getRandomElement(COMMENT_TEXTS),
     emoji: getRandomElement(EMOJIES),
     author: getRandomElement(COMMENT_AUTHORS),

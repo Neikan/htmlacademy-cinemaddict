@@ -1,5 +1,8 @@
 import moment from "moment";
-import {Position, CountCheckFormat, START_DATE_FILMS, CountFilm, DETAILS} from "../consts";
+import {
+  Position, CountCheckFormat, START_DATE_FILMS,
+  CountFilm, DETAILS, FormatRule
+} from "../consts";
 
 
 /**
@@ -110,17 +113,18 @@ export const getRandomDate = (maxDate, minDate = new Date([...START_DATE_FILMS])
  */
 export const castNumberFormat = (value) => {
   return value > CountCheckFormat.NUMBER ?
-    `${Math.trunc(value / CountCheckFormat.NUMBER)}  ${value % CountCheckFormat.NUMBER}` : String(value);
+    `${Math.trunc(value / CountCheckFormat.NUMBER)}  ${value % CountCheckFormat.NUMBER}` :
+    String(value);
 };
 
 
 /**
  * Получение индекса элемента
  * @param {Array} items данные элементов
- * @param {Object} item данные элемента
+ * @param {Object} id идентификатор элемента
  * @return {Number} индекс
  */
-export const getIndex = (items, item) => items.indexOf(item);
+export const getIndex = (items, id) => items.findIndex((item) => item.id === id);
 
 
 /**
@@ -138,3 +142,22 @@ export const formatDate = (date, formatRule) => moment(date).format(formatRule);
  * @return {string} отформатированная дата
  */
 export const formatDateFromNow = (date) => moment(date).fromNow();
+
+
+/**
+ * Приведение длительности фильма к формату заданному формату
+ * @param {Number} duration длительность в минутах
+ * @return {string} отформатированная длительность
+ */
+export const formatDuration = (duration) => {
+  const rawDuration = moment.duration(duration, `minutes`);
+
+  const formatedDuration = rawDuration.hours() === 0 ?
+    moment.utc(rawDuration.asMilliseconds()).format(FormatRule.DURATION) :
+    moment.utc(rawDuration.asMilliseconds()).format(FormatRule.DURATION_WITH_HOURS);
+
+  return formatedDuration;
+};
+
+
+export const generateId = () => `f${(+new Date()).toString(16)}${Math.random() * 1e8}`;

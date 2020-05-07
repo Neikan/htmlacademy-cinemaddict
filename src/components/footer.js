@@ -1,12 +1,12 @@
-import {CountFilm} from "../consts";
 import {castNumberFormat} from "../utils/common";
 
 
 /**
  * Создание разметки блока информации о количестве фильмов
+ * @param {number} countFilms количество фильмов
  * @return {string} разметка
  */
-const createStatistic = () => `<p>${castNumberFormat(CountFilm.ALL)} movies inside</p>`;
+const createFooter = (countFilms) => `<p>${castNumberFormat(countFilms)} movies inside</p>`;
 
 
-export {createStatistic};
+export {createFooter};

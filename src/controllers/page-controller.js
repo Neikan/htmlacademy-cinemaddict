@@ -1,16 +1,23 @@
-import {CountFilm, ExtraName, Position, Sorting} from "../consts";
+import MenuController from "./menu-controller";
+import FilmController from "./film-controller";
+import Films from "../components/films";
+import FilmsExtra from "../components/films-extra";
+import NoFilms from "../components/no-films";
+import ShowMoreBtn from "../components/show-more-button";
+import Sorting from "../components/sorting";
+import ProfileRank from "../components/profile-rank";
+import {
+  CountFilm, ExtraName, Position, Flag, FilmsBlock,
+  SortType, Mode, FilmsElement
+} from "../consts";
 import {render, remove} from "../utils/components";
-import {sortingArray, getIndex} from "../utils/common";
-import FilmsComponent from "../components/films";
-import {ShowMoreBtn} from "../components/show-more-button";
-import FilmsExtraComponent from "../components/films-extra";
-import NoFilmsComponent from "../components/no-films";
-import {SortComponent, sortRules} from "../components/sorting";
-import MenuComponent from "../components/menu";
-import {FilmController} from "./film-controller";
 
 
-const FILM_LIST_CLASS = `.films-list__container`;
+const Nodes = {
+  HEADER: document.querySelector(`.header`),
+  MAIN: document.querySelector(`.main`),
+};
+
 
 /**
  * Создание контроллера, обеспечивающего отрисовку фильмов
@@ -20,11 +27,21 @@ const FILM_LIST_CLASS = `.films-list__container`;
  *  обеспечивающий установку отображения контроллера фильма в режим по умолчанию
  * @param {Function} dataChangeHandler метод контроллера страницы,
  *  обеспечивающий изменение данных фильма и перерисовку карточки фильма
+ * @param {Function} pageUpdateHandler метод котроллера страницы, обеспечивающий обновление меню
+ * @param {Object} filterType примененный фильтр
+ * @param {string} filmsBlock название блока фильмов
  * @return {Array} массив контроллеров карточек фильмов
  */
-const renderFilmControllers = (filmsList, filmsData, viewChangeHandler, dataChangeHandler) => {
+const renderFilmControllers = (
+    filmsList, filmsData, viewChangeHandler,
+    dataChangeHandler, pageUpdateHandler, filterType, filmsBlock
+) => {
   return filmsData.map((filmData) => {
-    const filmController = new FilmController(filmsList, viewChangeHandler, dataChangeHandler);
+    const filmController = new FilmController(
+        filmsList, viewChangeHandler, dataChangeHandler,
+        pageUpdateHandler, filterType, filmsBlock
+    );
+
     filmController.render(filmData);
 
     return filmController;
@@ -35,44 +52,56 @@ const renderFilmControllers = (filmsList, filmsData, viewChangeHandler, dataChan
 /**
  * Создание контроллера, обеспечивающего отрисовку компонентов на странице
  */
-class PageController {
-  constructor(container) {
+export default class PageController {
+  constructor(container, filmsModel) {
     this._container = container;
 
-    this._filmsData = [];
-    this._showedFilmContollers = [];
+    this._filmsModel = filmsModel;
+    this._showedFilmControllers = [];
     this._showedFilmRatedContollers = [];
     this._showedFilmCommentedContollers = [];
-    this._menu = null;
-    this._films = new FilmsComponent();
-    this._filmsCommented = new FilmsExtraComponent(ExtraName.COMMENTED);
-    this._filmsRated = new FilmsExtraComponent(ExtraName.RATED);
+    this._films = new Films();
+    this._filmsCommented = new FilmsExtra(ExtraName.COMMENTED);
+    this._filmsRated = new FilmsExtra(ExtraName.RATED);
     this._showMoreBtn = new ShowMoreBtn();
-    this._noFilms = new NoFilmsComponent();
-    this._sorting = new SortComponent();
+    this._profileRank = null;
+    this._noFilms = null;
+    this._sorting = null;
+    this._menuController = null;
+    this._countFilms = CountFilm.START;
+    this._countWatchedFilms = 0;
 
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
     this._showMoreClickHandler = this._showMoreClickHandler.bind(this);
     this._dataChangeHandler = this._dataChangeHandler.bind(this);
     this._viewChangeHandler = this._viewChangeHandler.bind(this);
+    this._pageUpdateHandler = this._pageUpdateHandler.bind(this);
   }
 
 
   /**
    * Метод, обеспечивающий отрисовку данных фильмов
-   * @param {Array} films данные фильмов
    */
-  render(films) {
-    this._filmsData = films;
+  render() {
     const container = this._container.getElement();
+
+    this._renderProfileRank();
     this._renderMenu(container);
 
-    if (!this._filmsData.length) {
-      render[Position.BEFORE_END](container, this._noFilms);
+    if (!this._filmsModel.getFilmsData().length) {
+      this._renderNoFilms(container, Flag.NO);
       return;
     }
-    this._renderSorting(container);
-    this._renderFilms(container);
+
+    this._renderFilmsBlocks(container);
+  }
+
+
+  /**
+   * Метод, обеспечивающий установку значений по умолчанию
+   */
+  _setDefaults() {
+    this._countFilms = CountFilm.START;
   }
 
 
@@ -84,25 +113,117 @@ class PageController {
    * @param {Array} filmsContollers контроллеры отрисованных фильмов
    * @param {Number} countPrevFilms предыдущее количество отрисованных фильмов
    * @param {Number} countFilms текущее количество отрисованных фильмов
+   * @param {string} filmsBlock название блока фильмов
    * @param {Object} filmList список фильмов в компоненте-контейнере фильмов
    * @return {Object} созданный объект с данными
    */
-  _getDataSet(container, filmsComponent, filmsData,
-      filmsContollers, countPrevFilms, countFilms, filmList
+  _getDataSet(container, filmsComponent, filmsData, filmsContollers,
+      countPrevFilms, countFilms, filmsBlock, filmList
   ) {
     return {
-      container, filmsComponent, filmsData, filmsContollers, countPrevFilms, countFilms, filmList
+      container, filmsComponent, filmsData, filmsContollers,
+      countPrevFilms, countFilms, filmsBlock, filmList
     };
   }
 
 
   /**
-   * Метод, обеспечивающий создание и отрисовку компонента меню
+   * Метод, обеспечивающий создание и отрисовку компонента отсутствия соответствующих
+   *  фильмов фильтру или вообще отсутствия фильмов в базе
+   * @param {Object} container контейнер контроллера
+   * @param {Boolean} isFilter флаг, определяющий применен ли фильтр
+   */
+  _renderNoFilms(container, isFilter) {
+    this._noFilms = new NoFilms(isFilter);
+    render[Position.BEFORE_BEGIN](container, this._noFilms);
+  }
+
+
+  /**
+   * Метод, обеспечивающий отрисовку компонента ранга профиля пользователя
+   */
+  _renderProfileRank() {
+    this._countWatchedFilms = this._filmsModel.getCountsFilmsByFilters().HISTORY;
+    this._profileRank = new ProfileRank(this._countWatchedFilms);
+    render[Position.BEFORE_END](Nodes.HEADER, this._profileRank);
+  }
+
+
+  /**
+   * Метод, обеспечивающий отрисовку компонента меню
    * @param {Object} container контейнер контроллера
    */
   _renderMenu(container) {
-    this._menu = new MenuComponent(this._filmsData);
-    render[Position.BEFORE_BEGIN](container, this._menu);
+    this._menuController = new MenuController(container.parentElement, this._filmsModel);
+    this._menuController.render();
+    this._menuController.getMenu().setFilterChangeHandler(this._filterTypeChangeHandler(container));
+  }
+
+
+  /**
+   * Метод, обеспечивающий отрисовку компонентов-контейнеров фильмов
+   * @param {Object} container контейнер контроллера
+   */
+  _renderFilmsBlocks(container) {
+    this._renderFilmsCommented(container);
+    this._renderFilmsRated(container);
+    this._renderFilmsWithSorting(container);
+  }
+
+
+  /**
+   * Метод, обеспечивающий отрисовку компонента самых обсуждаемых фильмов
+   * @param {Object} container контейнер контроллера
+   * @param {string} position позиция отрисовываемого блока
+   */
+  _renderFilmsCommented(container, position = Position.AFTER_BEGIN) {
+    if (!this._filmsModel.getCommentedFilmsData().length) {
+      return;
+    }
+
+    this._showedFilmCommentedContollers = this._renderFilmsComponent(
+        this._getDataSet(
+            container, this._filmsCommented, this._filmsModel.getSortedFilmsDataByComments(),
+            this._showedFilmCommentedContollers, 0, CountFilm.EXTRA, FilmsBlock.COMMENTED
+        ),
+        position
+    );
+  }
+
+
+  /**
+   * Метод, обеспечивающий отрисовку компонента высокорейтинговых фильмов
+   * @param {Object} container контейнер контроллера
+   * @param {string} position позиция отрисовываемого блока
+   */
+  _renderFilmsRated(container, position = Position.AFTER_BEGIN) {
+    if (!this._filmsModel.getRatedFilmsData().length) {
+      return;
+    }
+
+    this._showedFilmRatedContollers = this._renderFilmsComponent(
+        this._getDataSet(
+            container, this._filmsRated, this._filmsModel.getSortedFilmsDataByRating(),
+            this._showedFilmRatedContollers, 0, CountFilm.EXTRA, FilmsBlock.RATED
+        ),
+        position
+    );
+  }
+
+
+  /**
+   * Метод, обеспечивающий отрисовку компонента всех фильмов
+   * @param {Object} container контейнер контроллера
+   * @param {string} position позиция отрисовываемого блока
+   */
+  _renderFilms(container, position = Position.AFTER_BEGIN) {
+    this._showedFilmControllers = this._renderFilmsComponent(
+        this._getDataSet(
+            container, this._films, this._filmsModel.getFilteredFilmsData(),
+            this._showedFilmControllers, 0, this._countFilms, FilmsBlock.ALL
+        ),
+        position
+    );
   }
 
 
@@ -111,37 +232,34 @@ class PageController {
    * @param {Object} container контейнер контроллера
    */
   _renderSorting(container) {
+    this._sorting = new Sorting(this._filmsModel.getSortType());
     render[Position.BEFORE_BEGIN](container, this._sorting);
     this._sorting.setSortTypeChangeHandler(this._sortTypeChangeHandler(container));
   }
 
 
   /**
-   * Метод, обеспечивающий отрисовку компонентов-контейнеров фильмов
+   * Метод, обеспечивающий отрисовку компонента _films вместе с сортировкой
    * @param {Object} container контейнер контроллера
+   * @param {string} position позиция отрисовываемого блока
    */
-  _renderFilms(container) {
-    this._renderFilmsComponent(this._getDataSet(container, this._filmsCommented,
-        sortingArray(this._filmsData, Sorting.BY_COMMENTS),
-        this._showedFilmCommentedContollers, 0, CountFilm.EXTRA));
-
-    this._renderFilmsComponent(this._getDataSet(container, this._filmsRated,
-        sortingArray(this._filmsData, Sorting.BY_RATING),
-        this._showedFilmRatedContollers, 0, CountFilm.EXTRA)
-    );
-    this._renderFilmsComponent(this._getDataSet(container, this._films, this._filmsData,
-        this._showedFilmContollers, 0, CountFilm.START)
-    );
+  _renderFilmsWithSorting(container) {
+    this._renderSorting(container);
+    this._renderFilms(container);
   }
 
 
   /**
    * Метод, обеспечивающий отрисовку компонента-контейнера фильмов
    * @param {Object} dataset объект с данными
+   * @param {string} position позиция отрисовываемого блока
+   * @return {Array} массив контроллеров фильмов
    */
-  _renderFilmsComponent(dataset) {
-    render[Position.AFTER_BEGIN](dataset.container, dataset.filmsComponent);
+  _renderFilmsComponent(dataset, position) {
+    render[position](dataset.container, dataset.filmsComponent);
     this._renderFilmsList(dataset);
+
+    return dataset.filmsContollers;
   }
 
 
@@ -150,10 +268,10 @@ class PageController {
    * @param {Object} dataset объект с данными
    */
   _renderFilmsList(dataset) {
-    dataset.filmsList = dataset.filmsComponent.getElement().querySelector(FILM_LIST_CLASS);
+    dataset.filmsList = dataset.filmsComponent.getElement().querySelector(FilmsElement.FILM_LIST);
     this._renderFilmControllers(dataset);
 
-    if (dataset.countFilms < dataset.filmsData.length) {
+    if (dataset.countFilms < dataset.filmsData.length && dataset.filmsBlock === FilmsBlock.ALL) {
       this._renderShowMoreBtn(dataset);
     }
   }
@@ -164,9 +282,10 @@ class PageController {
    * @param {Object} dataset объект с данными
    */
   _renderFilmControllers(dataset) {
-    dataset.filmsContollers.concat(renderFilmControllers(
+    dataset.filmsContollers = dataset.filmsContollers.concat(renderFilmControllers(
         dataset.filmsList, dataset.filmsData.slice(dataset.countPrevFilms, dataset.countFilms),
-        this._viewChangeHandler, this._dataChangeHandler
+        this._viewChangeHandler, this._dataChangeHandler,
+        this._pageUpdateHandler, this._filmsModel.getFilterType(), dataset.filmsBlock
     ));
   }
 
@@ -182,35 +301,99 @@ class PageController {
 
 
   /**
-   * Метод, обеспечивающий обновление контроллера фильма на основе новых данных
-   * @param {Object} filmContoller контроллер карточек фильма
-   * @param {Object} oldData прежние данные фильма
-   * @param {Object} newData обновленные данные фильма
+   * Метод, обеспечивающий отрисовку компонента-контейнера фильмов или компонента их отсутствия
+   * @param {Object} container контейнер контроллера
    */
-  _dataChangeHandler(filmContoller, oldData, newData) {
-    const index = getIndex(this._filmsData, oldData);
+  _renderFilmsOrNoFilms(container) {
+    if (!this._filmsModel.getFilteredFilmsData().length) {
+      this._renderNoFilms(container, Flag.YES);
+      this._resetSorting();
+    } else {
+      this._renderFilmsWithSorting(container);
+    }
+  }
 
-    if (index === -1) {
+
+  /**
+   * Метод, обеспечивающий обновление компонента ранга профиля пользователя в случае изменения просмотренных фильмов
+   */
+  _updateProfileRank() {
+    if (this._countWatchedFilms === this._filmsModel.getCountsFilmsByFilters().HISTORY) {
       return;
     }
 
-    this._updateFilmsData(index, newData);
-    filmContoller.render(this._filmsData[index]);
+    remove(this._profileRank);
+    this._countWatchedFilms = 0;
+    this._renderProfileRank();
   }
 
-
-  _updateFilmsData(index, newData) {
-    const newFilmsData = this._filmsData.slice();
-    newFilmsData[index] = newData;
-    this._filmsData = newFilmsData;
-  }
 
   /**
-   * Метод, обеспечивающий отображение каждого контроллера карточек фильма в режиме по умолчанию
-   * @param {Object} FilmsContollers
+   * Метод, обеспечивабщий обновление компонента меню
+   * @param {Object} container контейнер контроллера
    */
-  _viewChangeHandler(FilmsContollers) {
-    FilmsContollers.map((filmContoller) => filmContoller.setDefaultView());
+  _updateMenu(container) {
+    remove(this._menuController.getMenu());
+    this._renderMenu(container);
+  }
+
+
+  /**
+   * Метод, обеспечивабщий обновление блоков фильмов при изменении фильма в другом блоке
+   * @param {string} filmsBlockInitiator название блока, в котором произошло изменение фильма
+   * @param {Object} container контейнер контроллера
+   * @param {string} mode режим карточки, в которой были инициированы изменения
+   */
+  _updateFilmsBlocks(filmsBlockInitiator, container, mode) {
+    const updateRules = {
+      'all-films': () => this._updateFilmsIfTargetAllFilms(container),
+      'top-rated': () => this._updateFilmsIfTargetRated(container),
+      'most-commented': () => this._updateFilmsIfTargetCommented(container, mode)
+    };
+
+    updateRules[filmsBlockInitiator]();
+  }
+
+
+  /**
+   * Метод, обеспечивабщий обновление блоков фильмов при изменении фильма в блоке высокорейтинговых фильмов
+   * @param {Object} container контейнер контроллера
+   */
+  _updateFilmsIfTargetRated(container) {
+    this._resetFilmsWithSorting();
+    this._resetFilmsCommented();
+    this._renderFilmsOrNoFilms(container);
+    this._renderFilmsCommented(container, Position.BEFORE_END);
+  }
+
+
+  /**
+   * Метод, обеспечивабщий обновление блоков фильмов при изменении фильма в блоке самыз комментируемых фильмов
+   * @param {Object} container контейнер контроллера
+   * @param {string} mode режим карточки, в которой были инициированы изменения
+   */
+  _updateFilmsIfTargetCommented(container, mode) {
+    this._resetFilmsWithSorting();
+    this._resetFilmsRated();
+    this._renderFilmsRated(container, Position.AFTER_BEGIN);
+    this._renderFilmsOrNoFilms(container);
+
+    if (mode === Mode.DETAILS) {
+      this._resetFilmsCommented();
+      this._renderFilmsCommented(container, Position.BEFORE_END);
+    }
+  }
+
+
+  /**
+   * Метод, обеспечивабщий обновление блоков фильмов при изменении фильма в блоке всех фильмов
+   * @param {Object} container контейнер контроллера
+   */
+  _updateFilmsIfTargetAllFilms(container) {
+    this._resetFilmsRated();
+    this._resetFilmsCommented();
+    this._renderFilmsRated(container, Position.BEFORE_END);
+    this._renderFilmsCommented(container, Position.BEFORE_END);
   }
 
 
@@ -221,6 +404,99 @@ class PageController {
     this._showedFilmControllers = [];
     remove(this._films);
     remove(this._showMoreBtn);
+    this._resetNoFilms();
+  }
+
+
+  /**
+   * Метод, обеспечивающий удаление данных для компонента _filmsCommented
+   */
+  _resetFilmsCommented() {
+    if (!this._filmsModel.getCommentedFilmsData().length) {
+      return;
+    }
+
+    this._showedFilmCommentedContollers = [];
+    remove(this._filmsCommented);
+  }
+
+
+  /**
+   * Метод, обеспечивающий удаление данных для компонента _filmsRated
+   */
+  _resetFilmsRated() {
+    if (!this._filmsModel.getRatedFilmsData().length) {
+      return;
+    }
+
+    this._showedFilmRatedContollers = [];
+    remove(this._filmsRated);
+  }
+
+
+  /**
+   * Метод, обеспечивающий сброс сортировки
+   */
+  _resetSorting() {
+    remove(this._sorting);
+    this._filmsModel.setSortType(SortType.DEFAULT);
+  }
+
+
+  /**
+   * Метод, обеспечивающий удаление данных для компонента _films вместе с сортировкой
+   */
+  _resetFilmsWithSorting() {
+    remove(this._sorting);
+    this._resetFilms();
+  }
+
+
+  /**
+   * Метод, обеспечивающий удаление данных для компонента _noiFilms
+   */
+  _resetNoFilms() {
+    if (this._noFilms) {
+      remove(this._noFilms);
+    }
+  }
+
+
+  /**
+   * Метод, обеспечивающий обновление страницы
+   * @param {string} filmsBlockInitiator название блока, в котором произошло изменение фильма
+   * @param {string} mode режим карточки, в которой были инициированы изменения
+   */
+  _pageUpdateHandler(filmsBlockInitiator, mode) {
+    const container = this._container.getElement();
+
+    this._updateProfileRank();
+    this._updateMenu(container);
+    this._updateFilmsBlocks(filmsBlockInitiator, container, mode);
+  }
+
+
+  /**
+   * Метод, обеспечивающий обновление контроллера фильма на основе новых данных
+   * @param {Object} oldData прежние данные фильма
+   * @param {Object} newData обновленные данные фильма
+   * @return {Object} обновленные данные фильма
+   */
+  _dataChangeHandler(oldData, newData) {
+    return this._filmsModel.updateFilmData(oldData.id, newData);
+  }
+
+
+  /**
+   * Метод, обеспечивающий отображение каждого контроллера карточек фильма в режиме по умолчанию
+   * @param {Object} FilmsContollers
+   */
+  _viewChangeHandler() {
+    let allFilmControllers = this._showedFilmControllers
+        .concat(this._showedFilmRatedContollers)
+        .concat(this._showedFilmCommentedContollers);
+
+    allFilmControllers.map((filmContoller) => filmContoller.setDefaultView());
   }
 
 
@@ -233,6 +509,7 @@ class PageController {
     return () => {
       dataset.countPrevFilms = dataset.countFilms;
       dataset.countFilms += CountFilm.BY_BUTTON;
+      this._countFilms = dataset.countFilms;
       this._renderFilmControllers(dataset);
 
       if (dataset.countFilms >= dataset.filmsData.length) {
@@ -249,13 +526,27 @@ class PageController {
    */
   _sortTypeChangeHandler(container) {
     return (sortType) => {
-      this._resetFilms();
-      this._renderFilmsComponent(this._getDataSet(container, this._films, sortRules[sortType](this._filmsData),
-          this._showedFilmContollers, 0, CountFilm.START, this._showMoreBtn)
-      );
+      this._setDefaults();
+      this._filmsModel.setSortType(sortType);
+      this._resetFilmsWithSorting();
+      this._renderFilmsOrNoFilms(container);
+    };
+  }
+
+
+  /**
+   * Метод, обеспечивающий создание помощника для изменения отображаемого списка фильмов
+   *  в соответствии с выбранным фильтром
+   * @param {Object} container
+   * @return {Function} созданный помощник
+   */
+  _filterTypeChangeHandler(container) {
+    return (filterType) => {
+      this._setDefaults();
+      this._filmsModel.setFilterType(filterType);
+      this._filmsModel.setSortType(SortType.DEFAULT);
+      this._resetFilmsWithSorting();
+      this._renderFilmsOrNoFilms(container);
     };
   }
 }
-
-
-export {PageController};

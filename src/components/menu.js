@@ -1,26 +1,33 @@
-import {Attribute} from "../consts";
-import {filterCountMenu} from "../mock/menu-filters";
 import AbstractComponent from "./abstract/component";
+import {FilterType, MenuElement} from "../consts";
 
 
 /**
  * Создание разметки блока главного меню
- * @param {Array} films список фильмов
+ * @param {Object} countsFilmsByFilters количества фильмов, соответствующих фильтрам
+ * @param {string} filterType примененный фильтр
  * @return {string} разметка блока
  */
-const createMenu = (films) => {
+const createMenu = (countsFilmsByFilters, filterType) => {
+  const classMarkup = {
+    ALL: filterType === FilterType.ALL ? ` ` + MenuElement.ITEM_ACTIVE : ``,
+    WATCHLIST: filterType === FilterType.WATCHLIST ? ` ` + MenuElement.ITEM_ACTIVE : ``,
+    HISTORY: filterType === FilterType.HISTORY ? ` ` + MenuElement.ITEM_ACTIVE : ``,
+    FAVORITES: filterType === FilterType.FAVORITES ? ` ` + MenuElement.ITEM_ACTIVE : ``
+  };
+
   return (
     `<nav class="main-navigation">
       <div class="main-navigation__items">
-        <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-        <a href="#watchlist" class="main-navigation__item">Watchlist
-          <span class="main-navigation__item-count">${filterCountMenu(films, Attribute.IS_WATCH)}</span>
+        <a href="#all" data-filter-type="${FilterType.ALL}" class="main-navigation__item${classMarkup.ALL}">All movies</a>
+        <a href="#watchlist" data-filter-type="${FilterType.WATCHLIST}" class="main-navigation__item${classMarkup.WATCHLIST}">Watchlist
+          <span class="main-navigation__item-count">${countsFilmsByFilters.WATCHLIST}</span>
         </a>
-        <a href="#history" class="main-navigation__item">History
-          <span class="main-navigation__item-count">${filterCountMenu(films, Attribute.IS_WATCHED)}</span>
+        <a href="#history" data-filter-type="${FilterType.HISTORY}" class="main-navigation__item${classMarkup.HISTORY}">History
+          <span class="main-navigation__item-count">${countsFilmsByFilters.HISTORY}</span>
         </a>
-        <a href="#favorites" class="main-navigation__item">Favorites
-          <span class="main-navigation__item-count">${filterCountMenu(films, Attribute.IS_FAVORITE)}</span>
+        <a href="#favorites" data-filter-type="${FilterType.FAVORITES}" class="main-navigation__item${classMarkup.FAVORITES}">Favorites
+          <span class="main-navigation__item-count">${countsFilmsByFilters.FAVORITES}</span>
         </a>
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
@@ -33,13 +40,65 @@ const createMenu = (films) => {
  * Создание класса главного меню
  */
 export default class Menu extends AbstractComponent {
-  constructor(films) {
+  constructor(countsFilmsByFilters, filterType) {
     super();
 
-    this._films = films;
+    this._countsFilmsByFilters = countsFilmsByFilters;
+    this._filterType = filterType;
+
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
+
+  /**
+   * Метод, обеспечивающий создание компонента по заданному шаблону
+   * @return {Object}
+   */
   getTemplate() {
-    return createMenu(this._films);
+    return createMenu(this._countsFilmsByFilters, this._filterType);
+  }
+
+
+  /**
+   * Метод, обеспечивающий добавление слушателей на изменение текущего фильтра
+   * @param {Function} handler помощник
+   */
+  setFilterChangeHandler(handler) {
+    this.getElement().addEventListener(`click`, this._clickHandler(handler));
+  }
+
+
+  /**
+   * Метод, обеспечиващий установку активного фильтра и получение его значения
+   * @param {Function} handler помощник
+   * @return {Function}
+   */
+  _clickHandler(handler) {
+    return (evt) => {
+      const target = evt.target.closest(`.${MenuElement.ITEM}`);
+
+      if (target.tagName !== `A`) {
+        return;
+      }
+
+      this._setActiveClassHandler(evt);
+      this._filterType = target.dataset.filterType;
+      handler(this._filterType);
+    };
+  }
+
+
+  /**
+   * Метод, обеспечивающий добавление/удаления активного класса с пункта меню
+   * @param {Object} evt событие
+   */
+  _setActiveClassHandler(evt) {
+    [...this.getElement().querySelectorAll(`.${MenuElement.ITEM}`)].map((menuItem) => {
+      if (menuItem === evt.target.closest(`.${MenuElement.ITEM}`)) {
+        menuItem.classList.add(`${MenuElement.ITEM_ACTIVE}`);
+      } else {
+        menuItem.classList.remove(`${MenuElement.ITEM_ACTIVE}`);
+      }
+    });
   }
 }

@@ -1,4 +1,4 @@
-import {DESCRIPTION, CountDescription, CountDuration, RATING_MAX} from "./film-consts";
+import {DESCRIPTION, CountDescription, RATING_MAX} from "./film-consts";
 import {getRandomInt, getShuffleArray} from "../../utils/common";
 
 
@@ -17,19 +17,6 @@ export const getRandomDescription = () => {
   description = description.join(` `);
 
   return description;
-};
-
-
-/**
- * Создание случайной длительности фильма
- * @return {string} длительность фильма
- */
-export const getRandomDuration = () => {
-  const hours = getRandomInt(0, CountDuration.HOURS_MAX);
-  const minutes = getRandomInt(0, CountDuration.MINUTES_MAX);
-  const duration = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
-
-  return duration;
 };
 
 

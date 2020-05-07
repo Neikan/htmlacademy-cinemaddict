@@ -1,4 +1,4 @@
-export const COUNT_COMMENTS_MAX = 20;
+export const COUNT_COMMENTS_MAX = 5;
 export const RATING_MAX = 10;
 
 export const TITLES = [
@@ -190,9 +190,4 @@ export const DESCRIPTION = [
 export const CountDescription = {
   MIM: 1,
   MAX: 5
-};
-
-export const CountDuration = {
-  HOURS_MAX: 3,
-  MINUTES_MIN: 59,
 };

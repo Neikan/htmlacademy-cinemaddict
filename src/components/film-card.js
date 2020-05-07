@@ -1,10 +1,11 @@
 import AbstractComponent from "./abstract/component";
-import {CLASS_POINTER, ControlName, CONTROL_ITEM, Action, CARD_ELEMENTS} from "../consts";
+import {CARD_ELEMENTS, CardElement, ClassMarkup, FILM_DESCRIPTION_LENGTH} from "../consts";
 
 
 /**
  * Создание разметки блока стандартной карточки фильма
- * @param {Object} {свойства фильма}
+ * @param {Object} filmData данные фильма
+ * @param {string} filmsBlock название компонента-контейнера фильмов
  * @return {string} разметка блока
  */
 const createFilmCard = ({
@@ -16,16 +17,19 @@ const createFilmCard = ({
   isWatch,
   isWatched,
   isFavorite
-}) => {
-  const ACTIVE_CLASS = ` film-card__controls-item--active`;
+}, filmsBlock
+) => {
   const classMarkup = {
-    'addToWatch': isWatch ? ACTIVE_CLASS : ``,
-    'markAsWatched': isWatched ? ACTIVE_CLASS : ``,
-    'markAsFavourite': isFavorite ? ACTIVE_CLASS : ``
+    'addToWatch': isWatch ? ` ` + CardElement.BTN_ACTIVE : ``,
+    'markAsWatched': isWatched ? ` ` + CardElement.BTN_ACTIVE : ``,
+    'markAsFavourite': isFavorite ? ` ` + CardElement.BTN_ACTIVE : ``
   };
 
+  const formatDescription = details.description.length > FILM_DESCRIPTION_LENGTH ?
+    `${details.description.substring(0, FILM_DESCRIPTION_LENGTH - 1)}...` : details.description;
+
   return (
-    `<article class="film-card">
+    `<article class="film-card" data-films-block="${filmsBlock}">
       <h3 class="film-card__title">${titles.translate}</h3>
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
@@ -34,7 +38,7 @@ const createFilmCard = ({
         <span class="film-card__genre">${details.genres[0]}</span>
       </p>
       <img src="./images/posters/${promo.poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${details.description}</p>
+      <p class="film-card__description">${formatDescription}</p>
       <a class="film-card__comments">${comments.length} comments</a>
       <form class="film-card__controls">
         <button class="film-card__controls-item button
@@ -53,36 +57,37 @@ const createFilmCard = ({
  * Создание класса стандартной карточки фильма
  */
 export default class FilmCard extends AbstractComponent {
-  constructor(film) {
+  constructor(filmData, filmsBlock) {
     super();
 
-    this._film = film;
+    this._filmData = filmData;
+    this._filmsBlock = filmsBlock;
   }
 
   getTemplate() {
-    return createFilmCard(this._film);
+    return createFilmCard(this._filmData, this._filmsBlock);
   }
 
   setClickHandler(handler) {
     for (let cardElement of CARD_ELEMENTS) {
       const target = this.getElement().querySelector(`.${cardElement}`);
-      target.classList.add(CLASS_POINTER);
+      target.classList.add(ClassMarkup.POINTER);
       target.addEventListener(`click`, handler);
     }
   }
 
   setBtnWatchlistClickHandler(handler) {
-    this.getElement().querySelector(`.${CONTROL_ITEM}${Action.ADD_TO}${ControlName.WATCHLIST}`)
+    this.getElement().querySelector(`.${CardElement.BTN_WATCHLIST}`)
       .addEventListener(`click`, handler);
   }
 
   setBtnWatchedClickHandler(handler) {
-    this.getElement().querySelector(`.${CONTROL_ITEM}${Action.MARK_AS}${ControlName.WATCHED}`)
+    this.getElement().querySelector(`.${CardElement.BTN_HISTORY}`)
       .addEventListener(`click`, handler);
   }
 
   setBtnFavoriteClickHandler(handler) {
-    this.getElement().querySelector(`.${CONTROL_ITEM}${ControlName.FAVORITE}`)
+    this.getElement().querySelector(`.${CardElement.BTN_FAVORITE}`)
     .addEventListener(`click`, handler);
   }
 }

@@ -3,13 +3,16 @@ import AbstractComponent from "./abstract/component";
 
 /**
  * Создание разметки блока фильмов при отсутствии фильмов
+ * @param {Boolean} isFilter
  * @return {string} разметка блока
  */
-const createContainerNoFilms = () => {
+const createContainerNoFilms = (isFilter) => {
+  const addMarkup = isFilter ? `` : `in our database`;
+
   return (
     `<section class="films">
       <section class="films-list">
-        <h2 class="films-list__title">There are no movies in our database</h2>
+        <h2 class="films-list__title">There are no movies ${addMarkup}</h2>
       </section>
     </section>`
   );
@@ -20,8 +23,15 @@ const createContainerNoFilms = () => {
  * Создание класса блока фильмов при отсутствии фильмов
  */
 export default class NoFilms extends AbstractComponent {
+  constructor(isFilter) {
+    super();
+
+    this._isFilter = isFilter;
+  }
+
+
   getTemplate() {
-    return createContainerNoFilms();
+    return createContainerNoFilms(this._isFilter);
   }
 
   /**

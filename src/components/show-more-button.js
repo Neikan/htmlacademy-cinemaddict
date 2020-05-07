@@ -11,7 +11,7 @@ const createShowMore = () => `<button class="films-list__show-more">Show more</b
 /**
  * Создание класса кнопки показа скрытых фильмов
  */
-class ShowMoreBtn extends AbstractComponent {
+export default class ShowMoreBtn extends AbstractComponent {
   getTemplate() {
     return createShowMore();
   }
@@ -20,6 +20,3 @@ class ShowMoreBtn extends AbstractComponent {
     this.getElement().addEventListener(`click`, handler);
   }
 }
-
-
-export {ShowMoreBtn};

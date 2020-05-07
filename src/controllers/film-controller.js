@@ -1,23 +1,33 @@
-import {KeyCode, Position, DetailsElement, Flag} from "../consts";
+import FilmCard from "../components/film-card";
+import FilmDetails from "../components/film-details";
+import Comment from "../components/film-details/comment";
+import {encode} from "he";
+import {
+  KeyCode, Position, DetailsElement, CardElement, Flag,
+  FilmAttribute, FilterType, ClassMarkup, FilmsBlock, Mode
+} from "../consts";
 import {render, remove, replace, getItem} from "../utils/components";
-import FilmCardComponent from "../components/film-card";
-import FilmDetailsComponent from "../components/film-details";
-import {Comment} from "../components/film-details/comments";
+import {generateId, getIndex} from "../utils/common";
 
 
 const NODE_MAIN = `main`;
 
-const Mode = {
-  DEFAULT: `default`,
-  DETAILS: `details`,
+const changeDataRules = {
+  'isWatch': (filmData) => Object.assign({}, filmData, {isWatch: !filmData.isWatch}),
+  'isWatched': (filmData) => Object.assign({}, filmData, {isWatched: !filmData.isWatched}),
+  'isFavorite': (filmData) => Object.assign({}, filmData, {isFavorite: !filmData.isFavorite})
 };
+
+let filmsBlockInitiator = FilmsBlock.DEFAULT;
 
 
 /**
  * Создание контроллера, управляющего отображением карточек фильмов
  */
-class FilmController {
-  constructor(container, viewChangeHandler, dataChangeHandler) {
+export default class FilmController {
+  constructor(container, viewChangeHandler, dataChangeHandler,
+      pageUpdateHandler, filterType, filmsBlock
+  ) {
     this._container = container;
 
     this._mode = Mode.DEFAULT;
@@ -26,6 +36,9 @@ class FilmController {
     this._filmDetails = null;
     this._viewChangeHandler = viewChangeHandler;
     this._dataChangeHandler = dataChangeHandler;
+    this._pageUpdateHandler = pageUpdateHandler;
+    this._filterType = filterType;
+    this._filmsBlock = filmsBlock;
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._ctrlKeyUpHandler = this._ctrlKeyUpHandler.bind(this);
@@ -40,13 +53,13 @@ class FilmController {
    * @param {Object} filmData
    */
   render(filmData) {
-    this._filmData = filmData;
     const oldFilmCard = this._filmCard;
     const oldFilmDetails = this._filmDetails;
     const mainSection = document.querySelector(NODE_MAIN);
 
-    this._filmCard = new FilmCardComponent(filmData);
-    this._filmDetails = new FilmDetailsComponent(filmData);
+    this._filmData = filmData;
+    this._filmCard = new FilmCard(filmData, this._filmsBlock);
+    this._filmDetails = new FilmDetails(filmData);
 
     this._setCardHandlers(filmData, mainSection);
     this._replaceOldFilm(oldFilmCard, oldFilmDetails);
@@ -58,7 +71,7 @@ class FilmController {
    */
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._removeDetails();
+      this._closeDetails();
     }
   }
 
@@ -70,7 +83,6 @@ class FilmController {
    */
   _setCardHandlers(filmData, mainSection) {
     this._filmCard.setClickHandler(this._showDetailsClickHandler(mainSection));
-
     this._filmCard.setBtnWatchlistClickHandler(this._btnWatchlistClickHandler(filmData));
     this._filmCard.setBtnWatchedClickHandler(this._btnWatchedClickHandler(filmData));
     this._filmCard.setBtnFavoriteClickHandler(this._btnFavoriteClickHandler(filmData));
@@ -103,18 +115,51 @@ class FilmController {
     }
   }
 
+
   /**
    * Метод, обеспечивающий добавление нового комментария
    */
   _renderNewComment() {
     const container = this._filmDetails.getElement();
-    const commentData = this._getCommentData(container);
+    const emojiAddBlock = getItem(container, DetailsElement.EMOJI_ADD_BLOCK);
+    const textArea = getItem(container, DetailsElement.COMMENT_INPUT);
 
-    this._filmData.comments.push(commentData); // переписать потом скорее всего надо будет
-    render[Position.BEFORE_END](
-        getItem(container, DetailsElement.COMMENT_LIST), new Comment(commentData)
-    );
+    if (!emojiAddBlock.childNodes.length) {
+      emojiAddBlock.classList.add(DetailsElement.ERROR);
+      return;
+    }
+
+    if (textArea.value === ``) {
+      textArea.classList.add(DetailsElement.ERROR);
+      return;
+    }
+
+    this._addNewComment(container, emojiAddBlock, textArea);
     this._clearNewCommentForm(container);
+  }
+
+
+  /**
+   * Метод, обеспечивающий добавление нового комментария
+   * @param {Object} container контейнер подробной карточки
+   * @param {Object} emojiAddBlock блок, для которого выполняется добавление смайла
+   * @param {Object} textArea поле ввода комментария
+   */
+  _addNewComment(container, emojiAddBlock, textArea) {
+    if (emojiAddBlock.childNodes.length && textArea.value !== ``) {
+      const commentData = this._getCommentData(container);
+
+      const newComment = new Comment(commentData);
+
+      render[Position.BEFORE_END](
+          getItem(container, DetailsElement.COMMENT_LIST), newComment
+      );
+
+      newComment.setBtnDeleteCommentClickHandler(this._setBtnDeleteCommentClickHandler());
+
+      this._filmData.comments.push(commentData);
+      this._updateCommentsCount(container);
+    }
   }
 
 
@@ -125,12 +170,22 @@ class FilmController {
    */
   _getCommentData(container) {
     return {
+      commentId: generateId(),
       emoji: getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).value,
-      text: getItem(container, DetailsElement.COMMENT_INPUT).value,
+      text: encode(getItem(container, DetailsElement.COMMENT_INPUT).value),
       author: `Batman`,
-      // date: getCommentDate(new Date())
       date: new Date()
     };
+  }
+
+
+  /**
+   * Метод, выполняющий обновление текущего количества комментариев после удаления добавленного комментария
+   * @param {Object} container
+   */
+  _updateCommentsCount(container) {
+    container.querySelector(`.${DetailsElement.COMMENT_COUNT}`)
+      .textContent = this._filmData.comments.length;
   }
 
 
@@ -148,13 +203,152 @@ class FilmController {
 
 
   /**
-   * Метод, обеспечивающий удаление подробной карточки
+   * Метод, выполняющий удаление добавленного комментария
+   * @param {Object} target
+   */
+  _removeNewComment(target) {
+    this._filmData.comments.splice(
+        getIndex(this._filmData.comments, target.dataset.commentId), 1
+    );
+    target.remove();
+  }
+
+
+  /**
+   * Метод, обеспечивающий удаление подробной карточки при закрытии по кнопке
+   * или по нажатию на клавишу Escape
    */
   _removeDetails() {
+    this._pageUpdateHandler(filmsBlockInitiator, this._mode);
+    this._closeDetails();
+    filmsBlockInitiator = FilmsBlock.DEFAULT;
+  }
+
+
+  /**
+   * Метод, обеспечивающий закрытие подробной карточки при клике на другую
+   */
+  _closeDetails() {
     remove(this._filmDetails);
-    this._mode = Mode.DEFAULT;
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     document.removeEventListener(`keyup`, this._ctrlKeyUpHandler);
+
+    this.render(this._filmData);
+
+    if (filmsBlockInitiator === FilmsBlock.ALL) {
+      this._checkActivityCard();
+    }
+
+    this._mode = Mode.DEFAULT;
+  }
+
+
+  /**
+   * Метод, обеспечивающий обновление классов самой карточки фильма и кнопки,
+   *  добавляющей фильм в какой-либо список
+   * @param {Object} btn кнопка
+   * @param {string} filmsBlock название блока фильмов
+   * @param {string} filterType примененный фильтр
+   */
+  _updateBtnAndCardClass(btn, filmsBlock, filterType) {
+    if (this._filterType === filterType && filmsBlock === FilmsBlock.ALL) {
+      this._changeBtnAndCardClass(btn);
+    } else {
+      this._changeBtnClass(btn);
+    }
+  }
+
+
+  /**
+   * Метод, обеспечивающий изменение классов кнопки
+   * @param {Object} btn кнопка
+   */
+  _changeBtnClass(btn) {
+    if (btn.classList.contains(CardElement.BTN_ACTIVE)) {
+      this._inactiveBtn(btn);
+    } else {
+      this._activeBtn(btn);
+    }
+  }
+
+
+  /**
+   * Метод, обеспечивающий изменение классов кнопки и карточки
+   * @param {Object} btn кнопка
+   */
+  _changeBtnAndCardClass(btn) {
+    if (btn.classList.contains(CardElement.BTN_ACTIVE)) {
+      this._inactiveBtn(btn);
+      btn.closest(`.${CardElement.CARD}`).classList.add(ClassMarkup.OPACITY);
+    } else {
+      this._activeBtn(btn);
+      btn.closest(`.${CardElement.CARD}`).classList.remove(ClassMarkup.OPACITY);
+    }
+  }
+
+
+  /**
+   * Метод, обеспечивающий добавление активного класса на кнопку
+   * @param {Object} btn кнопка
+   */
+  _activeBtn(btn) {
+    btn.classList.add(`${CardElement.BTN_ACTIVE}`);
+  }
+
+
+  /**
+   * Метод, обеспечивающий удаление активного класса с кнопки
+   * @param {Object} btn кнопка
+   */
+  _inactiveBtn(btn) {
+    btn.classList.remove(`${CardElement.BTN_ACTIVE}`);
+  }
+
+
+  /**
+   * метод, обеспечивающий отметку карточки, как несоответствующей примененному фильтру
+   */
+  _inactiveCard() {
+    this._filmCard.getElement().classList.add(`${ClassMarkup.OPACITY}`);
+  }
+
+
+  /**
+   * Метод, выполняющий проверку должна ли быть карточка активной в примененном фильтре
+   * @param {string} btn
+   * @param {string} filterType
+   */
+  _checkActivity(btn, filterType) {
+    if (this._filterType === filterType
+      && !this._filmCard.getElement().querySelector(`.${btn}`)
+              .classList.contains(`${CardElement.BTN_ACTIVE}`)
+    ) {
+      this._inactiveCard();
+    }
+  }
+
+
+  /**
+   * Метод, обеспечивающий комплекс проверок должна ли быть карточка активной в примененном фильтре
+   */
+  _checkActivityCard() {
+    this._checkActivity(CardElement.BTN_WATCHLIST, FilterType.WATCHLIST);
+    this._checkActivity(CardElement.BTN_HISTORY, FilterType.HISTORY);
+    this._checkActivity(CardElement.BTN_FAVORITE, FilterType.FAVORITES);
+  }
+
+
+  /**
+   * Метод, выполняющий создание помошника для удаления добавленного комментария
+   * @return {Function} созданный помощник
+   */
+  _setBtnDeleteCommentClickHandler() {
+    return (evt) => {
+      evt.preventDefault();
+
+      this._removeNewComment(evt.target.closest(`.${DetailsElement.COMMENT_ITEM}`));
+      this._updateCommentsCount(this._filmDetails.getElement());
+    };
   }
 
 
@@ -164,9 +358,15 @@ class FilmController {
    * @return {Function} созданный помощник
    */
   _showDetailsClickHandler(mainSection) {
-    return () => {
+    return (evt) => {
+      this._viewChangeHandler();
+      this.render(this._filmData);
+
+      filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
+
       render[Position.BEFORE_END](mainSection, this._filmDetails);
       this._mode = Mode.DETAILS;
+
       document.addEventListener(`keydown`, this._escKeyDownHandler);
       document.addEventListener(`keyup`, this._ctrlKeyUpHandler);
 
@@ -177,46 +377,59 @@ class FilmController {
 
   /**
    * Метод, обеспечивающий создание помощника для добавления/удаления фильма
-   * из числа запланированных к просмотру
-   * @param {Object} filmData данные фильма
+   * из запланированного к просмотру
    * @return {Function} созданный помощник
    */
-  _btnWatchlistClickHandler(filmData) {
+  _btnWatchlistClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      this._dataChangeHandler(this, filmData, Object.assign({}, filmData, {
-        isWatch: !filmData.isWatch
-      }));
+      filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
+
+      this._filmData = this._dataChangeHandler(this._filmData,
+          changeDataRules[FilmAttribute.IS_WATCH](this._filmData)
+      );
+
+      this._pageUpdateHandler(filmsBlockInitiator);
+      this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.WATCHLIST);
     };
   }
 
 
   /**
-   * Метод, обеспечивающий создание помощника для добавления/удаления фильма из числа просмотренных
-   * @param {Object} filmData данные фильма
+   * Метод, обеспечивающий создание помощника для добавления/удаления фильма из просмотренного
    * @return {Function} созданный помощник
    */
-  _btnWatchedClickHandler(filmData) {
+  _btnWatchedClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      this._dataChangeHandler(this, filmData, Object.assign({}, filmData, {
-        isWatched: !filmData.isWatched
-      }));
+      filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
+
+      this._filmData = this._dataChangeHandler(this._filmData,
+          changeDataRules[FilmAttribute.IS_WATCHED](this._filmData)
+      );
+
+      this._pageUpdateHandler(filmsBlockInitiator);
+      this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.HISTORY);
     };
   }
 
 
   /**
-   * Метод, обеспечивающий создание помощника для добавления/удаления фильма из числа избранных
-   * @param {Object} filmData данные фильма
+   * Метод, обеспечивающий создание помощника для добавления/удаления фильма из избранного
    * @return {Function} созданный помощник
    */
-  _btnFavoriteClickHandler(filmData) {
+  _btnFavoriteClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      this._dataChangeHandler(this, filmData, Object.assign({}, filmData, {
-        isFavorite: !filmData.isFavorite
-      }));
+      filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
+
+      this._filmData = this._dataChangeHandler(this._filmData,
+          changeDataRules[FilmAttribute.IS_FAVORITE](this._filmData)
+      );
+
+      this._pageUpdateHandler(filmsBlockInitiator);
+      this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.FAVORITES);
+
     };
   }
 
@@ -243,6 +456,3 @@ class FilmController {
     }
   }
 }
-
-
-export {FilmController};

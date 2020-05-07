@@ -1078,3 +1078,9 @@ button {
 .pointer {
   cursor: pointer;
 }
+.film-card--opacity {
+  opacity: 0.3;
+}
+.film-details__new-comment--error {
+  box-shadow: 0 0 2px 3px #FF0000, 0 0 0 0 #FF0000;
+}
