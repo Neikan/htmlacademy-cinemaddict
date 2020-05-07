@@ -123,7 +123,8 @@ export const DetailsElement = {
   COMMENT_LIST: `film-details__comments-list`,
   BTN_WATCHLIST: `film-details__control-label--watchlist`,
   BTN_HISTORY: `film-details__control-label--watched`,
-  BTN_FAVORITE: `film-details__control-label--favorite`
+  BTN_FAVORITE: `film-details__control-label--favorite`,
+  ERROR: `film-details__new-comment--error`
 };
 
 export const MenuElement = {

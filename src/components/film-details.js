@@ -85,23 +85,7 @@ class FilmDetails extends AbstractSmartComponent {
     this._changeIsWatched(element);
     this._changeIsFavorite(element);
     this._setEmojiClickHandler();
-  }
-
-
-  /**
-   * Метод, обеспечиваюющий создание помощника для добавления смайла в форму комментария
-   * @param {Object} emojiAddBlock
-   * @return {Function} созданный помощник
-   */
-  _getEmojiClickhandler(emojiAddBlock) {
-    return (smile) => {
-      smile.addEventListener(`click`, () => {
-        if (emojiAddBlock.firstChild) {
-          emojiAddBlock.removeChild(emojiAddBlock.firstChild);
-        }
-        emojiAddBlock.appendChild(getImageElement(smile.value));
-      });
-    };
+    this._setTextAreaInputHandler();
   }
 
 
@@ -112,7 +96,53 @@ class FilmDetails extends AbstractSmartComponent {
     const emojiAddBlock = this.getElement().querySelector(`.${DetailsElement.EMOJI_ADD_BLOCK}`);
 
     [...this.getElement().querySelectorAll(`.${DetailsElement.EMOJI_ITEM}`)]
-        .map(this._getEmojiClickhandler(emojiAddBlock));
+        .map(this._getEmojiClickHandler(emojiAddBlock));
+  }
+
+
+  /**
+   * Метод, выполняющий проверку наличия класса ошибки на поле ввода комментария
+   */
+  _setTextAreaInputHandler() {
+    const textArea = this.getElement().querySelector(`.${DetailsElement.COMMENT_INPUT}`);
+
+    textArea.addEventListener(`input`, this._getTextAreaInputHandler(textArea));
+  }
+
+
+  /**
+   * Метод, обеспечиваюющий создание помощника для добавления смайла в форму комментария
+   * @param {Object} emojiAddBlock блок, для которого выполняется добавление смайла
+   * @return {Function} созданный помощник
+   */
+  _getEmojiClickHandler(emojiAddBlock) {
+    return (smile) => {
+      smile.addEventListener(`click`, () => {
+        if (emojiAddBlock.firstChild) {
+          emojiAddBlock.removeChild(emojiAddBlock.firstChild);
+        }
+        emojiAddBlock.appendChild(getImageElement(smile.value));
+
+        if (emojiAddBlock.classList.contains(DetailsElement.ERROR)) {
+          emojiAddBlock.classList.remove(DetailsElement.ERROR);
+        }
+
+      });
+    };
+  }
+
+
+  /**
+   * Метод, обеспечивающий создание помощника для удаления класса ошибки с поля ввода комментария
+   * @param {Object} textArea поле ввода комментария
+   * @return {Function} созданный помощник
+   */
+  _getTextAreaInputHandler(textArea) {
+    return () => {
+      if (textArea.classList.contains(DetailsElement.ERROR)) {
+        textArea.classList.remove(DetailsElement.ERROR);
+      }
+    };
   }
 
 
@@ -122,9 +152,9 @@ class FilmDetails extends AbstractSmartComponent {
    */
   _changeIsWatch(element) {
     element.querySelector(`.${DetailsElement.BTN_WATCHLIST}`)
-    .addEventListener(`click`, () => {
-      this._film.isWatch = !this._film.isWatch;
-    });
+      .addEventListener(`click`, () => {
+        this._film.isWatch = !this._film.isWatch;
+      });
   }
 
 
@@ -134,9 +164,9 @@ class FilmDetails extends AbstractSmartComponent {
    */
   _changeIsWatched(element) {
     element.querySelector(`.${DetailsElement.BTN_HISTORY}`)
-    .addEventListener(`click`, () => {
-      this._film.isWatched = !this._film.isWatched;
-    });
+      .addEventListener(`click`, () => {
+        this._film.isWatched = !this._film.isWatched;
+      });
   }
 
 
@@ -146,9 +176,9 @@ class FilmDetails extends AbstractSmartComponent {
    */
   _changeIsFavorite(element) {
     element.querySelector(`.${DetailsElement.BTN_FAVORITE}`)
-    .addEventListener(`click`, () => {
-      this._film.isFavorite = !this._film.isFavorite;
-    });
+      .addEventListener(`click`, () => {
+        this._film.isFavorite = !this._film.isFavorite;
+      });
   }
 }
 

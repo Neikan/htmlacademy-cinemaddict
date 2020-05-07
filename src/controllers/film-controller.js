@@ -6,6 +6,7 @@ import {
   FilmAttribute, FilterType, ClassMarkup, FilmsBlock, Mode
 } from "../consts";
 import {render, remove, replace, getItem} from "../utils/components";
+import {generateId} from "../utils/common";
 
 
 const NODE_MAIN = `main`;
@@ -119,13 +120,36 @@ class FilmController {
    */
   _renderNewComment() {
     const container = this._filmDetails.getElement();
-    const commentData = this._getCommentData(container);
+    const emojiAddBlock = getItem(container, DetailsElement.EMOJI_ADD_BLOCK);
+    const textArea = getItem(container, DetailsElement.COMMENT_INPUT);
 
-    this._filmData.comments.push(commentData); // переписать потом скорее всего надо будет
-    render[Position.BEFORE_END](
-        getItem(container, DetailsElement.COMMENT_LIST), new Comment(commentData)
-    );
+    if (!emojiAddBlock.childNodes.length) {
+      emojiAddBlock.classList.add(DetailsElement.ERROR);
+      return;
+    }
+
+    if (textArea.value === ``) {
+      textArea.classList.add(DetailsElement.ERROR);
+      return;
+    }
+
+    this._addNewComment(container, emojiAddBlock, textArea);
     this._clearNewCommentForm(container);
+  }
+
+
+  /**
+   * Метод, обеспечивающий добавление нового комментария
+   * @param {Object} container контейнер подробной карточки
+   * @param {Object} emojiAddBlock блок, для которого выполняется добавление смайла
+   * @param {Object} textArea поле ввода комментария
+   */
+  _addNewComment(container, emojiAddBlock, textArea) {
+    if (emojiAddBlock.childNodes.length && textArea.value !== ``) {
+      const commentData = this._getCommentData(container);
+      render[Position.BEFORE_END](getItem(container, DetailsElement.COMMENT_LIST), new Comment(commentData));
+      this._filmData.comments.push(commentData);
+    }
   }
 
 
@@ -136,6 +160,7 @@ class FilmController {
    */
   _getCommentData(container) {
     return {
+      commentId: generateId(),
       emoji: getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).value,
       text: getItem(container, DetailsElement.COMMENT_INPUT).value,
       author: `Batman`,

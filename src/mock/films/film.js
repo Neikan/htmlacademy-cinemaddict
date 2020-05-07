@@ -9,7 +9,6 @@ import {
   GENRES,
   AGE_RATINGS
 } from './film-consts';
-
 import {
   getRandomElement,
   getRandomSubArray,
@@ -17,15 +16,13 @@ import {
   getRandomBoolean,
   getRandomDate,
   formatDate,
-  formatDuration
+  formatDuration,
+  generateId
 } from '../../utils/common';
-
 import {generateComments} from '../comments/comment.js';
 import {getRandomDescription, getRandomRating} from './film-utils';
 import {FormatRule} from '../../consts';
 
-
-let filmId = 1;
 
 /**
  * Генерация фильма
@@ -36,7 +33,7 @@ const generateFilm = () => {
   const randomDate = getRandomDate(new Date());
 
   return {
-    id: filmId++,
+    id: generateId(),
     promo: {
       poster: getRandomElement(POSTERS),
       age: getRandomElement(AGE_RATINGS),
@@ -89,5 +86,6 @@ const generateFilm = () => {
  * @return {Array} массив сгенерированных фильмов
  */
 const generateFilms = (count) => new Array(count).fill({}).map(generateFilm);
+
 
 export {generateFilm, generateFilms};

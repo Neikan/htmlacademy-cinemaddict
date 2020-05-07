@@ -56,9 +56,9 @@ const createComments = (comments) =>
  * @param {Object} {свойства комментария}
  * @return {string} разметка одного комментария
  */
-const createComment = ({text, emoji, author, date}) => {
+const createComment = ({commentId, text, emoji, author, date}) => {
   return (
-    `<li class="film-details__comment">
+    `<li class="film-details__comment" data-comment-id="${commentId}">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
       </span>
@@ -83,6 +83,10 @@ class Comment extends AbstractComponent {
   }
 
 
+  /**
+   * Метод, обеспечивающий создание компонента по заданному шаблону
+   * @return {Object}
+   */
   getTemplate() {
     return createComment(this._film);
   }
