@@ -1,6 +1,7 @@
 import FilmCard from "../components/film-card";
 import FilmDetails from "../components/film-details";
 import Comment from "../components/film-details/comment";
+import {encode} from "he";
 import {
   KeyCode, Position, DetailsElement, CardElement, Flag,
   FilmAttribute, FilterType, ClassMarkup, FilmsBlock, Mode
@@ -171,7 +172,7 @@ export default class FilmController {
     return {
       commentId: generateId(),
       emoji: getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).value,
-      text: getItem(container, DetailsElement.COMMENT_INPUT).value,
+      text: encode(getItem(container, DetailsElement.COMMENT_INPUT).value),
       author: `Batman`,
       date: new Date()
     };

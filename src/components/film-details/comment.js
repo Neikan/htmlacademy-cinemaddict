@@ -1,4 +1,5 @@
 import AbstractComponent from "../abstract/component";
+import {encode} from "he";
 import {formatDateFromNow} from "../../utils/common";
 import {DetailsElement} from "../../consts";
 
@@ -15,7 +16,7 @@ const createComment = ({id, text, emoji, author, date}) => {
         <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
       </span>
       <div>
-        <p class="film-details__comment-text">${text}</p>
+        <p class="film-details__comment-text">${encode(text)}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${formatDateFromNow(date)}</span>
