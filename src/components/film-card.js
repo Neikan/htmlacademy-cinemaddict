@@ -4,7 +4,7 @@ import {CARD_ELEMENTS, CardElement, ClassMarkup, FILM_DESCRIPTION_LENGTH} from "
 
 /**
  * Создание разметки блока стандартной карточки фильма
- * @param {Object} {данные фильма}
+ * @param {Object} filmData данные фильма
  * @param {string} filmsBlock название компонента-контейнера фильмов
  * @return {string} разметка блока
  */
@@ -57,15 +57,15 @@ const createFilmCard = ({
  * Создание класса стандартной карточки фильма
  */
 class FilmCard extends AbstractComponent {
-  constructor(film, filmsBlock) {
+  constructor(filmData, filmsBlock) {
     super();
 
-    this._film = film;
+    this._filmData = filmData;
     this._filmsBlock = filmsBlock;
   }
 
   getTemplate() {
-    return createFilmCard(this._film, this._filmsBlock);
+    return createFilmCard(this._filmData, this._filmsBlock);
   }
 
   setClickHandler(handler) {

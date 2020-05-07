@@ -76,10 +76,10 @@ const createComment = ({commentId, text, emoji, author, date}) => {
 
 
 class Comment extends AbstractComponent {
-  constructor(film) {
+  constructor(commentData) {
     super();
 
-    this._film = film;
+    this._commentData = commentData;
   }
 
 
@@ -88,7 +88,7 @@ class Comment extends AbstractComponent {
    * @return {Object}
    */
   getTemplate() {
-    return createComment(this._film);
+    return createComment(this._commentData);
   }
 }
 

@@ -8,10 +8,10 @@ import {getImageElement} from "../utils/components";
 
 /**
  * Создание разметки блока подробной карточки фильма
- * @param {Object} film фильм
+ * @param {Object} filmData данные фильма
  * @return {string} разметка блока
  */
-const createFilmDetails = (film) => {
+const createFilmDetails = (filmData) => {
   return (
     `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
@@ -19,10 +19,10 @@ const createFilmDetails = (film) => {
           <div class="film-details__close">
             <button class="film-details__close-btn" type="button">close</button>
           </div>
-          ${createDetailsInfo(film)}
-          ${createControls(film)}
+          ${createDetailsInfo(filmData)}
+          ${createControls(filmData)}
         </div>
-        ${createCommentBlock(film)}
+        ${createCommentBlock(filmData)}
       </form>
     </section>`
   );
@@ -33,11 +33,11 @@ const createFilmDetails = (film) => {
  * Создание класса подробной карточки фильма
  */
 class FilmDetails extends AbstractSmartComponent {
-  constructor(film) {
+  constructor(filmData) {
     super();
 
-    this._film = film;
-    this._comments = film.comments;
+    this._filmData = filmData;
+    this._comments = filmData.comments;
   }
 
 
@@ -46,7 +46,7 @@ class FilmDetails extends AbstractSmartComponent {
    * @return {Object}
    */
   getTemplate() {
-    return createFilmDetails(this._film);
+    return createFilmDetails(this._filmData);
   }
 
 
@@ -153,7 +153,7 @@ class FilmDetails extends AbstractSmartComponent {
   _changeIsWatch(element) {
     element.querySelector(`.${DetailsElement.BTN_WATCHLIST}`)
       .addEventListener(`click`, () => {
-        this._film.isWatch = !this._film.isWatch;
+        this._filmData.isWatch = !this._filmData.isWatch;
       });
   }
 
@@ -165,7 +165,7 @@ class FilmDetails extends AbstractSmartComponent {
   _changeIsWatched(element) {
     element.querySelector(`.${DetailsElement.BTN_HISTORY}`)
       .addEventListener(`click`, () => {
-        this._film.isWatched = !this._film.isWatched;
+        this._filmData.isWatched = !this._filmData.isWatched;
       });
   }
 
@@ -177,7 +177,7 @@ class FilmDetails extends AbstractSmartComponent {
   _changeIsFavorite(element) {
     element.querySelector(`.${DetailsElement.BTN_FAVORITE}`)
       .addEventListener(`click`, () => {
-        this._film.isFavorite = !this._film.isFavorite;
+        this._filmData.isFavorite = !this._filmData.isFavorite;
       });
   }
 }
