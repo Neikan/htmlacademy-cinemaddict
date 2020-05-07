@@ -1,5 +1,5 @@
 import {AbstractComponent} from "./abstract/component";
-import {CARD_ELEMENTS, CardElement, ClassMarkup} from "../consts";
+import {CARD_ELEMENTS, CardElement, ClassMarkup, FILM_DESCRIPTION_LENGTH} from "../consts";
 
 
 /**
@@ -25,6 +25,9 @@ const createFilmCard = ({
     'markAsFavourite': isFavorite ? ` ` + CardElement.BTN_ACTIVE : ``
   };
 
+  const formatDescription = details.description.length > FILM_DESCRIPTION_LENGTH ?
+    `${details.description.substring(0, FILM_DESCRIPTION_LENGTH - 1)}...` : details.description;
+
   return (
     `<article class="film-card" data-films-block="${filmsBlock}">
       <h3 class="film-card__title">${titles.translate}</h3>
@@ -35,7 +38,7 @@ const createFilmCard = ({
         <span class="film-card__genre">${details.genres[0]}</span>
       </p>
       <img src="./images/posters/${promo.poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${details.description}</p>
+      <p class="film-card__description">${formatDescription}</p>
       <a class="film-card__comments">${comments.length} comments</a>
       <form class="film-card__controls">
         <button class="film-card__controls-item button

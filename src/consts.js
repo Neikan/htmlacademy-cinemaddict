@@ -15,6 +15,8 @@ export const CountCheckFormat = {
   NUMBER: 1000,
 };
 
+export const FILM_DESCRIPTION_LENGTH = 140;
+
 export const Position = {
   BEFORE_END: `beforeend`,
   BEFORE_BEGIN: `beforebegin`,
@@ -137,7 +139,9 @@ export const Flag = {
 export const FormatRule = {
   RELEASE_DATE: `DD MMMM YYYY`,
   RELEASE_YEAR: `YYYY`,
-  COMMENT_DATE: `YYYY/MM/DD HH:MM`
+  COMMENT_DATE: `YYYY/MM/DD HH:MM`,
+  DURATION: `mm[m]`,
+  DURATION_WITH_HOURS: `H[h] mm[m]`
 };
 
 export const FilterType = {

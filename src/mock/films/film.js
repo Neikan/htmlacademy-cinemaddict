@@ -17,15 +17,15 @@ import {
   getRandomBoolean,
   getRandomDate,
   formatDate,
+  formatDuration
 } from '../../utils/common';
 
 import {generateComments} from '../comments/comment.js';
-import {getRandomDuration, getRandomDescription, getRandomRating} from './film-utils';
+import {getRandomDescription, getRandomRating} from './film-utils';
 import {FormatRule} from '../../consts';
 
 
 let filmId = 1;
-
 
 /**
  * Генерация фильма
@@ -65,7 +65,7 @@ const generateFilm = () => {
       },
       duration: {
         name: `Runtime`,
-        info: getRandomDuration()
+        info: formatDuration(getRandomInt(240))
       },
       country: {
         name: `Country`,
@@ -81,6 +81,7 @@ const generateFilm = () => {
     isFavorite: getRandomBoolean()
   };
 };
+
 
 /**
  * Генерация заданного количества фильмов
