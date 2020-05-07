@@ -6,7 +6,7 @@ import {
   FilmAttribute, FilterType, ClassMarkup, FilmsBlock, Mode
 } from "../consts";
 import {render, remove, replace, getItem} from "../utils/components";
-import {generateId} from "../utils/common";
+import {generateId, getIndex} from "../utils/common";
 
 
 const NODE_MAIN = `main`;
@@ -148,13 +148,16 @@ export default class FilmController {
     if (emojiAddBlock.childNodes.length && textArea.value !== ``) {
       const commentData = this._getCommentData(container);
 
+      const newComment = new Comment(commentData);
+
       render[Position.BEFORE_END](
-          getItem(container, DetailsElement.COMMENT_LIST), new Comment(commentData)
+          getItem(container, DetailsElement.COMMENT_LIST), newComment
       );
 
+      newComment.setBtnDeleteCommentClickHandler(this._setBtnDeleteCommentClickHandler());
+
       this._filmData.comments.push(commentData);
-      container.querySelector(`.${DetailsElement.COMMENT_COUNT}`)
-        .textContent = this._filmData.comments.length;
+      this._updateCommentsCount(container);
     }
   }
 
@@ -176,6 +179,16 @@ export default class FilmController {
 
 
   /**
+   * Метод, выполняющий обновление текущего количества комментариев после удаления добавленного комментария
+   * @param {Object} container
+   */
+  _updateCommentsCount(container) {
+    container.querySelector(`.${DetailsElement.COMMENT_COUNT}`)
+      .textContent = this._filmData.comments.length;
+  }
+
+
+  /**
    * Метод, обеспечивающий очистку формы ввода комментария
    * @param {Object} container
    */
@@ -185,6 +198,18 @@ export default class FilmController {
     emojiAddBlock.removeChild(emojiAddBlock.firstChild);
     getItem(container, DetailsElement.COMMENT_INPUT).value = null;
     getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).checked = Flag.NO;
+  }
+
+
+  /**
+   * Метод, выполняющий удаление добавленного комментария
+   * @param {Object} target
+   */
+  _removeNewComment(target) {
+    this._filmData.comments.splice(
+        getIndex(this._filmData.comments, target.dataset.commentId), 1
+    );
+    target.remove();
   }
 
 
@@ -309,6 +334,20 @@ export default class FilmController {
     this._checkActivity(CardElement.BTN_WATCHLIST, FilterType.WATCHLIST);
     this._checkActivity(CardElement.BTN_HISTORY, FilterType.HISTORY);
     this._checkActivity(CardElement.BTN_FAVORITE, FilterType.FAVORITES);
+  }
+
+
+  /**
+   * Метод, выполняющий создание помошника для удаления добавленного комментария
+   * @return {Function} созданный помощник
+   */
+  _setBtnDeleteCommentClickHandler() {
+    return (evt) => {
+      evt.preventDefault();
+
+      this._removeNewComment(evt.target.closest(`.${DetailsElement.COMMENT_ITEM}`));
+      this._updateCommentsCount(this._filmDetails.getElement());
+    };
   }
 
 

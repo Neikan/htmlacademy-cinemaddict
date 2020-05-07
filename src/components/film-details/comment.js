@@ -1,5 +1,6 @@
 import AbstractComponent from "../abstract/component";
 import {formatDateFromNow} from "../../utils/common";
+import {DetailsElement} from "../../consts";
 
 
 /**
@@ -26,11 +27,15 @@ const createComment = ({id, text, emoji, author, date}) => {
 };
 
 
+/**
+ * Создание класса комментария
+ */
 export default class Comment extends AbstractComponent {
   constructor(commentData) {
     super();
 
     this._commentData = commentData;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
 
@@ -40,6 +45,28 @@ export default class Comment extends AbstractComponent {
    */
   getTemplate() {
     return createComment(this._commentData);
+  }
+
+
+  /**
+   * Метод, обеспечивающий добавление слушателей на кнопку удаления комментария
+   * @param {Function} handler помощник
+   */
+  setBtnDeleteCommentClickHandler(handler) {
+    this.getElement().querySelector(`.${DetailsElement.BTN_COMMENT_DELETE}`)
+      .addEventListener(`click`, this._clickHandler(handler));
+  }
+
+
+  /**
+   * Метод, обеспечивающий создание помощника для удаления комментария
+   * @param {Function} handler помощник
+   * @return {Function} созданный помощник
+   */
+  _clickHandler(handler) {
+    return (evt) => {
+      handler(evt);
+    };
   }
 }
 

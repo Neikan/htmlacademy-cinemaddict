@@ -56,8 +56,8 @@ export default class Sorting extends AbstractComponent {
 
   /**
    * Метод, обеспечивающий создание помощника для получения текущего типа сортировки
-   * @param {Function} handler
-   * @return {Function}
+   * @param {Function} handler помощник
+   * @return {Function} созданный помощник
    */
   _clickHandler(handler) {
     return (evt) => {

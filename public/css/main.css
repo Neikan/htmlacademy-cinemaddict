@@ -1082,5 +1082,5 @@ button {
   opacity: 0.3;
 }
 .film-details__new-comment--error {
-  border: solid 2px #FF0000;
+  box-shadow: 0 0 2px 3px #FF0000, 0 0 0 0 #FF0000;
 }

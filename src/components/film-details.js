@@ -87,7 +87,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._changeIsFavorite(element);
     this._setEmojiClickHandler();
     this._setTextAreaInputHandler();
-    this._setDeleteCommentClickHandler();
+    this._setBtnDeleteCommentClickHandler();
   }
 
 
@@ -115,9 +115,9 @@ export default class FilmDetails extends AbstractSmartComponent {
   /**
    * Метод, обеспечивающий добавление слушателей на кнопки удаления комментариев
    */
-  _setDeleteCommentClickHandler() {
+  _setBtnDeleteCommentClickHandler() {
     [...this.getElement().querySelectorAll(`.${DetailsElement.BTN_COMMENT_DELETE}`)]
-        .map(this._getDeleteCommentClickHandler());
+        .map(this._getBtnDeleteCommentClickHandler());
   }
 
 
@@ -161,7 +161,7 @@ export default class FilmDetails extends AbstractSmartComponent {
    * Метод, обеспечивающий создание помощника для удаления комментария
    * @return {Function} созданный помощник
    */
-  _getDeleteCommentClickHandler() {
+  _getBtnDeleteCommentClickHandler() {
     return (btn) => {
       btn.addEventListener(`click`, (evt) => {
         evt.preventDefault();
@@ -169,7 +169,6 @@ export default class FilmDetails extends AbstractSmartComponent {
         this._removeComment(evt.target.closest(`.${DetailsElement.COMMENT_ITEM}`));
         this._updateCommentsCount();
       });
-
     };
   }
 
