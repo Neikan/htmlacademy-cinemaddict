@@ -1,4 +1,4 @@
-import {AbstractComponent} from "./abstract/component";
+import AbstractComponent from "./abstract/component";
 import {CARD_ELEMENTS, CardElement, ClassMarkup, FILM_DESCRIPTION_LENGTH} from "../consts";
 
 
@@ -56,7 +56,7 @@ const createFilmCard = ({
 /**
  * Создание класса стандартной карточки фильма
  */
-class FilmCard extends AbstractComponent {
+export default class FilmCard extends AbstractComponent {
   constructor(filmData, filmsBlock) {
     super();
 
@@ -91,6 +91,3 @@ class FilmCard extends AbstractComponent {
     .addEventListener(`click`, handler);
   }
 }
-
-
-export {FilmCard};

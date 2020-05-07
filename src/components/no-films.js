@@ -1,4 +1,4 @@
-import {AbstractComponent} from "./abstract/component";
+import AbstractComponent from "./abstract/component";
 
 
 /**
@@ -22,7 +22,7 @@ const createContainerNoFilms = (isFilter) => {
 /**
  * Создание класса блока фильмов при отсутствии фильмов
  */
-class NoFilms extends AbstractComponent {
+export default class NoFilms extends AbstractComponent {
   constructor(isFilter) {
     super();
 
@@ -43,6 +43,3 @@ class NoFilms extends AbstractComponent {
     this.getElement().addEventListener(`click`, handler);
   }
 }
-
-
-export {NoFilms};

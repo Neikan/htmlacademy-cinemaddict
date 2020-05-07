@@ -1,6 +1,6 @@
-import {FilmCard} from "../components/film-card";
-import {FilmDetails} from "../components/film-details";
-import {Comment} from "../components/film-details/comments";
+import FilmCard from "../components/film-card";
+import FilmDetails from "../components/film-details";
+import Comment from "../components/film-details/comment";
 import {
   KeyCode, Position, DetailsElement, CardElement, Flag,
   FilmAttribute, FilterType, ClassMarkup, FilmsBlock, Mode
@@ -23,7 +23,7 @@ let filmsBlockInitiator = FilmsBlock.DEFAULT;
 /**
  * Создание контроллера, управляющего отображением карточек фильмов
  */
-class FilmController {
+export default class FilmController {
   constructor(container, viewChangeHandler, dataChangeHandler,
       pageUpdateHandler, filterType, filmsBlock
   ) {
@@ -408,6 +408,3 @@ class FilmController {
     }
   }
 }
-
-
-export {FilmController};

@@ -1,4 +1,4 @@
-import {AbstractComponent} from "./abstract/component";
+import AbstractComponent from "./abstract/component";
 
 
 /**
@@ -19,11 +19,8 @@ const createFilms = () => {
 /**
  * Создание класса блока фильмов
  */
-class Films extends AbstractComponent {
+export default class Films extends AbstractComponent {
   getTemplate() {
     return createFilms();
   }
 }
-
-
-export {Films};

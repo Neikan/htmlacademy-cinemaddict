@@ -1,4 +1,4 @@
-import {AbstractComponent} from "./abstract/component";
+import AbstractComponent from "./abstract/component";
 
 /**
  * Создание разметки секции фильмов
@@ -10,11 +10,8 @@ const createPage = () => `<section class="films"></section>`;
 /**
  * Создание класса секции для управления блоками фильмов
  */
-class Page extends AbstractComponent {
+export default class Page extends AbstractComponent {
   getTemplate() {
     return createPage();
   }
 }
-
-
-export {Page};

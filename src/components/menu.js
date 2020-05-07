@@ -1,4 +1,4 @@
-import {AbstractComponent} from "./abstract/component";
+import AbstractComponent from "./abstract/component";
 import {FilterType, MenuElement} from "../consts";
 
 
@@ -39,7 +39,7 @@ const createMenu = (countsFilmsByFilters, filterType) => {
 /**
  * Создание класса главного меню
  */
-class Menu extends AbstractComponent {
+export default class Menu extends AbstractComponent {
   constructor(countsFilmsByFilters, filterType) {
     super();
 
@@ -102,6 +102,3 @@ class Menu extends AbstractComponent {
     });
   }
 }
-
-
-export {Menu};

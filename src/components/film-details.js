@@ -1,4 +1,4 @@
-import {AbstractSmartComponent} from "./abstract/component-smart";
+import AbstractSmartComponent from "./abstract/component-smart";
 import {createDetailsInfo} from "./film-details/details-info";
 import {createControls} from "./film-details/controls";
 import {createCommentBlock} from "./film-details/comments";
@@ -32,7 +32,7 @@ const createFilmDetails = (filmData) => {
 /**
  * Создание класса подробной карточки фильма
  */
-class FilmDetails extends AbstractSmartComponent {
+export default class FilmDetails extends AbstractSmartComponent {
   constructor(filmData) {
     super();
 
@@ -181,6 +181,3 @@ class FilmDetails extends AbstractSmartComponent {
       });
   }
 }
-
-
-export {FilmDetails};

@@ -1,4 +1,4 @@
-import {AbstractComponent} from "./abstract/component";
+import AbstractComponent from "./abstract/component";
 
 
 /**
@@ -20,7 +20,7 @@ const createFilmsExtra = (title) => {
 /**
  * Создание класса блока фильмов
  */
-class FilmsExtra extends AbstractComponent {
+export default class FilmsExtra extends AbstractComponent {
   constructor(title) {
     super();
 
@@ -31,6 +31,3 @@ class FilmsExtra extends AbstractComponent {
     return createFilmsExtra(this._title);
   }
 }
-
-
-export {FilmsExtra};

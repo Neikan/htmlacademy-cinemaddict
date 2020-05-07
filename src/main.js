@@ -1,11 +1,11 @@
+import FilmsModel from "./models/films-model";
+import Page from "./components/page";
+import PageController from "./controllers/page-controller";
 import {CountFilm, Position} from "./consts";
 import {renderMarkup} from "./utils/common";
 import {render} from "./utils/components";
 import {createFooter} from "./components/footer";
 import {generateFilms} from "./mock/films/film";
-import {FilmsModel} from "./models/films-model";
-import {Page} from "./components/page";
-import {PageController} from "./controllers/page-controller";
 
 
 const Nodes = {

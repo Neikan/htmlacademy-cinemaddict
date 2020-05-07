@@ -4,7 +4,7 @@ import {createElement} from "../../utils/components";
 /**
  * Класс абстрактного компонента
  */
-class AbstractComponent {
+export default class AbstractComponent {
   constructor() {
     if (new.target === AbstractComponent) {
       throw new Error(`Can't instantiate AbstractComponent, only concrete one.`);
@@ -29,6 +29,3 @@ class AbstractComponent {
     this._element = null;
   }
 }
-
-
-export {AbstractComponent};

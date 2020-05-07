@@ -1,4 +1,4 @@
-import {AbstractComponent} from './abstract/component.js';
+import AbstractComponent from './abstract/component.js';
 import {RankDescription} from '../consts.js';
 
 
@@ -17,7 +17,7 @@ const createProfileRank = (rank) => {
 };
 
 
-class ProfileRank extends AbstractComponent {
+export default class ProfileRank extends AbstractComponent {
   constructor(countWatchedFilms) {
     super();
 
@@ -50,6 +50,3 @@ class ProfileRank extends AbstractComponent {
     }
   }
 }
-
-
-export {ProfileRank};

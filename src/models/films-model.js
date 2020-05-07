@@ -5,7 +5,7 @@ import {filterRules, sortRules} from '../utils/components';
 /**
  * Создание класса модели данных фильмов
  */
-class FilmsModel {
+export default class FilmsModel {
   constructor() {
     this._filmsData = [];
     this._filterType = FilterType.ALL;
@@ -157,6 +157,3 @@ class FilmsModel {
     this._filmsData = newFilmsData;
   }
 }
-
-
-export {FilmsModel};

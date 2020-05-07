@@ -1,11 +1,11 @@
-import {MenuController} from "./menu-controller";
-import {FilmController} from "./film-controller";
-import {Films} from "../components/films";
-import {FilmsExtra} from "../components/films-extra";
-import {NoFilms} from "../components/no-films";
-import {ShowMoreBtn} from "../components/show-more-button";
-import {Sorting} from "../components/sorting";
-import {ProfileRank} from "../components/profile-rank";
+import MenuController from "./menu-controller";
+import FilmController from "./film-controller";
+import Films from "../components/films";
+import FilmsExtra from "../components/films-extra";
+import NoFilms from "../components/no-films";
+import ShowMoreBtn from "../components/show-more-button";
+import Sorting from "../components/sorting";
+import ProfileRank from "../components/profile-rank";
 import {
   CountFilm, ExtraName, Position, Flag, FilmsBlock,
   SortType, Mode, FilmsElement
@@ -52,7 +52,7 @@ const renderFilmControllers = (
 /**
  * Создание контроллера, обеспечивающего отрисовку компонентов на странице
  */
-class PageController {
+export default class PageController {
   constructor(container, filmsModel) {
     this._container = container;
 
@@ -550,6 +550,3 @@ class PageController {
     };
   }
 }
-
-
-export {PageController};

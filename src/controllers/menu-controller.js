@@ -1,4 +1,4 @@
-import {Menu} from "../components/menu";
+import Menu from "../components/menu";
 import {Position} from "../consts";
 import {render, replace} from "../utils/components";
 
@@ -6,7 +6,7 @@ import {render, replace} from "../utils/components";
 /**
  * Создание класса контроллера меню
  */
-class MenuController {
+export default class MenuController {
   constructor(container, filmsModel) {
     this._container = container;
     this._filmModel = filmsModel;
@@ -50,6 +50,3 @@ class MenuController {
     }
   }
 }
-
-
-export {MenuController};

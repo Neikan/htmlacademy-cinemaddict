@@ -1,4 +1,4 @@
-import {AbstractComponent} from "./abstract/component";
+import AbstractComponent from "./abstract/component";
 import {SortType, SortClass} from "../consts";
 
 
@@ -27,7 +27,7 @@ const createSorting = (sortType) => {
 /**
  * Создание класса типов сортировки
  */
-class Sorting extends AbstractComponent {
+export default class Sorting extends AbstractComponent {
   constructor(sortType) {
     super();
     this._currentSortType = sortType;
@@ -92,6 +92,3 @@ class Sorting extends AbstractComponent {
     });
   }
 }
-
-
-export {Sorting};
