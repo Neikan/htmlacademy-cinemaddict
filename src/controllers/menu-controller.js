@@ -1,15 +1,17 @@
 import Menu from "../components/menu";
 import {Position} from "../consts";
-import {render, replace} from "../utils/components";
+import {render, replace, remove} from "../utils/components";
 
 
 /**
  * Создание класса контроллера меню
  */
 export default class MenuController {
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, _filterTypeChangeHandler, statisticsClickHandler) {
     this._container = container;
     this._filmModel = filmsModel;
+    this._filterTypeChangeHandler = _filterTypeChangeHandler;
+    this._statisticsClickHandler = statisticsClickHandler;
     this._menu = null;
   }
 
@@ -20,21 +22,18 @@ export default class MenuController {
   render() {
     const oldMenu = this._menu;
 
-    this._menu = new Menu(
-        this._filmModel.getCountsFilmsByFilters(),
-        this._filmModel.getFilterType()
-    );
-
+    this._setMenu();
     this._replace(this._container, oldMenu);
   }
 
 
   /**
-   * Метод, обеспечивающий получение текущего компонента меню
-   * @return {Object} меню
+   * Метод, обеспечивающий создание компонента меню
    */
-  getMenu() {
-    return this._menu;
+  _setMenu() {
+    this._menu = new Menu(this._filmModel.getCountsFilmsByFilters(), this._filmModel.getFilterType());
+    this._menu.setFilterChangeHandler(this._filterTypeChangeHandler);
+    this._menu.setStatisticsClickHandler(this._statisticsClickHandler);
   }
 
 
@@ -49,5 +48,12 @@ export default class MenuController {
     } else {
       replace(this._menu, oldMenu);
     }
+  }
+
+  /**
+   * Метод, обеспечивающий удаление текущего меню
+   */
+  remove() {
+    remove(this._menu);
   }
 }

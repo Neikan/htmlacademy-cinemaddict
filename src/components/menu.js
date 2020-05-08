@@ -5,34 +5,63 @@ import {FilterType, MenuElement} from "../consts";
 /**
  * Создание разметки блока главного меню
  * @param {Object} countsFilmsByFilters количества фильмов, соответствующих фильтрам
- * @param {string} filterType примененный фильтр
+ * @param {string} activefilterType примененный фильтр
  * @return {string} разметка блока
  */
-const createMenu = (countsFilmsByFilters, filterType) => {
-  const classMarkup = {
-    ALL: filterType === FilterType.ALL ? ` ` + MenuElement.ITEM_ACTIVE : ``,
-    WATCHLIST: filterType === FilterType.WATCHLIST ? ` ` + MenuElement.ITEM_ACTIVE : ``,
-    HISTORY: filterType === FilterType.HISTORY ? ` ` + MenuElement.ITEM_ACTIVE : ``,
-    FAVORITES: filterType === FilterType.FAVORITES ? ` ` + MenuElement.ITEM_ACTIVE : ``
-  };
-
+const createMenu = (countsFilmsByFilters, activefilterType) => {
   return (
     `<nav class="main-navigation">
       <div class="main-navigation__items">
-        <a href="#all" data-filter-type="${FilterType.ALL}" class="main-navigation__item${classMarkup.ALL}">All movies</a>
-        <a href="#watchlist" data-filter-type="${FilterType.WATCHLIST}" class="main-navigation__item${classMarkup.WATCHLIST}">Watchlist
-          <span class="main-navigation__item-count">${countsFilmsByFilters.WATCHLIST}</span>
-        </a>
-        <a href="#history" data-filter-type="${FilterType.HISTORY}" class="main-navigation__item${classMarkup.HISTORY}">History
-          <span class="main-navigation__item-count">${countsFilmsByFilters.HISTORY}</span>
-        </a>
-        <a href="#favorites" data-filter-type="${FilterType.FAVORITES}" class="main-navigation__item${classMarkup.FAVORITES}">Favorites
-          <span class="main-navigation__item-count">${countsFilmsByFilters.FAVORITES}</span>
-        </a>
+        ${createMenuItem(activefilterType, FilterType.ALL)}
+        ${createMenuItem(activefilterType, FilterType.WATCHLIST, countsFilmsByFilters.WATCHLIST)}
+        ${createMenuItem(activefilterType, FilterType.HISTORY, countsFilmsByFilters.HISTORY)}
+        ${createMenuItem(activefilterType, FilterType.FAVORITES, countsFilmsByFilters.FAVORITES)}
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
     </nav>`
   );
+};
+
+
+/**
+ * Создание разметки пункта меню
+ * @param {string} activefilterType примененный фильтр
+ * @param {string} filterType фильтр
+ * @param {Number} countFilms количество фильмов, соответствующее фильтру
+ * @return {string} разметка пункта
+ */
+const createMenuItem = (activefilterType, filterType, countFilms) => {
+  return (
+    `<a href="#favorites" data-filter-type="${filterType}"
+      class="main-navigation__item${getClassMarkup(activefilterType, filterType)}"
+      >${filterType} ${getSpanMarkup(filterType, countFilms)}</a>`
+  );
+};
+
+
+/**
+ * Создание разметки дополнительного активного класса
+ * @param {string} activefilterType примененный фильтр
+ * @param {string} filterType фильтр
+ * @return {string} разметка класса
+ */
+const getClassMarkup = (activefilterType, filterType) => {
+  return activefilterType === filterType ?
+    ` ` + MenuElement.ITEM_ACTIVE :
+    ``;
+};
+
+
+/**
+ * Создание разметки с количеством фильмов, соответствующих фильтру
+ * @param {string} filterType фильтр
+ * @param {Number} countFilms количество фильмов, соответствующих фильтру
+ * @return {string} разметка элемента
+ */
+const getSpanMarkup = (filterType, countFilms) => {
+  return filterType !== FilterType.ALL ?
+    `<span class="main-navigation__item-count">${countFilms}</span>` :
+    ``;
 };
 
 
@@ -74,7 +103,7 @@ export default class Menu extends AbstractComponent {
    * Метод, обеспечивающий отображение статистики
    * @param {Function} handler
    */
-  setShowStatisticsHandler(handler) {
+  setStatisticsClickHandler(handler) {
     this.getElement().querySelector(`.${MenuElement.ITEM_STATS}`)
       .addEventListener(`click`, this._showHandler(handler));
   }

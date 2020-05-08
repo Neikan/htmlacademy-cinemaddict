@@ -77,6 +77,8 @@ export default class PageController {
     this._dataChangeHandler = this._dataChangeHandler.bind(this);
     this._viewChangeHandler = this._viewChangeHandler.bind(this);
     this._pageUpdateHandler = this._pageUpdateHandler.bind(this);
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
+    this._statisticsClickHandler = this._statisticsClickHandler.bind(this);
   }
 
 
@@ -174,21 +176,13 @@ export default class PageController {
    * @param {Object} container контейнер контроллера
    */
   _renderMenu(container) {
-    this._menuController = new MenuController(container.parentElement, this._filmsModel);
+    this._menuController = new MenuController(
+        container.parentElement, this._filmsModel,
+        this._filterTypeChangeHandler(container), this._statisticsClickHandler()
+    );
     this._menuController.render();
-    this._menuController.getMenu().setFilterChangeHandler(this._filterTypeChangeHandler(container));
-    this._menuController.getMenu().setShowStatisticsHandler(this._showStatisticsHandler(container));
   }
 
-
-  _showStatisticsHandler() {
-    return (evt) => {
-      if (evt.target) {
-        this.hide();
-        this._statistics.show();
-      }
-    };
-  }
 
   /**
    * Метод, обеспечивающий отрисовку компонентов-контейнеров фильмов
@@ -201,6 +195,10 @@ export default class PageController {
   }
 
 
+  /**
+   * Метод, обеспечивающий отрисовку компонента-контейнера стастистики
+   * @param {Object} container контейнер контроллера
+   */
   _renderStatistics(container) {
     this._statistics = new Statistics(this._filmsModel.getFilmsData());
     render[Position.BEFORE_END](container.parentElement, this._statistics);
@@ -368,7 +366,8 @@ export default class PageController {
    * @param {Object} container контейнер контроллера
    */
   _updateMenu(container) {
-    remove(this._menuController.getMenu());
+    this._menuController.remove();
+    this._menuController = null;
     this._renderMenu(container);
   }
 
@@ -577,15 +576,27 @@ export default class PageController {
    */
   _filterTypeChangeHandler(container) {
     return (filterType) => {
-
       this._statistics.hide();
       this.show();
-
       this._setDefaults();
       this._filmsModel.setFilterType(filterType);
       this._filmsModel.setSortType(SortType.DEFAULT);
       this._resetFilmsWithSorting();
       this._renderFilmsOrNoFilms(container);
+    };
+  }
+
+
+  /**
+   * Метод, обеспечивающий создание помощника для отображения компонента-контейнера стастистики
+   * @return {Function} созданный помощник
+   */
+  _statisticsClickHandler() {
+    return (evt) => {
+      if (evt.target) {
+        this.hide();
+        this._statistics.show();
+      }
     };
   }
 }
