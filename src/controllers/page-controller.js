@@ -9,7 +9,7 @@ import ProfileRank from "../components/profile-rank";
 import Statistics from "../components/statistics";
 import {
   CountFilm, ExtraName, Position, Flag, FilmsBlock,
-  SortType, Mode, FilmsElement
+  SortType, Mode, FilmsElement, STATS_NAME
 } from "../consts";
 import {render, remove} from "../utils/components";
 
@@ -78,7 +78,6 @@ export default class PageController {
     this._viewChangeHandler = this._viewChangeHandler.bind(this);
     this._pageUpdateHandler = this._pageUpdateHandler.bind(this);
     this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
-    this._statisticsClickHandler = this._statisticsClickHandler.bind(this);
   }
 
 
@@ -177,8 +176,7 @@ export default class PageController {
    */
   _renderMenu(container) {
     this._menuController = new MenuController(
-        container.parentElement, this._filmsModel,
-        this._filterTypeChangeHandler(container), this._statisticsClickHandler()
+        container.parentElement, this._filmsModel, this._filterTypeChangeHandler(container)
     );
     this._menuController.render();
   }
@@ -576,27 +574,20 @@ export default class PageController {
    */
   _filterTypeChangeHandler(container) {
     return (filterType) => {
-      this._statistics.hide();
-      this.show();
+      if (filterType !== STATS_NAME) {
+        this._statistics.hide();
+        this.show();
+      } else {
+        this.hide();
+        this._statistics.show();
+        return;
+      }
+
       this._setDefaults();
       this._filmsModel.setFilterType(filterType);
       this._filmsModel.setSortType(SortType.DEFAULT);
       this._resetFilmsWithSorting();
       this._renderFilmsOrNoFilms(container);
-    };
-  }
-
-
-  /**
-   * Метод, обеспечивающий создание помощника для отображения компонента-контейнера стастистики
-   * @return {Function} созданный помощник
-   */
-  _statisticsClickHandler() {
-    return (evt) => {
-      if (evt.target) {
-        this.hide();
-        this._statistics.show();
-      }
     };
   }
 }

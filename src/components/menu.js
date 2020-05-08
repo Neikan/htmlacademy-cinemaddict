@@ -24,9 +24,7 @@ const createMenu = (menuItemsData) => {
 
 /**
  * Создание разметки пункта меню
- * @param {string} activefilterType примененный фильтр
- * @param {string} menuItemsData фильтр
- * @param {Number} countFilms количество фильмов, соответствующее фильтру
+ * @param {string} {данные пункта меню}
  * @return {string} разметка пункта
  */
 const createMenuItem = ({name, isActive, count}) => {
@@ -48,13 +46,13 @@ const getClassMarkup = (isActive) => isActive ? ` ` + MenuElement.ITEM_ACTIVE : 
 
 /**
  * Создание разметки с количеством фильмов, соответствующих фильтру
- * @param {string} filterType фильтр
- * @param {Number} countFilms количество фильмов, соответствующих фильтру
+ * @param {string} name фильтр
+ * @param {Number} count количество фильмов, соответствующих фильтру
  * @return {string} разметка элемента
  */
-const getSpanMarkup = (filterType, countFilms) => {
-  return filterType !== FilterType.ALL ?
-    `<span class="main-navigation__item-count">${countFilms}</span>` :
+const getSpanMarkup = (name, count) => {
+  return name !== FilterType.ALL ?
+    `<span class="main-navigation__item-count">${count}</span>` :
     ``;
 };
 
@@ -69,8 +67,7 @@ export default class Menu extends AbstractComponent {
     this._countsFilmsByFilters = countsFilmsByFilters;
     this._filterType = filterType;
 
-    this._clickFilterHandler = this._clickFilterHandler.bind(this);
-    this._clickStatsHandler = this._clickStatsHandler.bind(this);
+    this._clickMenuItemHandler = this._clickMenuItemHandler.bind(this);
   }
 
 
@@ -83,11 +80,28 @@ export default class Menu extends AbstractComponent {
   }
 
 
-  _getIsActiveFilter(filterType) {
-    return this._filterType === filterType ? Flag.YES : Flag.NO;
+  /**
+   * Метод, обеспечивающий добавление слушателей на изменение текущего фильтра
+   * @param {Function} handler помощник
+   */
+  setFilterChangeHandler(handler) {
+    this.getElement().addEventListener(`click`, this._clickMenuItemHandler(handler));
   }
 
 
+  /**
+   * Метод, обеспечивающий получение пункта статистики
+   * @return {Object}
+   */
+  _getMenuStats() {
+    return this.getElement().querySelector(`.${MenuElement.ITEM_STATS}`);
+  }
+
+
+  /**
+   * Метод, выполняющий получение агрегированных данных для пунктов меню
+   * @return {Object} данные пунктов меню
+   */
   _getMenuItemsData() {
     return {
       ALL: {
@@ -118,61 +132,12 @@ export default class Menu extends AbstractComponent {
 
 
   /**
-   * Метод, обеспечивающий получение контнейнера с пунктами-фильтрами меню
-   * @return {Object}
+   * Метод, выполняющий проверку применен фильтр или нет
+   * @param {string} filterType фильтр
+   * @return {Boolean} признак активности фильтра
    */
-  getMenuFilters() {
-    return this.getElement().querySelector(`.${MenuElement.ITEMS}`);
-  }
-
-
-  /**
-   * Метод, обеспечивающий получение пункта статистики
-   * @return {Object}
-   */
-  getMenuStats() {
-    return this.getElement().querySelector(`.${MenuElement.ITEM_STATS}`);
-  }
-
-
-  /**
-   * Метод, обеспечивающий добавление слушателей на изменение текущего фильтра
-   * @param {Function} handler помощник
-   */
-  setFilterChangeHandler(handler) {
-    this.getMenuFilters().addEventListener(`click`, this._clickFilterHandler(handler));
-  }
-
-
-  /**
-   * Метод, обеспечивающий отображение статистики
-   * @param {Function} handler
-   */
-  setStatisticsClickHandler(handler) {
-    this.getMenuStats().addEventListener(`click`, this._clickStatsHandler(handler));
-  }
-
-
-  /**
-   * Метод, обеспечиващий создание помощника для установки активным пункта стастистики
-   * @param {Function} handler помощник
-   * @return {Function} созданный помощник
-   */
-  _clickStatsHandler(handler) {
-    return (evt) => {
-      if (evt.target.tagName !== `A`) {
-        return;
-      }
-
-      if (evt.target) {
-        evt.target.classList.add(`${MenuElement.ITEM_ACTIVE}`);
-        this._setActiveClassHandler(evt);
-      } else {
-        evt.target.classList.remove(`${MenuElement.ITEM_ACTIVE}`);
-      }
-
-      handler(evt);
-    };
+  _getIsActiveFilter(filterType) {
+    return this._filterType === filterType ? Flag.YES : Flag.NO;
   }
 
 
@@ -181,9 +146,9 @@ export default class Menu extends AbstractComponent {
    * @param {Function} handler помощник
    * @return {Function} созданный помощник
    */
-  _clickFilterHandler(handler) {
+  _clickMenuItemHandler(handler) {
     return (evt) => {
-      const target = evt.target.closest(`.${MenuElement.ITEM}`);
+      const target = evt.target.closest(MenuElement.DATA_ID);
 
       if (target.tagName !== `A`) {
         return;
@@ -201,22 +166,14 @@ export default class Menu extends AbstractComponent {
    * @param {Object} evt событие
    */
   _setActiveClassHandler(evt) {
-    [...this.getElement().querySelectorAll(`.${MenuElement.ITEM}`)].map((menuItem) => {
-      if (menuItem === evt.target.closest(`.${MenuElement.ITEM}`)) {
-        menuItem.classList.add(`${MenuElement.ITEM_ACTIVE}`);
-        this._setActiveStatsHandler(menuItem);
-      } else {
-        menuItem.classList.remove(`${MenuElement.ITEM_ACTIVE}`);
-      }
-    });
-  }
-
-
-  _setActiveStatsHandler(element) {
-    if (element === this.getElement().querySelector(`.${MenuElement.ITEM_STATS}`)) {
-      this.getElement().querySelector(`.${MenuElement.ITEM_STATS}`).classList.add(`${MenuElement.ITEM_ACTIVE}`);
-    } else {
-      this.getElement().querySelector(`.${MenuElement.ITEM_STATS}`).classList.remove(`${MenuElement.ITEM_ACTIVE}`);
-    }
+    [...this.getElement().querySelectorAll(`.${MenuElement.ITEM}`)]
+      .concat(this._getMenuStats())
+      .map((menuItem) => {
+        if (menuItem === evt.target.closest(MenuElement.DATA_ID)) {
+          menuItem.classList.add(`${MenuElement.ITEM_ACTIVE}`);
+        } else {
+          menuItem.classList.remove(`${MenuElement.ITEM_ACTIVE}`);
+        }
+      });
   }
 }

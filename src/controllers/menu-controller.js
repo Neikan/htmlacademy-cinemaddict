@@ -7,11 +7,10 @@ import {render, replace, remove} from "../utils/components";
  * Создание класса контроллера меню
  */
 export default class MenuController {
-  constructor(container, filmsModel, _filterTypeChangeHandler, statisticsClickHandler) {
+  constructor(container, filmsModel, _filterTypeChangeHandler) {
     this._container = container;
     this._filmModel = filmsModel;
     this._filterTypeChangeHandler = _filterTypeChangeHandler;
-    this._statisticsClickHandler = statisticsClickHandler;
     this._menu = null;
   }
 
@@ -33,7 +32,6 @@ export default class MenuController {
   _setMenu() {
     this._menu = new Menu(this._filmModel.getCountsFilmsByFilters(), this._filmModel.getFilterType());
     this._menu.setFilterChangeHandler(this._filterTypeChangeHandler);
-    this._menu.setStatisticsClickHandler(this._statisticsClickHandler);
   }
 
 
@@ -49,6 +47,7 @@ export default class MenuController {
       replace(this._menu, oldMenu);
     }
   }
+
 
   /**
    * Метод, обеспечивающий удаление текущего меню

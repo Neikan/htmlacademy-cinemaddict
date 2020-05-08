@@ -134,7 +134,8 @@ export const MenuElement = {
   ITEMS: `main-navigation__items`,
   ITEM: `main-navigation__item`,
   ITEM_ACTIVE: `main-navigation__item--active`,
-  ITEM_STATS: `main-navigation__additional`
+  ITEM_STATS: `main-navigation__additional`,
+  DATA_ID: `a[data-item-id]`
 };
 
 export const Flag = {
