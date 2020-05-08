@@ -75,8 +75,8 @@ export default class Menu extends AbstractComponent {
     this._countsFilmsByFilters = countsFilmsByFilters;
     this._filterType = filterType;
 
-    this._clickHandler = this._clickHandler.bind(this);
-    this._showHandler = this._showHandler.bind(this);
+    this._clickFilterHandler = this._clickFilterHandler.bind(this);
+    this._clickStatsHandler = this._clickStatsHandler.bind(this);
   }
 
 
@@ -90,12 +90,29 @@ export default class Menu extends AbstractComponent {
 
 
   /**
+   * Метод, обеспечивающий получение контнейнера с пунктами-фильтрами меню
+   * @return {Object}
+   */
+  getMenuItems() {
+    return this.getElement().querySelector(`.${MenuElement.ITEMS}`);
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение пункта статистики
+   * @return {Object}
+   */
+  getMenuItemStats() {
+    return this.getElement().querySelector(`.${MenuElement.ITEM_STATS}`);
+  }
+
+
+  /**
    * Метод, обеспечивающий добавление слушателей на изменение текущего фильтра
    * @param {Function} handler помощник
    */
   setFilterChangeHandler(handler) {
-    this.getElement().querySelector(`.${MenuElement.ITEMS}`)
-      .addEventListener(`click`, this._clickHandler(handler));
+    this.getMenuItems().addEventListener(`click`, this._clickFilterHandler(handler));
   }
 
 
@@ -104,12 +121,16 @@ export default class Menu extends AbstractComponent {
    * @param {Function} handler
    */
   setStatisticsClickHandler(handler) {
-    this.getElement().querySelector(`.${MenuElement.ITEM_STATS}`)
-      .addEventListener(`click`, this._showHandler(handler));
+    this.getMenuItemStats().addEventListener(`click`, this._clickStatsHandler(handler));
   }
 
 
-  _showHandler(handler) {
+  /**
+   * Метод, обеспечиващий создание помощника для установки активным пункта стастистики
+   * @param {Function} handler помощник
+   * @return {Function} созданный помощник
+   */
+  _clickStatsHandler(handler) {
     return (evt) => {
       if (evt.target.tagName !== `A`) {
         return;
@@ -128,11 +149,11 @@ export default class Menu extends AbstractComponent {
 
 
   /**
-   * Метод, обеспечиващий установку активного фильтра и получение его значения
+   * Метод, обеспечиващий создание помощника для установки активного фильтра и получения его значения
    * @param {Function} handler помощник
-   * @return {Function}
+   * @return {Function} созданный помощник
    */
-  _clickHandler(handler) {
+  _clickFilterHandler(handler) {
     return (evt) => {
       const target = evt.target.closest(`.${MenuElement.ITEM}`);
 
