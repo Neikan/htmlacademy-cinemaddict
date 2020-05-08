@@ -1,5 +1,6 @@
 import AbstractSmartComponent from "./abstract/component-smart";
 
+
 const createStatistics = () => {
   return (
     `<section class="statistic visually-hidden">
