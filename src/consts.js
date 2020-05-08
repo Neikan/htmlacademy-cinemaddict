@@ -131,8 +131,10 @@ export const DetailsElement = {
 };
 
 export const MenuElement = {
+  ITEMS: `main-navigation__items`,
   ITEM: `main-navigation__item`,
-  ITEM_ACTIVE: `main-navigation__item--active`
+  ITEM_ACTIVE: `main-navigation__item--active`,
+  ITEM_STATS: `main-navigation__additional`
 };
 
 export const Flag = {

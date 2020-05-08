@@ -22,7 +22,8 @@ export default class MenuController {
 
     this._menu = new Menu(
         this._filmModel.getCountsFilmsByFilters(),
-        this._filmModel.getFilterType());
+        this._filmModel.getFilterType()
+    );
 
     this._replace(this._container, oldMenu);
   }

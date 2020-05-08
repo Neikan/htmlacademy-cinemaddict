@@ -47,6 +47,7 @@ export default class Menu extends AbstractComponent {
     this._filterType = filterType;
 
     this._clickHandler = this._clickHandler.bind(this);
+    this._showHandler = this._showHandler.bind(this);
   }
 
 
@@ -64,7 +65,36 @@ export default class Menu extends AbstractComponent {
    * @param {Function} handler помощник
    */
   setFilterChangeHandler(handler) {
-    this.getElement().addEventListener(`click`, this._clickHandler(handler));
+    this.getElement().querySelector(`.${MenuElement.ITEMS}`)
+      .addEventListener(`click`, this._clickHandler(handler));
+  }
+
+
+  /**
+   * Метод, обеспечивающий отображение статистики
+   * @param {Function} handler
+   */
+  setShowStatisticsHandler(handler) {
+    this.getElement().querySelector(`.${MenuElement.ITEM_STATS}`)
+      .addEventListener(`click`, this._showHandler(handler));
+  }
+
+
+  _showHandler(handler) {
+    return (evt) => {
+      if (evt.target.tagName !== `A`) {
+        return;
+      }
+
+      if (evt.target) {
+        evt.target.classList.add(`${MenuElement.ITEM_ACTIVE}`);
+        this._setActiveClassHandler(evt);
+      } else {
+        evt.target.classList.remove(`${MenuElement.ITEM_ACTIVE}`);
+      }
+
+      handler(evt);
+    };
   }
 
 
@@ -96,9 +126,19 @@ export default class Menu extends AbstractComponent {
     [...this.getElement().querySelectorAll(`.${MenuElement.ITEM}`)].map((menuItem) => {
       if (menuItem === evt.target.closest(`.${MenuElement.ITEM}`)) {
         menuItem.classList.add(`${MenuElement.ITEM_ACTIVE}`);
+        this._setActiveStatsHandler(menuItem);
       } else {
         menuItem.classList.remove(`${MenuElement.ITEM_ACTIVE}`);
       }
     });
+  }
+
+
+  _setActiveStatsHandler(element) {
+    if (element === this.getElement().querySelector(`.${MenuElement.ITEM_STATS}`)) {
+      this.getElement().querySelector(`.${MenuElement.ITEM_STATS}`).classList.add(`${MenuElement.ITEM_ACTIVE}`);
+    } else {
+      this.getElement().querySelector(`.${MenuElement.ITEM_STATS}`).classList.remove(`${MenuElement.ITEM_ACTIVE}`);
+    }
   }
 }

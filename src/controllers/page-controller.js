@@ -85,6 +85,7 @@ export default class PageController {
    */
   hide() {
     this._container.hide();
+    this._sorting.hide();
   }
 
 
@@ -93,6 +94,7 @@ export default class PageController {
    */
   show() {
     this._container.show();
+    this._sorting.show();
   }
 
 
@@ -175,8 +177,18 @@ export default class PageController {
     this._menuController = new MenuController(container.parentElement, this._filmsModel);
     this._menuController.render();
     this._menuController.getMenu().setFilterChangeHandler(this._filterTypeChangeHandler(container));
+    this._menuController.getMenu().setShowStatisticsHandler(this._showStatisticsHandler(container));
   }
 
+
+  _showStatisticsHandler() {
+    return (evt) => {
+      if (evt.target) {
+        this.hide();
+        this._statistics.show();
+      }
+    };
+  }
 
   /**
    * Метод, обеспечивающий отрисовку компонентов-контейнеров фильмов
@@ -191,7 +203,7 @@ export default class PageController {
 
   _renderStatistics(container) {
     this._statistics = new Statistics(this._filmsModel.getFilmsData());
-    render[Position.BEFORE_END](container, this._statistics);
+    render[Position.BEFORE_END](container.parentElement, this._statistics);
   }
 
   /**
@@ -565,6 +577,10 @@ export default class PageController {
    */
   _filterTypeChangeHandler(container) {
     return (filterType) => {
+
+      this._statistics.hide();
+      this.show();
+
       this._setDefaults();
       this._filmsModel.setFilterType(filterType);
       this._filmsModel.setSortType(SortType.DEFAULT);
