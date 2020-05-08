@@ -159,6 +159,7 @@ export const FilterType = {
   COMMENTED: `Commented`
 };
 
+export const STATS_NAME = `Stats`;
 
 export const SortType = {
   DEFAULT: `default`,

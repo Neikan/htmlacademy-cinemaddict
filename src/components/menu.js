@@ -1,23 +1,22 @@
 import AbstractComponent from "./abstract/component";
-import {FilterType, MenuElement} from "../consts";
+import {FilterType, MenuElement, STATS_NAME, Flag} from "../consts";
 
 
 /**
  * Создание разметки блока главного меню
- * @param {Object} countsFilmsByFilters количества фильмов, соответствующих фильтрам
- * @param {string} activefilterType примененный фильтр
+ * @param {Object} menuItemsData данные пунктов меню
  * @return {string} разметка блока
  */
-const createMenu = (countsFilmsByFilters, activefilterType) => {
+const createMenu = (menuItemsData) => {
   return (
     `<nav class="main-navigation">
       <div class="main-navigation__items">
-        ${createMenuItem(activefilterType, FilterType.ALL)}
-        ${createMenuItem(activefilterType, FilterType.WATCHLIST, countsFilmsByFilters.WATCHLIST)}
-        ${createMenuItem(activefilterType, FilterType.HISTORY, countsFilmsByFilters.HISTORY)}
-        ${createMenuItem(activefilterType, FilterType.FAVORITES, countsFilmsByFilters.FAVORITES)}
+        ${createMenuItem(menuItemsData.ALL)}
+        ${createMenuItem(menuItemsData.WATCHLIST)}
+        ${createMenuItem(menuItemsData.HISTORY)}
+        ${createMenuItem(menuItemsData.FAVORITES)}
       </div>
-      <a href="#stats" class="main-navigation__additional">Stats</a>
+      <a href="#stats" data-item-id="${menuItemsData.STATS.name}" class="main-navigation__additional">${menuItemsData.STATS.name}</a>
     </nav>`
   );
 };
@@ -26,30 +25,25 @@ const createMenu = (countsFilmsByFilters, activefilterType) => {
 /**
  * Создание разметки пункта меню
  * @param {string} activefilterType примененный фильтр
- * @param {string} filterType фильтр
+ * @param {string} menuItemsData фильтр
  * @param {Number} countFilms количество фильмов, соответствующее фильтру
  * @return {string} разметка пункта
  */
-const createMenuItem = (activefilterType, filterType, countFilms) => {
+const createMenuItem = ({name, isActive, count}) => {
   return (
-    `<a href="#favorites" data-filter-type="${filterType}"
-      class="main-navigation__item${getClassMarkup(activefilterType, filterType)}"
-      >${filterType} ${getSpanMarkup(filterType, countFilms)}</a>`
+    `<a href="#favorites" data-item-id="${name}"
+      class="main-navigation__item${getClassMarkup(isActive)}"
+      >${name} ${getSpanMarkup(name, count)}</a>`
   );
 };
 
 
 /**
  * Создание разметки дополнительного активного класса
- * @param {string} activefilterType примененный фильтр
- * @param {string} filterType фильтр
+ * @param {string} isActive флаг, определяющий применен или нет фильтр
  * @return {string} разметка класса
  */
-const getClassMarkup = (activefilterType, filterType) => {
-  return activefilterType === filterType ?
-    ` ` + MenuElement.ITEM_ACTIVE :
-    ``;
-};
+const getClassMarkup = (isActive) => isActive ? ` ` + MenuElement.ITEM_ACTIVE : ``;
 
 
 /**
@@ -85,7 +79,41 @@ export default class Menu extends AbstractComponent {
    * @return {Object}
    */
   getTemplate() {
-    return createMenu(this._countsFilmsByFilters, this._filterType);
+    return createMenu(this._getMenuItemsData());
+  }
+
+
+  _getIsActiveFilter(filterType) {
+    return this._filterType === filterType ? Flag.YES : Flag.NO;
+  }
+
+
+  _getMenuItemsData() {
+    return {
+      ALL: {
+        name: FilterType.ALL,
+        isActive: this._getIsActiveFilter(FilterType.ALL)
+      },
+      WATCHLIST: {
+        name: FilterType.WATCHLIST,
+        isActive: this._getIsActiveFilter(FilterType.WATCHLIST),
+        count: this._countsFilmsByFilters.WATCHLIST
+      },
+      HISTORY: {
+        name: FilterType.HISTORY,
+        isActive: this._getIsActiveFilter(FilterType.HISTORY),
+        count: this._countsFilmsByFilters.HISTORY
+      },
+      FAVORITES: {
+        name: FilterType.FAVORITES,
+        isActive: this._getIsActiveFilter(FilterType.FAVORITES),
+        count: this._countsFilmsByFilters.FAVORITES
+      },
+      STATS: {
+        name: STATS_NAME,
+        isActive: this._getIsActiveFilter(STATS_NAME)
+      }
+    };
   }
 
 
@@ -93,7 +121,7 @@ export default class Menu extends AbstractComponent {
    * Метод, обеспечивающий получение контнейнера с пунктами-фильтрами меню
    * @return {Object}
    */
-  getMenuItems() {
+  getMenuFilters() {
     return this.getElement().querySelector(`.${MenuElement.ITEMS}`);
   }
 
@@ -102,7 +130,7 @@ export default class Menu extends AbstractComponent {
    * Метод, обеспечивающий получение пункта статистики
    * @return {Object}
    */
-  getMenuItemStats() {
+  getMenuStats() {
     return this.getElement().querySelector(`.${MenuElement.ITEM_STATS}`);
   }
 
@@ -112,7 +140,7 @@ export default class Menu extends AbstractComponent {
    * @param {Function} handler помощник
    */
   setFilterChangeHandler(handler) {
-    this.getMenuItems().addEventListener(`click`, this._clickFilterHandler(handler));
+    this.getMenuFilters().addEventListener(`click`, this._clickFilterHandler(handler));
   }
 
 
@@ -121,7 +149,7 @@ export default class Menu extends AbstractComponent {
    * @param {Function} handler
    */
   setStatisticsClickHandler(handler) {
-    this.getMenuItemStats().addEventListener(`click`, this._clickStatsHandler(handler));
+    this.getMenuStats().addEventListener(`click`, this._clickStatsHandler(handler));
   }
 
 
@@ -162,7 +190,7 @@ export default class Menu extends AbstractComponent {
       }
 
       this._setActiveClassHandler(evt);
-      this._filterType = target.dataset.filterType;
+      this._filterType = target.dataset.itemId;
       handler(this._filterType);
     };
   }
