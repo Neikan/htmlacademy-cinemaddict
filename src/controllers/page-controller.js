@@ -6,6 +6,7 @@ import NoFilms from "../components/no-films";
 import ShowMoreBtn from "../components/show-more-button";
 import Sorting from "../components/sorting";
 import ProfileRank from "../components/profile-rank";
+import Statistics from "../components/statistics";
 import {
   CountFilm, ExtraName, Position, Flag, FilmsBlock,
   SortType, Mode, FilmsElement
@@ -17,7 +18,6 @@ const Nodes = {
   HEADER: document.querySelector(`.header`),
   MAIN: document.querySelector(`.main`),
 };
-
 
 /**
  * Создание контроллера, обеспечивающего отрисовку фильмов
@@ -67,6 +67,7 @@ export default class PageController {
     this._profileRank = null;
     this._noFilms = null;
     this._sorting = null;
+    this._statistics = null;
     this._menuController = null;
     this._countFilms = CountFilm.START;
     this._countWatchedFilms = 0;
@@ -76,6 +77,22 @@ export default class PageController {
     this._dataChangeHandler = this._dataChangeHandler.bind(this);
     this._viewChangeHandler = this._viewChangeHandler.bind(this);
     this._pageUpdateHandler = this._pageUpdateHandler.bind(this);
+  }
+
+
+  /**
+   * Метод, обеспечиващий скрытие контейнера контроллера
+   */
+  hide() {
+    this._container.hide();
+  }
+
+
+  /**
+   * Метод, обеспечиващий отображение контейнера контроллера
+   */
+  show() {
+    this._container.show();
   }
 
 
@@ -94,6 +111,7 @@ export default class PageController {
     }
 
     this._renderFilmsBlocks(container);
+    this._renderStatistics(container);
   }
 
 
@@ -170,6 +188,11 @@ export default class PageController {
     this._renderFilmsWithSorting(container);
   }
 
+
+  _renderStatistics(container) {
+    this._statistics = new Statistics(this._filmsModel.getFilmsData());
+    render[Position.BEFORE_END](container, this._statistics);
+  }
 
   /**
    * Метод, обеспечивающий отрисовку компонента самых обсуждаемых фильмов
