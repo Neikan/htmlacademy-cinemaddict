@@ -199,8 +199,9 @@ export default class PageController {
    * @param {string} period выбранный период
    */
   _renderStatistics(container, period) {
-    this._statistics = new Statistics(this._filmsModel.getFilmsDataForStats(period));
+    this._statistics = new Statistics(this._filmsModel, this._filmsModel.getFilmsDataForStats(period));
     render[Position.BEFORE_END](container.parentElement, this._statistics);
+    this._statistics.render();
   }
 
   /**

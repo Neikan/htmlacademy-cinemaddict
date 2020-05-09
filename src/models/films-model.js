@@ -130,8 +130,8 @@ export default class FilmsModel {
 
   /**
    * Метод, обеспечивающий получение данных для компонента-контейнера статистики
-   * @param {string} period выбранный период
-   * @return {Object} данные для статистики по просомтренным фильмам
+   * @param {string} period период статистики
+   * @return {Object} данные для статистики по просмотренным фильмам
    */
   getFilmsDataForStats(period) {
     const filmsWatchedData = this._getWatchedFilmsDataByTime(period);
@@ -145,8 +145,25 @@ export default class FilmsModel {
 
 
   /**
+   * Метод обеспечивающий получение жанров с количеством им соответствующих просмотренных фильмов
+   * @param {Array} filmsWatchedData данные фильмов, соответствующие периоду
+   * @return {Array} жанры и количество фильмов им соответствующих
+   */
+  getCountWatchedFilmsByGenre(filmsWatchedData) {
+    const countGenres = this._getWatchedFilmsGenres(filmsWatchedData).map((genre) => {
+      return {
+        [`name`]: genre,
+        [`count`]: filterRules[FilterType.GENRES](filmsWatchedData, genre)
+      };
+    });
+
+    return sortRules[SortType.BY_GENRES](countGenres);
+  }
+
+
+  /**
    * Метод, выполняющий получение фильмов, просмотренных за период
-   * @param {string} period выбранный период
+   * @param {string} period период статистики
    * @return {Array} данные фильмов, соответствующие периоду
    */
   _getWatchedFilmsDataByTime(period) {
@@ -173,7 +190,7 @@ export default class FilmsModel {
    * @param {Array} filmsWatchedData данные фильмов, соответствующие периоду
    * @return {Array} жанры, соответствующие периоду
    */
-  _getFilmsGenres(filmsWatchedData) {
+  _getWatchedFilmsGenres(filmsWatchedData) {
     const uniqueGenres = [];
 
     const getGenres = () => {
@@ -197,14 +214,7 @@ export default class FilmsModel {
    * @return {string} название жанра
    */
   _getTopGenre(filmsWatchedData) {
-    const countGenres = this._getFilmsGenres(filmsWatchedData).map((genre) => {
-      return {
-        [`name`]: genre,
-        [`count`]: filterRules[FilterType.GENRES](filmsWatchedData, genre)
-      };
-    });
-
-    return sortRules[SortType.BY_GENRES](countGenres).slice(0, 1)[0].name;
+    return this.getCountWatchedFilmsByGenre(filmsWatchedData).slice(0, 1)[0].name;
   }
 
 

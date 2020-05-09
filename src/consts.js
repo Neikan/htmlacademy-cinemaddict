@@ -6,7 +6,7 @@ export const KeyCode = {
 export const MINUTES_IN_HOUR = 60;
 
 export const CountFilm = {
-  ALL: 200,
+  ALL: 20,
   START: 5,
   BY_BUTTON: 5,
   EXTRA: 2,
