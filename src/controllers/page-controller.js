@@ -9,7 +9,7 @@ import ProfileRank from "../components/profile-rank";
 import Statistics from "../components/statistics";
 import {
   CountFilm, ExtraName, Position, Flag, FilmsBlock,
-  SortType, Mode, FilmsElement, STATS_NAME
+  SortType, Mode, FilmsElement, STATS_NAME, StatsElement
 } from "../consts";
 import {render, remove} from "../utils/components";
 
@@ -165,7 +165,7 @@ export default class PageController {
    */
   _renderProfileRank() {
     this._countWatchedFilms = this._filmsModel.getCountsFilmsByFilters().HISTORY;
-    this._profileRank = new ProfileRank(this._countWatchedFilms);
+    this._profileRank = new ProfileRank(this._filmsModel.getRankDescription(this._countWatchedFilms));
     render[Position.BEFORE_END](Nodes.HEADER, this._profileRank);
   }
 
@@ -196,13 +196,13 @@ export default class PageController {
   /**
    * Метод, обеспечивающий отрисовку компонента-контейнера стастистики
    * @param {Object} container контейнер контроллера
-   * @param {string} period выбранный период
    */
-  _renderStatistics(container, period) {
-    this._statistics = new Statistics(this._filmsModel, this._filmsModel.getFilmsDataForStats(period));
+  _renderStatistics(container) {
+    this._statistics = new Statistics(container, this._filmsModel);
     render[Position.BEFORE_END](container.parentElement, this._statistics);
     this._statistics.render();
   }
+
 
   /**
    * Метод, обеспечивающий отрисовку компонента самых обсуждаемых фильмов
@@ -390,6 +390,16 @@ export default class PageController {
 
 
   /**
+   * Метод, обеспечивающий обновление компонента-контейнера стастистики в случае, если
+   * @param {Object} container контейнер контроллера
+   */
+  _updateStatistics(container) {
+    remove(this._statistics);
+    this._renderStatistics(container);
+  }
+
+
+  /**
    * Метод, обеспечивабщий обновление блоков фильмов при изменении фильма в блоке высокорейтинговых фильмов
    * @param {Object} container контейнер контроллера
    */
@@ -506,6 +516,7 @@ export default class PageController {
 
     this._updateProfileRank();
     this._updateMenu(container);
+    this._updateStatistics(container);
     this._updateFilmsBlocks(filmsBlockInitiator, container, mode);
   }
 
@@ -576,11 +587,12 @@ export default class PageController {
    */
   _filterTypeChangeHandler(container) {
     return (filterType) => {
-      if (filterType !== STATS_NAME) {
+      if (filterType !== StatsElement.NAME) {
         this._statistics.hide();
         this.show();
       } else {
         this.hide();
+        this._resetNoFilms();
         this._statistics.show();
         return;
       }

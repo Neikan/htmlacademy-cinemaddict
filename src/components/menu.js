@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract/component";
-import {FilterType, MenuElement, STATS_NAME, Flag} from "../consts";
+import {FilterType, MenuElement, Flag, StatsElement} from "../consts";
 
 
 /**
@@ -124,8 +124,8 @@ export default class Menu extends AbstractComponent {
         count: this._countsFilmsByFilters.FAVORITES
       },
       STATS: {
-        name: STATS_NAME,
-        isActive: this._getIsActiveFilter(STATS_NAME)
+        name: StatsElement.NAME,
+        isActive: this._getIsActiveFilter(StatsElement.NAME)
       }
     };
   }

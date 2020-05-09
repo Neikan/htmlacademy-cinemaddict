@@ -1,41 +1,46 @@
 import AbstractSmartComponent from "./abstract/component-smart";
 import Chart from "chart.js";
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import {getHours, getMinutes} from "../utils/common";
+import {StatsElement} from "../consts";
 
 
 const STATS_FILTERS = [
   {
     input: `all-time`,
-    label: `All time`
-  },
-  {
+    label: `All time`,
+    value: 0
+  }, {
     input: `today`,
-    label: `Today`
-  },
-  {
+    label: `Today`,
+    value: 1
+  }, {
     input: `week`,
-    label: `Week`
-  },
-  {
+    label: `Week`,
+    value: 7
+  }, {
     input: `month`,
-    label: `Month`
-  },
-  {
+    label: `Month`,
+    value: 30
+  }, {
     input: `year`,
-    label: `Year`
+    label: `Year`,
+    value: 365
   }
 ];
 
 
 /**
  * Создание разметки для фильтра статистики
+ * @param {string} filter примененный фильтр
  * @param {Object} параметры пункта
  * @return {string} разметка фильтра
  */
-const createStatsFilter = ({input, label}) => {
+const createStatsFilter = (filter, {input, label}) => {
+  const isCheckd = filter === input ? ` checked` : ``;
+
   return (
-    `<input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${input}" value="${input}" checked>
+    `<input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${input}" value="${input}"${isCheckd}>
     <label for="statistic-${input}" class="statistic__filters-label">${label}</label>`
   );
 };
@@ -43,28 +48,31 @@ const createStatsFilter = ({input, label}) => {
 
 /**
  * Создание разметки для блока фильтров статистики
+ * @param {string} period период
  * @return {string} разметка блока
  */
-const createStatsFilters = () => STATS_FILTERS.map(createStatsFilter).join(`\n`);
+const createStatsFilters = (period) => STATS_FILTERS.map((filter) =>
+  createStatsFilter(period, filter)).join(`\n`);
 
 
 /**
  * Создание разметки блока статистики
  * @param {Object} данные по просмотренным фильмам
+ * @param {string} filter примененный фильтр
  * @return {string} разметка блока
  */
-const createStatistics = ({count, duration, topGenre}) => {
+const createStatistics = ({rank, count, duration, topGenre}, filter) => {
   return (
     `<section class="statistic visually-hidden">
       <p class="statistic__rank">
         Your rank
         <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-        <span class="statistic__rank-label">Sci-Fighter</span>
+        <span class="statistic__rank-label">${rank}</span>
       </p>
 
       <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
         <p class="statistic__filters-description">Show stats:</p>
-        ${createStatsFilters()}
+        ${createStatsFilters(filter)}
       </form>
 
       <ul class="statistic__text-list">
@@ -94,11 +102,14 @@ const createStatistics = ({count, duration, topGenre}) => {
  * Создание класса для экрана статистики по просмотренным фильмам за период
  */
 export default class Statistics extends AbstractSmartComponent {
-  constructor(filmsModel, filmsDataForStats) {
+  constructor(container, filmsModel) {
     super();
 
+    this._container = container;
     this._filmsModel = filmsModel;
-    this._filmsDataForStats = filmsDataForStats;
+    this._filmsWatchedData = [];
+    this._filter = `all-time`;
+    this._period = 0;
     this._chart = null;
     this._chartData = [];
     this._chartLabels = [];
@@ -111,7 +122,7 @@ export default class Statistics extends AbstractSmartComponent {
    * @return {Object}
    */
   getTemplate() {
-    return createStatistics(this._filmsDataForStats);
+    return createStatistics(this._filmsModel.getFilmsDataForStats(this._period), this._filter);
   }
 
 
@@ -121,6 +132,52 @@ export default class Statistics extends AbstractSmartComponent {
   render() {
     this._setChartData();
     this._renderChart();
+    this.setFilterChangeHandler();
+  }
+
+
+  /**
+   * Метод, обеспечивающий перерисовку статистики при смене фильтра
+   */
+  rerender() {
+    this._setChartData();
+    super.rerender();
+    this._renderChart();
+    super.show();
+  }
+
+
+  /**
+   * Метод, обеспечивающий добавление слушателей на фильтры статистики
+   */
+  setFilterChangeHandler() {
+    [...this.getElement().querySelectorAll(`.${StatsElement.FILTER}`)]
+      .map(this._getFilterChangeHandler());
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение значения периода, по которому необходимо получить статистику
+   */
+  _getPeriod() {
+    this._period = STATS_FILTERS[
+      STATS_FILTERS.findIndex((filter) => filter.input === this._filter)
+    ].value;
+  }
+
+
+  /**
+   * Метод, обеспесивающий создание помощника для переключения фильтров статистики
+   * @return {Function} созданный помощник
+   */
+  _getFilterChangeHandler() {
+    return (filter) => {
+      filter.addEventListener(`change`, (evt) => {
+        this._filter = evt.target.value;
+        this._getPeriod();
+        this.rerender();
+      });
+    };
   }
 
 
@@ -128,9 +185,9 @@ export default class Statistics extends AbstractSmartComponent {
    * Метод, обеспечивающий получение данных для диаграммы
    * @param {string} period период статистики
    */
-  _setChartData(period) {
+  _setChartData() {
     this._chartData = this._filmsModel.getCountWatchedFilmsByGenre(
-        this._filmsModel._getWatchedFilmsDataByTime(period)
+        this._filmsModel._getWatchedFilmsDataByTime(this._period)
     );
 
     this._chartLabels = this._chartData.map((genre) => genre.name);
@@ -203,5 +260,13 @@ export default class Statistics extends AbstractSmartComponent {
         }
       }
     });
+  }
+
+
+  /**
+   * Метод, обеспечивающий восставновление слушателей
+   */
+  recoveryListeners() {
+    this.setFilterChangeHandler();
   }
 }

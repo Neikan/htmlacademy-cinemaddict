@@ -1,4 +1,4 @@
-import {FilterType, FilmAttribute, Flag, SortType, CountFilm} from '../consts';
+import {FilterType, FilmAttribute, Flag, SortType, CountFilm, RankDescription} from '../consts';
 import {filterRules, sortRules} from '../utils/components';
 import {getIndex} from '../utils/common';
 
@@ -136,11 +136,11 @@ export default class FilmsModel {
   getFilmsDataForStats(period) {
     const filmsWatchedData = this._getWatchedFilmsDataByTime(period);
 
-    return {
-      count: filmsWatchedData.length,
-      duration: this._getDurationWatchedFilms(filmsWatchedData),
-      topGenre: this._getTopGenre(filmsWatchedData)
-    };
+    if (filmsWatchedData.length) {
+      return this._getRealStats(filmsWatchedData);
+    } else {
+      return this._getZeroStats();
+    }
   }
 
 
@@ -162,12 +162,59 @@ export default class FilmsModel {
 
 
   /**
+   * Метод, обеспечивающий получение ранга профиля пользователя
+   * @param {Number} countWatchedFilms количество просмотренных фильмов
+   * @return {string} ранг профиля пользователя
+   */
+  getRankDescription(countWatchedFilms) {
+    if (countWatchedFilms >= RankDescription.MOVIE_BUFF.from) {
+      return RankDescription.MOVIE_BUFF.rank;
+    } else if (countWatchedFilms >= RankDescription.FUN.from) {
+      return RankDescription.FUN.rank;
+    } else if (countWatchedFilms >= RankDescription.NOVICE.from) {
+      return RankDescription.NOVICE.rank;
+    } else {
+      return (``);
+    }
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение данных для компонента-контейнера статистики в случае, если просмотренные за период фильмы присутствуют
+   * @param {Array} filmsWatchedData данные фильмов, соответствующие периоду
+   * @return {Object} данные для статистики по просмотренным фильмам
+   */
+  _getRealStats(filmsWatchedData) {
+    return {
+      rank: this.getRankDescription(filmsWatchedData.length),
+      count: filmsWatchedData.length,
+      duration: this._getDurationWatchedFilms(filmsWatchedData),
+      topGenre: this._getTopGenre(filmsWatchedData)
+    };
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение данных для компонента-контейнера статистики в случае, если просмотренные за период фильмы отсутствуют
+   * @return {Object} данные для статистики по просмотренным фильмам
+   */
+  _getZeroStats() {
+    return {
+      rank: this.getRankDescription(0),
+      count: 0,
+      duration: 0,
+      topGenre: `—`
+    };
+  }
+
+
+  /**
    * Метод, выполняющий получение фильмов, просмотренных за период
    * @param {string} period период статистики
    * @return {Array} данные фильмов, соответствующие периоду
    */
   _getWatchedFilmsDataByTime(period) {
-    return period ?
+    return period !== 0 ?
       filterRules[FilterType.HISTORY_BY_TIME](this._filmsData, period) :
       filterRules[FilterType.HISTORY](this._filmsData);
   }

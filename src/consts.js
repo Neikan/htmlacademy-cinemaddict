@@ -6,7 +6,7 @@ export const KeyCode = {
 export const MINUTES_IN_HOUR = 60;
 
 export const CountFilm = {
-  ALL: 20,
+  ALL: 22,
   START: 5,
   BY_BUTTON: 5,
   EXTRA: 2,
@@ -181,8 +181,6 @@ export const FilterType = {
   GENRES: `By genres`
 };
 
-export const STATS_NAME = `Stats`;
-
 export const Mode = {
   DEFAULT: `default`,
   DETAILS: `details`,
@@ -193,4 +191,10 @@ export const Period = {
   WEEK: 7,
   MONTH: 30,
   YEAR: 365
+};
+
+export const StatsElement = {
+  NAME: `Stats`,
+  FILTER: `statistic__filters-input`,
+  CHART: `statistic__chart`
 };

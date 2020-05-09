@@ -90,7 +90,8 @@ export const filterRules = {
   'Commented': (filmsData) => filmsData.filter((filmData) => filmData.comments.length !== 0),
   'By genres': (filmsData, genre) => filmsData.filter((filmData) =>
     filmData.details.genres.includes(genre)).length,
-  'History by time': (filmsData, time) => filmsData.filter((filmData) => filmData.isWatched && filmData.watchedDate >= getTime(time))
+  'History by time': (filmsData, period) => filmsData.filter((filmData) =>
+    filmData.isWatched && filmData.watchedDate >= getTime(period))
 };
 
 
