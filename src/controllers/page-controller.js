@@ -9,7 +9,7 @@ import ProfileRank from "../components/profile-rank";
 import Statistics from "../components/statistics";
 import {
   CountFilm, ExtraName, Position, Flag, FilmsBlock,
-  SortType, Mode, FilmsElement, STATS_NAME, StatsElement
+  SortType, Mode, FilmsElement, StatsElement
 } from "../consts";
 import {render, remove} from "../utils/components";
 
