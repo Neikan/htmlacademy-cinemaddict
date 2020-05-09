@@ -150,7 +150,7 @@ export default class Menu extends AbstractComponent {
     return (evt) => {
       const target = evt.target.closest(MenuElement.DATA_ID);
 
-      if (target.tagName !== `A`) {
+      if (evt.target.tagName !== `A`) {
         return;
       }
 
