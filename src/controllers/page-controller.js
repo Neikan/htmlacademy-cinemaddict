@@ -196,9 +196,10 @@ export default class PageController {
   /**
    * Метод, обеспечивающий отрисовку компонента-контейнера стастистики
    * @param {Object} container контейнер контроллера
+   * @param {string} period выбранный период
    */
-  _renderStatistics(container) {
-    this._statistics = new Statistics(this._filmsModel.getFilmsData());
+  _renderStatistics(container, period) {
+    this._statistics = new Statistics(this._filmsModel.getFilmsDataForStats(period));
     render[Position.BEFORE_END](container.parentElement, this._statistics);
   }
 

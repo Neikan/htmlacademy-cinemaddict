@@ -1,7 +1,7 @@
 import moment from "moment";
 import {
   Position, CountCheckFormat, START_DATE_FILMS,
-  CountFilm, DETAILS, FormatRule
+  CountFilm, DETAILS, FormatRule, MINUTES_IN_HOUR
 } from "../consts";
 
 
@@ -160,4 +160,36 @@ export const formatDuration = (duration) => {
 };
 
 
+/**
+ * Генерация идентификатора для фильмов и комментариев
+ * @return {string}
+ */
 export const generateId = () => `f${(+new Date()).toString(16)}${Math.random() * 1e8}`;
+
+
+/**
+ *
+ * @param {number} period
+ * @return {Date}
+ */
+export const getTime = (period) => {
+  const currentDate = new Date();
+  return currentDate.setDate(currentDate.getDate() - period);
+};
+
+
+/**
+ * Получение количества часов длительности фильмов
+ * @param {Number} durationInMinutes длительность фильмов в минутах
+ * @return {Number} количество часов
+ */
+export const getHours = (durationInMinutes) =>
+  (durationInMinutes - durationInMinutes % MINUTES_IN_HOUR) / MINUTES_IN_HOUR;
+
+
+/**
+ * Получение количества минут длительности фильмов
+ * @param {Number} durationInMinutes длительность фильмов в минутах
+ * @return {Number} количество минут
+ */
+export const getMinutes = (durationInMinutes) => durationInMinutes % MINUTES_IN_HOUR;

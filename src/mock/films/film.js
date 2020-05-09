@@ -7,7 +7,8 @@ import {
   ACTORS,
   COUNTRIES,
   GENRES,
-  AGE_RATINGS
+  AGE_RATINGS,
+  START_DATE_WATCHED
 } from './film-consts';
 import {
   getRandomElement,
@@ -16,7 +17,6 @@ import {
   getRandomBoolean,
   getRandomDate,
   formatDate,
-  formatDuration,
   generateId
 } from '../../utils/common';
 import {generateComments} from '../comments/comment.js';
@@ -62,7 +62,7 @@ const generateFilm = () => {
       },
       duration: {
         name: `Runtime`,
-        info: formatDuration(getRandomInt(240))
+        info: getRandomInt(240)
       },
       country: {
         name: `Country`,
@@ -75,6 +75,7 @@ const generateFilm = () => {
     comments: generateComments(getRandomInt(COUNT_COMMENTS_MAX)),
     isWatch: getRandomBoolean(),
     isWatched: getRandomBoolean(),
+    watchedDate: getRandomDate(new Date(), new Date([...START_DATE_WATCHED])),
     isFavorite: getRandomBoolean()
   };
 };

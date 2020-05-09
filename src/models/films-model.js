@@ -129,6 +129,86 @@ export default class FilmsModel {
 
 
   /**
+   * Метод, обеспечивающий получение данных для компонента-контейнера статистики
+   * @param {string} period выбранный период
+   * @return {Object} данные для статистики по просомтренным фильмам
+   */
+  getFilmsDataForStats(period) {
+    const filmsWatchedData = this._getWatchedFilmsDataByTime(period);
+
+    return {
+      count: filmsWatchedData.length,
+      duration: this._getDurationWatchedFilms(filmsWatchedData),
+      topGenre: this._getTopGenre(filmsWatchedData)
+    };
+  }
+
+
+  /**
+   * Метод, выполняющий получение фильмов, просмотренных за период
+   * @param {string} period выбранный период
+   * @return {Array} данные фильмов, соответствующие периоду
+   */
+  _getWatchedFilmsDataByTime(period) {
+    return period ?
+      filterRules[FilterType.HISTORY_BY_TIME](this._filmsData, period) :
+      filterRules[FilterType.HISTORY](this._filmsData);
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение длительности в минутах просмотренных за период фильмов
+   * @param {Array} filmsWatchedData данные фильмов, соответствующие периоду
+   * @return {Number} длительность просмотренных за период фильмов
+   */
+  _getDurationWatchedFilms(filmsWatchedData) {
+    return filmsWatchedData.reduce((result, filmData) => {
+      return result + filmData.details.duration.info;
+    }, 0);
+  }
+
+
+  /**
+   * Метод, выполняющий получение всех жанров просмотренных за период фильмов
+   * @param {Array} filmsWatchedData данные фильмов, соответствующие периоду
+   * @return {Array} жанры, соответствующие периоду
+   */
+  _getFilmsGenres(filmsWatchedData) {
+    const uniqueGenres = [];
+
+    const getGenres = () => {
+      filmsWatchedData.map((film) => {
+        film.details.genres.map((genre) => {
+          if (!uniqueGenres.includes(genre)) {
+            uniqueGenres.push(genre);
+          }
+        });
+      });
+    };
+    getGenres();
+
+    return uniqueGenres;
+  }
+
+
+  /**
+   * Метод обеспечивающий получение самого популярного жанра среди просмотренных за период фильмов
+   * @param {Array} filmsWatchedData данные фильмов, соответствующие периоду
+   * @return {string} название жанра
+   */
+  _getTopGenre(filmsWatchedData) {
+    const countGenres = this._getFilmsGenres(filmsWatchedData).map((genre) => {
+      return {
+        [`name`]: genre,
+        [`count`]: filterRules[FilterType.GENRES](filmsWatchedData, genre)
+      };
+    });
+
+    return sortRules[SortType.BY_GENRES](countGenres).slice(0, 1)[0].name;
+  }
+
+
+  /**
    * Метод, обеспечивающий обновление данных фильма в исходных данных
    * @param {Number} id идентификатор элемента в массиве данных фильмов
    * @param {Object} newFilmData обновленные данные фильма
