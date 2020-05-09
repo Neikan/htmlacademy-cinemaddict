@@ -3,8 +3,10 @@ export const KeyCode = {
   ESC: 27
 };
 
+export const MINUTES_IN_HOUR = 60;
+
 export const CountFilm = {
-  ALL: 34,
+  ALL: 22,
   START: 5,
   BY_BUTTON: 5,
   EXTRA: 2,
@@ -49,7 +51,24 @@ export const SortMethod = {
   BY_COMMENT_DATE: {
     type: `forNumberAsc`,
     parameter: `date`
+  },
+  BY_GENRES: {
+    type: `forNumberDesc`,
+    parameter: `count`
   }
+};
+
+export const SortType = {
+  DEFAULT: `default`,
+  BY_DATE: `by-date`,
+  BY_RATING: `by-rating`,
+  BY_COMMENTS: `by-comments`,
+  BY_GENRES: `by-genres`
+};
+
+export const SortClass = {
+  BUTTON: `sort__button`,
+  BUTTON_ACTIVE: `sort__button--active`
 };
 
 export const RankDescription = {
@@ -131,8 +150,11 @@ export const DetailsElement = {
 };
 
 export const MenuElement = {
+  ITEMS: `main-navigation__items`,
   ITEM: `main-navigation__item`,
-  ITEM_ACTIVE: `main-navigation__item--active`
+  ITEM_ACTIVE: `main-navigation__item--active`,
+  ITEM_STATS: `main-navigation__additional`,
+  DATA_ID: `a[data-item-id]`
 };
 
 export const Flag = {
@@ -152,25 +174,27 @@ export const FilterType = {
   ALL: `All movies`,
   WATCHLIST: `Watchlist`,
   HISTORY: `History`,
+  HISTORY_BY_TIME: `History by time`,
   FAVORITES: `Favorites`,
   RATED: `Rated`,
-  COMMENTED: `Commented`
-};
-
-
-export const SortType = {
-  DEFAULT: `default`,
-  BY_DATE: `by-date`,
-  BY_RATING: `by-rating`,
-  BY_COMMENTS: `by-comments`
-};
-
-export const SortClass = {
-  BUTTON: `sort__button`,
-  BUTTON_ACTIVE: `sort__button--active`
+  COMMENTED: `Commented`,
+  GENRES: `By genres`
 };
 
 export const Mode = {
   DEFAULT: `default`,
   DETAILS: `details`,
+};
+
+export const Period = {
+  TODAY: 1,
+  WEEK: 7,
+  MONTH: 30,
+  YEAR: 365
+};
+
+export const StatsElement = {
+  NAME: `Stats`,
+  FILTER: `statistic__filters-input`,
+  CHART: `statistic__chart`
 };

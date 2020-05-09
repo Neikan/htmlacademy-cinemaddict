@@ -1,5 +1,6 @@
 import AbstractComponent from "./abstract/component";
 import {CARD_ELEMENTS, CardElement, ClassMarkup, FILM_DESCRIPTION_LENGTH} from "../consts";
+import {formatDuration} from "../utils/common";
 
 
 /**
@@ -34,7 +35,7 @@ const createFilmCard = ({
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${details.year}</span>
-        <span class="film-card__duration">${details.duration.info}</span>
+        <span class="film-card__duration">${formatDuration(details.duration.info)}</span>
         <span class="film-card__genre">${details.genres[0]}</span>
       </p>
       <img src="./images/posters/${promo.poster}" alt="" class="film-card__poster">

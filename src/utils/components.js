@@ -1,4 +1,4 @@
-import {sortingArray} from "./common";
+import {sortingArray, getTime} from "./common";
 import {SortMethod} from "../consts";
 
 
@@ -87,7 +87,11 @@ export const filterRules = {
   'History': (filmsData) => filmsData.filter((filmData) => filmData.isWatched),
   'Favorites': (filmsData) => filmsData.filter((filmData) => filmData.isFavorite),
   'Rated': (filmsData) => filmsData.filter((filmData) => filmData.rating !== 0),
-  'Commented': (filmsData) => filmsData.filter((filmData) => filmData.comments.length !== 0)
+  'Commented': (filmsData) => filmsData.filter((filmData) => filmData.comments.length !== 0),
+  'By genres': (filmsData, genre) => filmsData.filter((filmData) =>
+    filmData.details.genres.includes(genre)).length,
+  'History by time': (filmsData, period) => filmsData.filter((filmData) =>
+    filmData.isWatched && filmData.watchedDate >= getTime(period))
 };
 
 
@@ -98,5 +102,6 @@ export const sortRules = {
   'default': (films) => films,
   'by-date': (films, count = films.length) => sortingArray(films, SortMethod.BY_DATE, count),
   'by-rating': (films, count = films.length) => sortingArray(films, SortMethod.BY_RATING, count),
-  'by-comments': (films, count = films.length) => sortingArray(films, SortMethod.BY_COMMENTS, count)
+  'by-comments': (films, count = films.length) => sortingArray(films, SortMethod.BY_COMMENTS, count),
+  'by-genres': (films, count = films.length) => sortingArray(films, SortMethod.BY_GENRES, count)
 };

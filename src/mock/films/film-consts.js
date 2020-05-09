@@ -1,5 +1,8 @@
 export const COUNT_COMMENTS_MAX = 5;
+
 export const RATING_MAX = 10;
+
+export const START_DATE_WATCHED = [2018, 1, 1];
 
 export const TITLES = [
   {

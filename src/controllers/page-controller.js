@@ -6,9 +6,10 @@ import NoFilms from "../components/no-films";
 import ShowMoreBtn from "../components/show-more-button";
 import Sorting from "../components/sorting";
 import ProfileRank from "../components/profile-rank";
+import Statistics from "../components/statistics";
 import {
   CountFilm, ExtraName, Position, Flag, FilmsBlock,
-  SortType, Mode, FilmsElement
+  SortType, Mode, FilmsElement, StatsElement
 } from "../consts";
 import {render, remove} from "../utils/components";
 
@@ -17,7 +18,6 @@ const Nodes = {
   HEADER: document.querySelector(`.header`),
   MAIN: document.querySelector(`.main`),
 };
-
 
 /**
  * Создание контроллера, обеспечивающего отрисовку фильмов
@@ -67,6 +67,7 @@ export default class PageController {
     this._profileRank = null;
     this._noFilms = null;
     this._sorting = null;
+    this._statistics = null;
     this._menuController = null;
     this._countFilms = CountFilm.START;
     this._countWatchedFilms = 0;
@@ -76,6 +77,25 @@ export default class PageController {
     this._dataChangeHandler = this._dataChangeHandler.bind(this);
     this._viewChangeHandler = this._viewChangeHandler.bind(this);
     this._pageUpdateHandler = this._pageUpdateHandler.bind(this);
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
+  }
+
+
+  /**
+   * Метод, обеспечиващий скрытие контейнера контроллера
+   */
+  hide() {
+    this._container.hide();
+    this._sorting.hide();
+  }
+
+
+  /**
+   * Метод, обеспечиващий отображение контейнера контроллера
+   */
+  show() {
+    this._container.show();
+    this._sorting.show();
   }
 
 
@@ -94,6 +114,7 @@ export default class PageController {
     }
 
     this._renderFilmsBlocks(container);
+    this._renderStatistics(container);
   }
 
 
@@ -144,7 +165,7 @@ export default class PageController {
    */
   _renderProfileRank() {
     this._countWatchedFilms = this._filmsModel.getCountsFilmsByFilters().HISTORY;
-    this._profileRank = new ProfileRank(this._countWatchedFilms);
+    this._profileRank = new ProfileRank(this._filmsModel.getRankDescription(this._countWatchedFilms));
     render[Position.BEFORE_END](Nodes.HEADER, this._profileRank);
   }
 
@@ -154,9 +175,10 @@ export default class PageController {
    * @param {Object} container контейнер контроллера
    */
   _renderMenu(container) {
-    this._menuController = new MenuController(container.parentElement, this._filmsModel);
+    this._menuController = new MenuController(
+        container.parentElement, this._filmsModel, this._filterTypeChangeHandler(container)
+    );
     this._menuController.render();
-    this._menuController.getMenu().setFilterChangeHandler(this._filterTypeChangeHandler(container));
   }
 
 
@@ -168,6 +190,17 @@ export default class PageController {
     this._renderFilmsCommented(container);
     this._renderFilmsRated(container);
     this._renderFilmsWithSorting(container);
+  }
+
+
+  /**
+   * Метод, обеспечивающий отрисовку компонента-контейнера стастистики
+   * @param {Object} container контейнер контроллера
+   */
+  _renderStatistics(container) {
+    this._statistics = new Statistics(container, this._filmsModel);
+    render[Position.BEFORE_END](container.parentElement, this._statistics);
+    this._statistics.render();
   }
 
 
@@ -333,7 +366,8 @@ export default class PageController {
    * @param {Object} container контейнер контроллера
    */
   _updateMenu(container) {
-    remove(this._menuController.getMenu());
+    this._menuController.remove();
+    this._menuController = null;
     this._renderMenu(container);
   }
 
@@ -352,6 +386,16 @@ export default class PageController {
     };
 
     updateRules[filmsBlockInitiator]();
+  }
+
+
+  /**
+   * Метод, обеспечивающий обновление компонента-контейнера стастистики в случае, если
+   * @param {Object} container контейнер контроллера
+   */
+  _updateStatistics(container) {
+    remove(this._statistics);
+    this._renderStatistics(container);
   }
 
 
@@ -472,6 +516,7 @@ export default class PageController {
 
     this._updateProfileRank();
     this._updateMenu(container);
+    this._updateStatistics(container);
     this._updateFilmsBlocks(filmsBlockInitiator, container, mode);
   }
 
@@ -542,6 +587,16 @@ export default class PageController {
    */
   _filterTypeChangeHandler(container) {
     return (filterType) => {
+      if (filterType !== StatsElement.NAME) {
+        this._statistics.hide();
+        this.show();
+      } else {
+        this.hide();
+        this._resetNoFilms();
+        this._statistics.show();
+        return;
+      }
+
       this._setDefaults();
       this._filmsModel.setFilterType(filterType);
       this._filmsModel.setSortType(SortType.DEFAULT);

@@ -214,6 +214,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     element.querySelector(`.${DetailsElement.BTN_HISTORY}`)
       .addEventListener(`click`, () => {
         this._filmData.isWatched = !this._filmData.isWatched;
+        this._filmData.watchedDate = new Date();
       });
   }
 

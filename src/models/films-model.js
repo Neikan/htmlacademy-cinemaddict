@@ -1,4 +1,4 @@
-import {FilterType, FilmAttribute, Flag, SortType, CountFilm} from '../consts';
+import {FilterType, FilmAttribute, Flag, SortType, CountFilm, RankDescription} from '../consts';
 import {filterRules, sortRules} from '../utils/components';
 import {getIndex} from '../utils/common';
 
@@ -125,6 +125,143 @@ export default class FilmsModel {
    */
   getCommentedFilmsData() {
     return filterRules[FilterType.COMMENTED](this._filmsData);
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение данных для компонента-контейнера статистики
+   * @param {string} period период статистики
+   * @return {Object} данные для статистики по просмотренным фильмам
+   */
+  getFilmsDataForStats(period) {
+    const filmsWatchedData = this._getWatchedFilmsDataByTime(period);
+
+    if (filmsWatchedData.length) {
+      return this._getRealStats(filmsWatchedData);
+    } else {
+      return this._getZeroStats();
+    }
+  }
+
+
+  /**
+   * Метод обеспечивающий получение жанров с количеством им соответствующих просмотренных фильмов
+   * @param {Array} filmsWatchedData данные фильмов, соответствующие периоду
+   * @return {Array} жанры и количество фильмов им соответствующих
+   */
+  getCountWatchedFilmsByGenre(filmsWatchedData) {
+    const countGenres = this._getWatchedFilmsGenres(filmsWatchedData).map((genre) => {
+      return {
+        [`name`]: genre,
+        [`count`]: filterRules[FilterType.GENRES](filmsWatchedData, genre)
+      };
+    });
+
+    return sortRules[SortType.BY_GENRES](countGenres);
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение ранга профиля пользователя
+   * @param {Number} countWatchedFilms количество просмотренных фильмов
+   * @return {string} ранг профиля пользователя
+   */
+  getRankDescription(countWatchedFilms) {
+    if (countWatchedFilms >= RankDescription.MOVIE_BUFF.from) {
+      return RankDescription.MOVIE_BUFF.rank;
+    } else if (countWatchedFilms >= RankDescription.FUN.from) {
+      return RankDescription.FUN.rank;
+    } else if (countWatchedFilms >= RankDescription.NOVICE.from) {
+      return RankDescription.NOVICE.rank;
+    } else {
+      return (``);
+    }
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение данных для компонента-контейнера статистики в случае, если просмотренные за период фильмы присутствуют
+   * @param {Array} filmsWatchedData данные фильмов, соответствующие периоду
+   * @return {Object} данные для статистики по просмотренным фильмам
+   */
+  _getRealStats(filmsWatchedData) {
+    return {
+      rank: this.getRankDescription(filmsWatchedData.length),
+      count: filmsWatchedData.length,
+      duration: this._getDurationWatchedFilms(filmsWatchedData),
+      topGenre: this._getTopGenre(filmsWatchedData)
+    };
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение данных для компонента-контейнера статистики в случае, если просмотренные за период фильмы отсутствуют
+   * @return {Object} данные для статистики по просмотренным фильмам
+   */
+  _getZeroStats() {
+    return {
+      rank: this.getRankDescription(0),
+      count: 0,
+      duration: 0,
+      topGenre: `—`
+    };
+  }
+
+
+  /**
+   * Метод, выполняющий получение фильмов, просмотренных за период
+   * @param {string} period период статистики
+   * @return {Array} данные фильмов, соответствующие периоду
+   */
+  _getWatchedFilmsDataByTime(period) {
+    return period !== 0 ?
+      filterRules[FilterType.HISTORY_BY_TIME](this._filmsData, period) :
+      filterRules[FilterType.HISTORY](this._filmsData);
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение длительности в минутах просмотренных за период фильмов
+   * @param {Array} filmsWatchedData данные фильмов, соответствующие периоду
+   * @return {Number} длительность просмотренных за период фильмов
+   */
+  _getDurationWatchedFilms(filmsWatchedData) {
+    return filmsWatchedData.reduce((result, filmData) => {
+      return result + filmData.details.duration.info;
+    }, 0);
+  }
+
+
+  /**
+   * Метод, выполняющий получение всех жанров просмотренных за период фильмов
+   * @param {Array} filmsWatchedData данные фильмов, соответствующие периоду
+   * @return {Array} жанры, соответствующие периоду
+   */
+  _getWatchedFilmsGenres(filmsWatchedData) {
+    const uniqueGenres = [];
+
+    const getGenres = () => {
+      filmsWatchedData.map((film) => {
+        film.details.genres.map((genre) => {
+          if (!uniqueGenres.includes(genre)) {
+            uniqueGenres.push(genre);
+          }
+        });
+      });
+    };
+    getGenres();
+
+    return uniqueGenres;
+  }
+
+
+  /**
+   * Метод обеспечивающий получение самого популярного жанра среди просмотренных за период фильмов
+   * @param {Array} filmsWatchedData данные фильмов, соответствующие периоду
+   * @return {string} название жанра
+   */
+  _getTopGenre(filmsWatchedData) {
+    return this.getCountWatchedFilmsByGenre(filmsWatchedData).slice(0, 1)[0].name;
   }
 
 

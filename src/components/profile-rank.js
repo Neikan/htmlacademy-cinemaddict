@@ -1,5 +1,4 @@
 import AbstractComponent from './abstract/component.js';
-import {RankDescription} from '../consts.js';
 
 
 /**
@@ -18,10 +17,10 @@ const createProfileRank = (rank) => {
 
 
 export default class ProfileRank extends AbstractComponent {
-  constructor(countWatchedFilms) {
+  constructor(rankDescription) {
     super();
 
-    this._countWatchedFilms = countWatchedFilms;
+    this._rankDescription = rankDescription;
   }
 
 
@@ -30,23 +29,6 @@ export default class ProfileRank extends AbstractComponent {
    * @return {Object}
    */
   getTemplate() {
-    return createProfileRank(this._getRankDescription());
-  }
-
-
-  /**
-   * Метод, обеспечивающий получение ранга профиля пользователя
-   * @return {string} ранг профиля пользователя
-   */
-  _getRankDescription() {
-    if (this._countWatchedFilms >= RankDescription.MOVIE_BUFF.from) {
-      return RankDescription.MOVIE_BUFF.rank;
-    } else if (this._countWatchedFilms >= RankDescription.FUN.from) {
-      return RankDescription.FUN.rank;
-    } else if (this._countWatchedFilms >= RankDescription.NOVICE.from) {
-      return RankDescription.NOVICE.rank;
-    } else {
-      return (``);
-    }
+    return createProfileRank(this._rankDescription);
   }
 }

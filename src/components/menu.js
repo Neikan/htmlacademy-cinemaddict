@@ -1,38 +1,59 @@
 import AbstractComponent from "./abstract/component";
-import {FilterType, MenuElement} from "../consts";
+import {FilterType, MenuElement, Flag, StatsElement} from "../consts";
 
 
 /**
  * Создание разметки блока главного меню
- * @param {Object} countsFilmsByFilters количества фильмов, соответствующих фильтрам
- * @param {string} filterType примененный фильтр
+ * @param {Object} menuItemsData данные пунктов меню
  * @return {string} разметка блока
  */
-const createMenu = (countsFilmsByFilters, filterType) => {
-  const classMarkup = {
-    ALL: filterType === FilterType.ALL ? ` ` + MenuElement.ITEM_ACTIVE : ``,
-    WATCHLIST: filterType === FilterType.WATCHLIST ? ` ` + MenuElement.ITEM_ACTIVE : ``,
-    HISTORY: filterType === FilterType.HISTORY ? ` ` + MenuElement.ITEM_ACTIVE : ``,
-    FAVORITES: filterType === FilterType.FAVORITES ? ` ` + MenuElement.ITEM_ACTIVE : ``
-  };
-
+const createMenu = (menuItemsData) => {
   return (
     `<nav class="main-navigation">
       <div class="main-navigation__items">
-        <a href="#all" data-filter-type="${FilterType.ALL}" class="main-navigation__item${classMarkup.ALL}">All movies</a>
-        <a href="#watchlist" data-filter-type="${FilterType.WATCHLIST}" class="main-navigation__item${classMarkup.WATCHLIST}">Watchlist
-          <span class="main-navigation__item-count">${countsFilmsByFilters.WATCHLIST}</span>
-        </a>
-        <a href="#history" data-filter-type="${FilterType.HISTORY}" class="main-navigation__item${classMarkup.HISTORY}">History
-          <span class="main-navigation__item-count">${countsFilmsByFilters.HISTORY}</span>
-        </a>
-        <a href="#favorites" data-filter-type="${FilterType.FAVORITES}" class="main-navigation__item${classMarkup.FAVORITES}">Favorites
-          <span class="main-navigation__item-count">${countsFilmsByFilters.FAVORITES}</span>
-        </a>
+        ${createMenuItem(menuItemsData.ALL)}
+        ${createMenuItem(menuItemsData.WATCHLIST)}
+        ${createMenuItem(menuItemsData.HISTORY)}
+        ${createMenuItem(menuItemsData.FAVORITES)}
       </div>
-      <a href="#stats" class="main-navigation__additional">Stats</a>
+      <a href="#stats" data-item-id="${menuItemsData.STATS.name}" class="main-navigation__additional">${menuItemsData.STATS.name}</a>
     </nav>`
   );
+};
+
+
+/**
+ * Создание разметки пункта меню
+ * @param {string} {данные пункта меню}
+ * @return {string} разметка пункта
+ */
+const createMenuItem = ({name, isActive, count}) => {
+  return (
+    `<a href="#favorites" data-item-id="${name}"
+      class="main-navigation__item${getClassMarkup(isActive)}"
+      >${name} ${getSpanMarkup(name, count)}</a>`
+  );
+};
+
+
+/**
+ * Создание разметки дополнительного активного класса
+ * @param {string} isActive флаг, определяющий применен или нет фильтр
+ * @return {string} разметка класса
+ */
+const getClassMarkup = (isActive) => isActive ? ` ` + MenuElement.ITEM_ACTIVE : ``;
+
+
+/**
+ * Создание разметки с количеством фильмов, соответствующих фильтру
+ * @param {string} name фильтр
+ * @param {Number} count количество фильмов, соответствующих фильтру
+ * @return {string} разметка элемента
+ */
+const getSpanMarkup = (name, count) => {
+  return name !== FilterType.ALL ?
+    `<span class="main-navigation__item-count">${count}</span>` :
+    ``;
 };
 
 
@@ -46,7 +67,7 @@ export default class Menu extends AbstractComponent {
     this._countsFilmsByFilters = countsFilmsByFilters;
     this._filterType = filterType;
 
-    this._clickHandler = this._clickHandler.bind(this);
+    this._clickMenuItemHandler = this._clickMenuItemHandler.bind(this);
   }
 
 
@@ -55,7 +76,7 @@ export default class Menu extends AbstractComponent {
    * @return {Object}
    */
   getTemplate() {
-    return createMenu(this._countsFilmsByFilters, this._filterType);
+    return createMenu(this._getMenuItemsData());
   }
 
 
@@ -64,25 +85,77 @@ export default class Menu extends AbstractComponent {
    * @param {Function} handler помощник
    */
   setFilterChangeHandler(handler) {
-    this.getElement().addEventListener(`click`, this._clickHandler(handler));
+    this.getElement().addEventListener(`click`, this._clickMenuItemHandler(handler));
   }
 
 
   /**
-   * Метод, обеспечиващий установку активного фильтра и получение его значения
-   * @param {Function} handler помощник
-   * @return {Function}
+   * Метод, обеспечивающий получение пункта статистики
+   * @return {Object}
    */
-  _clickHandler(handler) {
-    return (evt) => {
-      const target = evt.target.closest(`.${MenuElement.ITEM}`);
+  _getMenuStats() {
+    return this.getElement().querySelector(`.${MenuElement.ITEM_STATS}`);
+  }
 
-      if (target.tagName !== `A`) {
+
+  /**
+   * Метод, выполняющий получение агрегированных данных для пунктов меню
+   * @return {Object} данные пунктов меню
+   */
+  _getMenuItemsData() {
+    return {
+      ALL: {
+        name: FilterType.ALL,
+        isActive: this._getIsActiveFilter(FilterType.ALL)
+      },
+      WATCHLIST: {
+        name: FilterType.WATCHLIST,
+        isActive: this._getIsActiveFilter(FilterType.WATCHLIST),
+        count: this._countsFilmsByFilters.WATCHLIST
+      },
+      HISTORY: {
+        name: FilterType.HISTORY,
+        isActive: this._getIsActiveFilter(FilterType.HISTORY),
+        count: this._countsFilmsByFilters.HISTORY
+      },
+      FAVORITES: {
+        name: FilterType.FAVORITES,
+        isActive: this._getIsActiveFilter(FilterType.FAVORITES),
+        count: this._countsFilmsByFilters.FAVORITES
+      },
+      STATS: {
+        name: StatsElement.NAME,
+        isActive: this._getIsActiveFilter(StatsElement.NAME)
+      }
+    };
+  }
+
+
+  /**
+   * Метод, выполняющий проверку применен фильтр или нет
+   * @param {string} filterType фильтр
+   * @return {Boolean} признак активности фильтра
+   */
+  _getIsActiveFilter(filterType) {
+    return this._filterType === filterType ? Flag.YES : Flag.NO;
+  }
+
+
+  /**
+   * Метод, обеспечиващий создание помощника для установки активного фильтра и получения его значения
+   * @param {Function} handler помощник
+   * @return {Function} созданный помощник
+   */
+  _clickMenuItemHandler(handler) {
+    return (evt) => {
+      const target = evt.target.closest(MenuElement.DATA_ID);
+
+      if (evt.target.tagName !== `A`) {
         return;
       }
 
       this._setActiveClassHandler(evt);
-      this._filterType = target.dataset.filterType;
+      this._filterType = target.dataset.itemId;
       handler(this._filterType);
     };
   }
@@ -93,12 +166,14 @@ export default class Menu extends AbstractComponent {
    * @param {Object} evt событие
    */
   _setActiveClassHandler(evt) {
-    [...this.getElement().querySelectorAll(`.${MenuElement.ITEM}`)].map((menuItem) => {
-      if (menuItem === evt.target.closest(`.${MenuElement.ITEM}`)) {
-        menuItem.classList.add(`${MenuElement.ITEM_ACTIVE}`);
-      } else {
-        menuItem.classList.remove(`${MenuElement.ITEM_ACTIVE}`);
-      }
-    });
+    [...this.getElement().querySelectorAll(`.${MenuElement.ITEM}`)]
+      .concat(this._getMenuStats())
+      .map((menuItem) => {
+        if (menuItem === evt.target.closest(MenuElement.DATA_ID)) {
+          menuItem.classList.add(`${MenuElement.ITEM_ACTIVE}`);
+        } else {
+          menuItem.classList.remove(`${MenuElement.ITEM_ACTIVE}`);
+        }
+      });
   }
 }

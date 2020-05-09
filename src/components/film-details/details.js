@@ -1,4 +1,5 @@
 import {createGenresBlock} from "./genres";
+import {formatDuration} from "../../utils/common";
 
 
 /**
@@ -18,12 +19,28 @@ const createDetails = (details) => {
 
 
 /**
+ * Приведение длительности к заданному формату
+ * @param {Object} duration информация о длительности
+ * @return {Object} обновленная информация о длительности
+ */
+const updateFormatDuration = (duration) => {
+  duration = {
+    name: duration.name,
+    info: formatDuration(duration.info)
+  };
+  return duration;
+};
+
+
+/**
  * Получение массива элементов для таблицы с детальной информацией о фильме
  * @param {Object} {детальная информация о фильме}
  * @return {Array} массив элементов
  */
 const getRows = ({director, screenwriters, actors, releaseDate, duration, country}) =>
-  Object.values({director, screenwriters, actors, releaseDate, duration, country});
+  Object.values({director, screenwriters, actors, releaseDate,
+    duration: updateFormatDuration(duration), country}
+  );
 
 
 /**

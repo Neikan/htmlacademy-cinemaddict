@@ -14,7 +14,10 @@ const NODE_MAIN = `main`;
 
 const changeDataRules = {
   'isWatch': (filmData) => Object.assign({}, filmData, {isWatch: !filmData.isWatch}),
-  'isWatched': (filmData) => Object.assign({}, filmData, {isWatched: !filmData.isWatched}),
+  'isWatched': (filmData) => Object.assign({}, filmData, {
+    isWatched: !filmData.isWatched,
+    watchedDate: new Date()
+  }),
   'isFavorite': (filmData) => Object.assign({}, filmData, {isFavorite: !filmData.isFavorite})
 };
 
