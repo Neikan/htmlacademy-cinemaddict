@@ -9,6 +9,7 @@ import {getIndex} from '../utils/common';
 export default class FilmsModel {
   constructor() {
     this._filmsData = [];
+    this._commentsData = [];
     this._filterType = FilterType.ALL;
     this._sortType = SortType.DEFAULT;
   }
@@ -20,6 +21,20 @@ export default class FilmsModel {
    */
   setFilmsData(filmsData) {
     this._filmsData = filmsData;
+  }
+
+
+  /**
+   * Метод, обеспечивающий присвоение данным фильмов действительных значений данных комментариев
+   * @param {Array} commentsData данные комментариев
+   */
+  setCommentsData(commentsData) {
+    this._commentsData = Array.from(commentsData);
+
+    this._filmsData.map((filmData) => {
+      filmData.comments = this._commentsData[this._filmsData
+        .findIndex((filmDataIndex) => filmData === filmDataIndex)];
+    });
   }
 
 
@@ -47,6 +62,15 @@ export default class FilmsModel {
    */
   getFilmsData() {
     return this._filmsData;
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение данных комментариев
+   * @return {Array} данные комментариев
+   */
+  getCommentsData() {
+    return this._commentsData;
   }
 
 
@@ -134,7 +158,7 @@ export default class FilmsModel {
    * @return {Object} данные для статистики по просмотренным фильмам
    */
   getFilmsDataForStats(period) {
-    const filmsWatchedData = this._getWatchedFilmsDataByTime(period);
+    const filmsWatchedData = this.getWatchedFilmsDataByTime(period);
 
     if (filmsWatchedData.length) {
       return this._getRealStats(filmsWatchedData);
@@ -213,7 +237,7 @@ export default class FilmsModel {
    * @param {string} period период статистики
    * @return {Array} данные фильмов, соответствующие периоду
    */
-  _getWatchedFilmsDataByTime(period) {
+  getWatchedFilmsDataByTime(period) {
     return period !== 0 ?
       filterRules[FilterType.HISTORY_BY_TIME](this._filmsData, period) :
       filterRules[FilterType.HISTORY](this._filmsData);

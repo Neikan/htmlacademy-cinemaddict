@@ -1,5 +1,5 @@
-import MenuController from "./menu-controller";
-import FilmController from "./film-controller";
+import MenuController from "./menu";
+import FilmController from "./film";
 import Films from "../components/films";
 import FilmsExtra from "../components/films-extra";
 import NoFilms from "../components/no-films";
