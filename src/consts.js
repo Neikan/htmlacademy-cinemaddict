@@ -198,3 +198,12 @@ export const StatsElement = {
   FILTER: `statistic__filters-input`,
   CHART: `statistic__chart`
 };
+
+export const SHAKE_AINMATION = `shake`;
+
+export const BtnName = {
+  DELETE: `Delete`,
+  DELETING: `Deleting`
+};
+
+export const BTN_ATTRIBUTE = `disabled`;

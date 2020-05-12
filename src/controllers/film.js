@@ -4,8 +4,8 @@ import FilmData from "../models/film";
 import Comment from "../components/film-details/comment";
 import {encode} from "he";
 import {
-  KeyCode, Position, DetailsElement, CardElement, Flag,
-  FilterType, ClassMarkup, FilmsBlock, Mode
+  KeyCode, Position, DetailsElement, CardElement, Flag, FilterType,
+  ClassMarkup, FilmsBlock, Mode, SHAKE_AINMATION, BtnName, BTN_ATTRIBUTE
 } from "../consts";
 import {render, remove, replace, getItem} from "../utils/components";
 import {getIndex} from "../utils/common";
@@ -48,7 +48,7 @@ export default class FilmController {
 
   /**
    * Метод, обеспечивабщий отрисовку карточек фильма
-   * @param {Object} filmData
+   * @param {Object} filmData данные фильма
    */
   render(filmData) {
     const oldFilmCard = this._filmCard;
@@ -57,7 +57,7 @@ export default class FilmController {
 
     this._filmData = filmData;
     this._filmCard = new FilmCard(filmData, this._filmsBlock);
-    this._filmDetails = new FilmDetails(filmData, this._dataChangeHandler);
+    this._filmDetails = new FilmDetails(filmData, this._dataChangeHandler, this._api);
 
     this._setCardHandlers(filmData, mainSection);
     this._replaceOldFilm(oldFilmCard, oldFilmDetails);
@@ -101,9 +101,40 @@ export default class FilmController {
 
 
   /**
+   * Метод, добавляющий дополнительные атрибуты для поля ввода комментария, если в процессе добавления произошла ошибка
+   * @param {Object} textArea поле ввола комментария
+   */
+  _setTextAreaAttributesFailureAdding(textArea) {
+    textArea.disabled = Flag.NO;
+    textArea.classList.add(DetailsElement.ERROR);
+    textArea.classList.add(SHAKE_AINMATION);
+  }
+
+
+  /**
+   * Метод, удаляющий дополнительные атрибуты с кнопки удаления комментария, если в процессе удаления произошла ошибка
+   * @param {Object} btn кнопка удаления комментария
+   */
+  _setBtnDeleteAttributesFailureDeleting(btn) {
+    btn.removeAttribute(BTN_ATTRIBUTE);
+    btn.textContent = BtnName.DELETE;
+  }
+
+
+  /**
+   * Метод, добавляющий дополнительные атрибуты для кнопки удаления комментария при запуске процесса удаления
+   * @param {Object} btn кнопка удаления комментария
+   */
+  _setBtnDeleteAttributesForDeleting(btn) {
+    btn.setAttribute(BTN_ATTRIBUTE, `${Flag.YES}`);
+    btn.textContent = BtnName.DELETING;
+  }
+
+
+  /**
    * Метод, обеспечивающий обновление карточек контроллера
-   * @param {Object} oldFilmCard
-   * @param {Object} oldFilmDetails
+   * @param {Object} oldFilmCard прежняя краткая карточка фильма
+   * @param {Object} oldFilmDetails прежняя подробная карточка фильма
    */
   _replaceOldFilm(oldFilmCard, oldFilmDetails) {
     if (oldFilmCard && oldFilmDetails) {
@@ -112,6 +143,20 @@ export default class FilmController {
     } else {
       render[Position.BEFORE_END](this._container, this._filmCard);
     }
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение данных с формы ввода комментария
+   * @param {Object} container контейнер подробной карточки
+   * @return {Object} данные для создания комментария
+   */
+  _getCommentData(container) {
+    return {
+      emotion: getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).value,
+      comment: encode(getItem(container, DetailsElement.COMMENT_INPUT).value),
+      date: new Date()
+    };
   }
 
 
@@ -133,10 +178,8 @@ export default class FilmController {
       return;
     }
 
-    // textArea.disabled = Flag.YES;
-
+    this._checkClassesTextArea(textArea);
     this._addNewComment(container, emojiAddBlock, textArea);
-    this._clearNewCommentForm(container);
   }
 
 
@@ -149,43 +192,65 @@ export default class FilmController {
   _addNewComment(container, emojiAddBlock, textArea) {
     if (emojiAddBlock.childNodes.length && textArea.value !== ``) {
       const commentData = new CommentData(this._getCommentData(container));
+      textArea.disabled = Flag.YES;
 
       this._api.sendCommentData(this._filmData.id, commentData)
         .then((commentsData) => {
-          const newCommentData = commentsData[commentsData.length - 1];
-          const newCommentComponent = new Comment(newCommentData);
-
-          render[Position.BEFORE_END](
-              getItem(container, DetailsElement.COMMENT_LIST), newCommentComponent
-          );
-          newCommentComponent.setBtnDeleteCommentClickHandler(this._setBtnDeleteCommentClickHandler());
-
-          this._filmData.comments.push(newCommentData);
-          this._filmData.commentsIds.push(newCommentData.id);
-
-          this._updateCommentsCount(container);
+          this._addNewCommentAfterResponse(container, commentsData, textArea);
+        })
+        .catch(() => {
+          this._setTextAreaAttributesFailureAdding(textArea);
         });
     }
   }
 
 
   /**
-   * Метод, обеспечивающий получение данных с формы ввода комментария
-   * @param {Object} container
-   * @return {Object} данные для создания комментария
+   * Метод, обеспечивающий добавление нового комментария после получения данных от сервера
+   * @param {Object} container контейнер подробной карточки
+   * @param {Object} commentsData данные комментариев
+   * @param {Object} textArea поле ввода комментария
    */
-  _getCommentData(container) {
-    return {
-      emotion: getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).value,
-      comment: encode(getItem(container, DetailsElement.COMMENT_INPUT).value),
-      date: new Date()
-    };
+  _addNewCommentAfterResponse(container, commentsData, textArea) {
+    const newCommentData = commentsData[commentsData.length - 1];
+    const newCommentComponent = new Comment(newCommentData);
+
+    this._addNewCommentAndSetBtnDeleteListener(container, newCommentComponent, newCommentData);
+    this._addNewCommentDataForFilmData(newCommentData);
+    this._updateCommentsCount(container);
+    this._clearNewCommentForm(container, textArea);
+  }
+
+
+  /**
+   * Метод, обеспечивающий добавление данных нового комментария в данные фильма
+   * @param {Object} newCommentData данные нового комментария
+   */
+  _addNewCommentDataForFilmData(newCommentData) {
+    this._filmData.comments.push(newCommentData);
+    this._filmData.commentsIds.push(newCommentData.id);
+  }
+
+
+  /**
+   * Метод, обеспечивающий отрисовку нового комментария на форме с слушателем на кнопке удаления
+   * @param {Object} container контейнер подробной карточки
+   * @param {Object} newCommentComponent блок нового комментария
+   * @param {Object} newCommentData данные нового комментария
+   */
+  _addNewCommentAndSetBtnDeleteListener(container, newCommentComponent, newCommentData) {
+    render[Position.BEFORE_END](
+        getItem(container, DetailsElement.COMMENT_LIST), newCommentComponent
+    );
+    newCommentComponent.setBtnDeleteCommentClickHandler(
+        this._setBtnDeleteCommentClickHandler(newCommentData.id)
+    );
   }
 
 
   /**
    * Метод, выполняющий обновление текущего количества комментариев после удаления добавленного комментария
-   * @param {Object} container
+   * @param {Object} container контейнер подробной карточки
    */
   _updateCommentsCount(container) {
     container.querySelector(`.${DetailsElement.COMMENT_COUNT}`)
@@ -195,14 +260,36 @@ export default class FilmController {
 
   /**
    * Метод, обеспечивающий очистку формы ввода комментария
-   * @param {Object} container
+   * @param {Object} container контейнер подробной карточки
+   * @param {Object} textArea поле ввода комментария
    */
-  _clearNewCommentForm(container) {
+  _clearNewCommentForm(container, textArea) {
     const emojiAddBlock = getItem(container, DetailsElement.EMOJI_ADD_BLOCK);
 
     emojiAddBlock.removeChild(emojiAddBlock.firstChild);
-    getItem(container, DetailsElement.COMMENT_INPUT).value = null;
+    textArea.value = null;
+    textArea.disabled = Flag.NO;
     getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).checked = Flag.NO;
+  }
+
+
+  /**
+   * Метод, выполняющий запрос к серверу и удаление комментария
+   * @param {Object} evt событие
+   * @param {Object} btn кнопка удаления комментария
+   * @param {Number} commentDataId идентификатор комментария
+   * @param {Object} commentItem блок удаляемого комментария
+   */
+  _removeCommentAfterRequest(evt, btn, commentDataId, commentItem) {
+    this._api.deleteCommentData(commentDataId)
+      .then(() => {
+        this._removeNewComment(evt.target.closest(`.${DetailsElement.COMMENT_ITEM}`));
+        this._updateCommentsCount(this._filmDetails.getElement());
+      })
+      .catch(() => {
+        this._setBtnDeleteAttributesFailureDeleting(btn);
+        commentItem.classList.add(`${SHAKE_AINMATION}`);
+      });
   }
 
 
@@ -319,8 +406,8 @@ export default class FilmController {
 
   /**
    * Метод, выполняющий проверку должна ли быть карточка активной в примененном фильтре
-   * @param {string} btn
-   * @param {string} filterType
+   * @param {string} btn кнопка
+   * @param {string} filterType примененный фильтр
    */
   _checkActivity(btn, filterType) {
     if (this._filterType === filterType
@@ -343,15 +430,43 @@ export default class FilmController {
 
 
   /**
+   * Метод, обеспечивающий проверку наличий дополнительных классов на блоке комментария
+   * @param {Object} commentItem блок комментария
+   */
+  _checkClassesCommentItem(commentItem) {
+    if (commentItem.classList.contains(`${SHAKE_AINMATION}`)) {
+      commentItem.classList.remove(`${SHAKE_AINMATION}`);
+    }
+  }
+
+
+  /**
+   * Метод, выполняющий проверку наличий дополнительных классов на поле ввода комментария
+   * @param {Object} textArea поле воода комментария
+   */
+  _checkClassesTextArea(textArea) {
+    if (textArea.classList.contains(SHAKE_AINMATION
+      || textArea.classList.remove(DetailsElement.ERROR))) {
+      textArea.classList.remove(DetailsElement.ERROR);
+      textArea.classList.remove(SHAKE_AINMATION);
+    }
+  }
+
+
+  /**
    * Метод, выполняющий создание помошника для удаления добавленного комментария
+   * @param {Number} commentDataId идентификатор комментария
    * @return {Function} созданный помощник
    */
-  _setBtnDeleteCommentClickHandler() {
+  _setBtnDeleteCommentClickHandler(commentDataId) {
     return (evt) => {
       evt.preventDefault();
+      const btn = evt.target;
+      const commentItem = evt.target.closest(`.${DetailsElement.COMMENT_ITEM}`);
 
-      this._removeNewComment(evt.target.closest(`.${DetailsElement.COMMENT_ITEM}`));
-      this._updateCommentsCount(this._filmDetails.getElement());
+      this._checkClassesCommentItem(commentItem);
+      this._setBtnDeleteAttributesForDeleting(btn);
+      this._removeCommentAfterRequest(evt, btn, commentDataId, commentItem);
     };
   }
 
@@ -441,7 +556,7 @@ export default class FilmController {
   /**
    * Метод, обеспечивающий обновление отображения данных
    * @param {Object} evt событие
-   * @param {string} filterType текущий фильтр
+   * @param {string} filterType примененный фильтр
    */
   _updateFilmsBlockHandler(evt, filterType) {
     filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
@@ -452,7 +567,7 @@ export default class FilmController {
 
   /**
    * Метод, обеспечивающий закрытие подробной карточки по нажатию на клавишу Escape
-   * @param {Object} evt
+   * @param {Object} evt событие
    */
   _escKeyDownHandler(evt) {
     if (evt.keyCode === KeyCode.ESC) {
@@ -463,8 +578,8 @@ export default class FilmController {
 
   /**
    * Метод, обеспечивающий отправку комментария по нажатию комбинации клавиш Ctrl + Enter
-   * @param {Object} evt
-   * @param {Object} filmData
+   * @param {Object} evt событие
+   * @param {Object} filmData данные фильма
    */
   _ctrlKeyUpHandler(evt) {
     if (evt.keyCode === KeyCode.ENTER && evt.ctrlKey) {

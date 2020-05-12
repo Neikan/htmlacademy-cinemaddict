@@ -2,7 +2,7 @@ import AbstractSmartComponent from "./abstract/component-smart";
 import {createDetailsInfo} from "./film-details/details-info";
 import {createControls} from "./film-details/controls";
 import {createCommentBlock} from "./film-details/comments";
-import {DetailsElement, Flag} from "../consts";
+import {DetailsElement, Flag, SHAKE_AINMATION, BtnName, BTN_ATTRIBUTE} from "../consts";
 import {getImageElement} from "../utils/components";
 import {getIndex} from "../utils/common";
 
@@ -34,11 +34,12 @@ const createFilmDetails = (filmData) => {
  * Создание класса подробной карточки фильма
  */
 export default class FilmDetails extends AbstractSmartComponent {
-  constructor(filmData, dataChangeHandler) {
+  constructor(filmData, dataChangeHandler, api) {
     super();
 
     this._filmData = filmData;
     this._dataChangeHandler = dataChangeHandler;
+    this._api = api;
   }
 
 
@@ -164,12 +165,33 @@ export default class FilmDetails extends AbstractSmartComponent {
     return (btn) => {
       btn.addEventListener(`click`, (evt) => {
         evt.preventDefault();
-        btn.setAttribute(`disabled`, `${Flag.YES}`);
-        btn.textContent = `Deleting...`;
-        this._removeComment(evt.target.closest(`.${DetailsElement.COMMENT_ITEM}`));
-        this._updateCommentsCount();
+        const commentItem = evt.target.closest(`.${DetailsElement.COMMENT_ITEM}`);
+
+        this._checkClassesCommentItem(commentItem);
+        this._setBtnDeleteAttributesForDeleting(btn);
+        this._removeCommentAfterRequest(commentItem, btn);
       });
     };
+  }
+
+
+  /**
+   * Метод, удаляющий дополнительные атрибуты с кнопки удаления комментария, если в процессе удаления произошла ошибка
+   * @param {Object} btn кнопка удаления комментария
+   */
+  _setBtnDeleteAttributesFailureDeleting(btn) {
+    btn.removeAttribute(BTN_ATTRIBUTE);
+    btn.textContent = BtnName.DELETE;
+  }
+
+
+  /**
+   * Метод, добавляющий дополнительные атрибуты для кнопки удаления комментария при запуске процесса удаления
+   * @param {Object} btn кнопка удаления комментария
+   */
+  _setBtnDeleteAttributesForDeleting(btn) {
+    btn.setAttribute(BTN_ATTRIBUTE, `${Flag.YES}`);
+    btn.textContent = BtnName.DELETING;
   }
 
 
@@ -183,6 +205,24 @@ export default class FilmDetails extends AbstractSmartComponent {
 
 
   /**
+   * Метод, выполняющий запрос к серверу и удаление комментария
+   * @param {Object} commentItem блок удаляемого комментария
+   * @param {Object} btn кнопка удаления комментария
+   */
+  _removeCommentAfterRequest(commentItem, btn) {
+    this._api.deleteCommentData(commentItem.dataset.commentId)
+      .then(() => {
+        this._removeComment(commentItem);
+        this._updateCommentsCount();
+      })
+      .catch(() => {
+        this._setBtnDeleteAttributesFailureDeleting(btn);
+        commentItem.classList.add(`${SHAKE_AINMATION}`);
+      });
+  }
+
+
+  /**
    * Метод, выполняющий удаление комментария
    * @param {Object} target
    */
@@ -190,7 +230,21 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._filmData.comments.splice(
         getIndex(this._filmData.comments, target.dataset.commentId), 1
     );
+    this._filmData.commentsIds.splice(
+        getIndex(this._filmData.commentsIds, target.dataset.commentId), 1
+    );
     target.remove();
+  }
+
+
+  /**
+   * Метод, обеспечивающий проверку наличий дополнительных классов на блоке комментария
+   * @param {Object} commentItem блок комментария
+   */
+  _checkClassesCommentItem(commentItem) {
+    if (commentItem.classList.contains(`${SHAKE_AINMATION}`)) {
+      commentItem.classList.remove(`${SHAKE_AINMATION}`);
+    }
   }
 
 
