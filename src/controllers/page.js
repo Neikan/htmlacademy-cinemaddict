@@ -382,9 +382,9 @@ export default class PageController {
    */
   _updateFilmsBlocks(filmsBlockInitiator, container, mode) {
     const updateRules = {
-      'all-films': () => this._updateFilmsIfTargetAllFilms(container),
-      'top-rated': () => this._updateFilmsIfTargetRated(container),
-      'most-commented': () => this._updateFilmsIfTargetCommented(container, mode)
+      [FilmsBlock.ALL]: () => this._updateFilmsIfTargetAllFilms(container),
+      [FilmsBlock.RATED]: () => this._updateFilmsIfTargetRated(container),
+      [FilmsBlock.COMMENTED]: () => this._updateFilmsIfTargetCommented(container, mode)
     };
 
     updateRules[filmsBlockInitiator]();
