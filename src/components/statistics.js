@@ -91,7 +91,7 @@ const createStatistics = ({rank, count, duration, topGenre}, filter) => {
       </ul>
 
       <div class="statistic__chart-wrap">
-        <canvas class="statistic__chart" width="1000"></canvas>
+        <canvas class="${StatsElement.CHART}" width="1000"></canvas>
       </div>
     </section>`
   );
@@ -187,7 +187,7 @@ export default class Statistics extends AbstractSmartComponent {
    */
   _setChartData() {
     this._chartData = this._filmsModel.getCountWatchedFilmsByGenre(
-        this._filmsModel._getWatchedFilmsDataByTime(this._period)
+        this._filmsModel.getWatchedFilmsDataByPeriod(this._period)
     );
 
     this._chartLabels = this._chartData.map((genre) => genre.name);
@@ -200,7 +200,7 @@ export default class Statistics extends AbstractSmartComponent {
    */
   _renderChart() {
     const BAR_HEIGHT = 50;
-    const statisticCtx = document.querySelector(`.statistic__chart`);
+    const statisticCtx = document.querySelector(`.${StatsElement.CHART}`);
 
     statisticCtx.height = BAR_HEIGHT * this._chartData.length;
 

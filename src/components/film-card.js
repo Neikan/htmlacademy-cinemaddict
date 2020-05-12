@@ -14,7 +14,7 @@ const createFilmCard = ({
   titles,
   rating,
   details,
-  comments,
+  commentsIds,
   isWatch,
   isWatched,
   isFavorite
@@ -38,9 +38,9 @@ const createFilmCard = ({
         <span class="film-card__duration">${formatDuration(details.duration.info)}</span>
         <span class="film-card__genre">${details.genres[0]}</span>
       </p>
-      <img src="./images/posters/${promo.poster}" alt="" class="film-card__poster">
+      <img src="${promo.poster}" alt="" class="film-card__poster">
       <p class="film-card__description">${formatDescription}</p>
-      <a class="film-card__comments">${comments.length} comments</a>
+      <a class="film-card__comments">${commentsIds.length} comments</a>
       <form class="film-card__controls">
         <button class="film-card__controls-item button
           film-card__controls-item--add-to-watchlist${classMarkup[`addToWatch`]}">Add to watchlist</button>
