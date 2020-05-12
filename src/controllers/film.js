@@ -27,6 +27,7 @@ export default class FilmController {
 
     this._mode = Mode.DEFAULT;
     this._filmData = null;
+    this._filmOldData = null;
     this._filmCard = null;
     this._filmDetails = null;
     this._viewChangeHandler = viewChangeHandler;
@@ -54,7 +55,7 @@ export default class FilmController {
 
     this._filmData = filmData;
     this._filmCard = new FilmCard(filmData, this._filmsBlock);
-    this._filmDetails = new FilmDetails(filmData);
+    this._filmDetails = new FilmDetails(filmData, this._dataChangeHandler);
 
     this._setCardHandlers(filmData, mainSection);
     this._replaceOldFilm(oldFilmCard, oldFilmDetails);
@@ -88,6 +89,7 @@ export default class FilmController {
    * Метод, добавляющий слушателей событий к подробной карточке фильма
    */
   _setDetailsHandlers() {
+    this._filmOldData = this._filmData;
     this._filmDetails.setBtnCloseClickHandler(() => {
       this._removeDetails();
     });

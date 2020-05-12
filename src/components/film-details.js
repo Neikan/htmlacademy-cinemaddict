@@ -34,11 +34,11 @@ const createFilmDetails = (filmData) => {
  * Создание класса подробной карточки фильма
  */
 export default class FilmDetails extends AbstractSmartComponent {
-  constructor(filmData) {
+  constructor(filmData, dataChangeHandler) {
     super();
 
     this._filmData = filmData;
-    this._comments = filmData.comments;
+    this._dataChangeHandler = dataChangeHandler;
   }
 
 
@@ -79,7 +79,6 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   /**
    * Метод, обеспечивающий подписку на события на карточке
-   * @return {Object}
    */
   _subscribeOnEvents() {
     const element = this.getElement();
@@ -89,8 +88,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._setEmojiClickHandler();
     this._setTextAreaInputHandler();
     this._setBtnDeleteCommentClickHandler();
-
-    return this._filmData;
   }
 
 
@@ -204,7 +201,9 @@ export default class FilmDetails extends AbstractSmartComponent {
   _changeIsWatch(element) {
     element.querySelector(`.${DetailsElement.BTN_WATCHLIST}`)
       .addEventListener(`click`, () => {
+        const oldFilmData = this._filmData;
         this._filmData.isWatch = !this._filmData.isWatch;
+        this._filmData = this._dataChangeHandler(oldFilmData, this._filmData);
       });
   }
 
@@ -216,13 +215,15 @@ export default class FilmDetails extends AbstractSmartComponent {
   _changeIsWatched(element) {
     element.querySelector(`.${DetailsElement.BTN_HISTORY}`)
       .addEventListener(`click`, () => {
+        const oldFilmData = this._filmData;
+
         this._filmData.isWatched = !this._filmData.isWatched;
         if (this._filmData.isWatched === Flag.YES) {
           this._filmData.watchedDate = new Date();
         } else {
           this._filmData.watchedDate = null;
         }
-
+        this._filmData = this._dataChangeHandler(oldFilmData, this._filmData);
       });
   }
 
@@ -234,7 +235,9 @@ export default class FilmDetails extends AbstractSmartComponent {
   _changeIsFavorite(element) {
     element.querySelector(`.${DetailsElement.BTN_FAVORITE}`)
       .addEventListener(`click`, () => {
+        const oldFilmData = this._filmData;
         this._filmData.isFavorite = !this._filmData.isFavorite;
+        this._filmData = this._dataChangeHandler(oldFilmData, this._filmData);
       });
   }
 }
