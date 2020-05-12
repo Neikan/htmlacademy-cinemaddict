@@ -7,37 +7,14 @@ import {
   KeyCode, Position, DetailsElement, CardElement, Flag, FilterType,
   ClassMarkup, FilmsBlock, Mode, SHAKE_AINMATION, BtnName, BTN_ATTRIBUTE, FilmAttribute
 } from "../consts";
-import {render, remove, replace, getItem} from "../utils/components";
+import {render, remove, replace, getItem, changeDataRules} from "../utils/components";
 import {getIndex} from "../utils/common";
 import CommentData from "../models/comment";
 
 
 const NODE_MAIN = `main`;
 
-const changeDataRules = {
-  'isWatch': (filmData) => {
-    filmData.isWatch = !filmData.isWatch;
-
-    return filmData;
-  },
-
-  'isWatched': (filmData) => {
-    filmData.isWatched = !filmData.isWatched;
-    filmData.watchedDate = filmData.isWatched ? new Date() : null;
-
-    return filmData;
-  },
-
-  'isFavorite': (filmData) => {
-    filmData.isFavorite = !filmData.isFavorite;
-
-    return filmData;
-  }
-};
-
-
 let filmsBlockInitiator = FilmsBlock.DEFAULT;
-
 
 /**
  * Создание контроллера, управляющего отображением карточек фильмов
