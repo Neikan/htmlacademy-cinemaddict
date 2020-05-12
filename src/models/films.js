@@ -7,7 +7,8 @@ import {getIndex} from '../utils/common';
  * Создание класса модели данных фильмов
  */
 export default class FilmsModel {
-  constructor() {
+  constructor(api) {
+    this._api = api;
     this._filmsData = [];
     this._commentsData = [];
     this._filterType = FilterType.ALL;
@@ -158,7 +159,7 @@ export default class FilmsModel {
    * @return {Object} данные для статистики по просмотренным фильмам
    */
   getFilmsDataForStats(period) {
-    const filmsWatchedData = this.getWatchedFilmsDataByTime(period);
+    const filmsWatchedData = this.getWatchedFilmsDataByPeriod(period);
 
     if (filmsWatchedData.length) {
       return this._getRealStats(filmsWatchedData);
@@ -204,6 +205,18 @@ export default class FilmsModel {
 
 
   /**
+   * Метод, выполняющий получение фильмов, просмотренных за период
+   * @param {string} period период статистики
+   * @return {Array} данные фильмов, соответствующие периоду
+   */
+  getWatchedFilmsDataByPeriod(period) {
+    return period !== 0 ?
+      filterRules[FilterType.HISTORY_BY_TIME](this._filmsData, period) :
+      filterRules[FilterType.HISTORY](this._filmsData);
+  }
+
+
+  /**
    * Метод, обеспечивающий получение данных для компонента-контейнера статистики в случае, если просмотренные за период фильмы присутствуют
    * @param {Array} filmsWatchedData данные фильмов, соответствующие периоду
    * @return {Object} данные для статистики по просмотренным фильмам
@@ -229,18 +242,6 @@ export default class FilmsModel {
       duration: 0,
       topGenre: `—`
     };
-  }
-
-
-  /**
-   * Метод, выполняющий получение фильмов, просмотренных за период
-   * @param {string} period период статистики
-   * @return {Array} данные фильмов, соответствующие периоду
-   */
-  getWatchedFilmsDataByTime(period) {
-    return period !== 0 ?
-      filterRules[FilterType.HISTORY_BY_TIME](this._filmsData, period) :
-      filterRules[FilterType.HISTORY](this._filmsData);
   }
 
 
@@ -291,20 +292,32 @@ export default class FilmsModel {
 
   /**
    * Метод, обеспечивающий обновление данных фильма в исходных данных
-   * @param {Number} id идентификатор элемента в массиве данных фильмов
-   * @param {Object} newFilmData обновленные данные фильма
+   * @param {Number} oldData прежние данные фильма
+   * @param {Object} newData обновленные данные фильма
+   * @return {Object} обновленные данные фильма
+  */
+  updateFilmData(oldData, newData) {
+    this._api.updateFilmData(oldData.id, newData);
+    return this.updateModelFilmData(oldData.id, newData);
+  }
+
+
+  /**
+   * Метод, обеспечивающий обновление данных фильма в модели
+   * @param {Number} id
+   * @param {Object} newData
    * @return {Object}
    */
-  updateFilmData(id, newFilmData) {
+  updateModelFilmData(id, newData) {
     const index = getIndex(this._filmsData, id);
 
     if (index === -1) {
       return Flag.NO;
     }
 
-    this._updateFilmsData(index, newFilmData);
+    this._updateFilmsData(index, newData);
 
-    return newFilmData;
+    return newData;
   }
 
 

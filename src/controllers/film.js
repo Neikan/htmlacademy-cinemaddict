@@ -1,25 +1,17 @@
 import FilmCard from "../components/film-card";
 import FilmDetails from "../components/film-details";
+import FilmData from "../models/film";
 import Comment from "../components/film-details/comment";
 import {encode} from "he";
 import {
   KeyCode, Position, DetailsElement, CardElement, Flag,
-  FilmAttribute, FilterType, ClassMarkup, FilmsBlock, Mode
+  FilterType, ClassMarkup, FilmsBlock, Mode
 } from "../consts";
 import {render, remove, replace, getItem} from "../utils/components";
 import {generateId, getIndex} from "../utils/common";
 
 
 const NODE_MAIN = `main`;
-
-const changeDataRules = {
-  'isWatch': (filmData) => Object.assign({}, filmData, {isWatch: !filmData.isWatch}),
-  'isWatched': (filmData) => Object.assign({}, filmData, {
-    isWatched: !filmData.isWatched,
-    watchedDate: new Date()
-  }),
-  'isFavorite': (filmData) => Object.assign({}, filmData, {isFavorite: !filmData.isFavorite})
-};
 
 let filmsBlockInitiator = FilmsBlock.DEFAULT;
 
@@ -386,14 +378,13 @@ export default class FilmController {
   _btnWatchlistClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
 
-      this._filmData = this._dataChangeHandler(this._filmData,
-          changeDataRules[FilmAttribute.IS_WATCH](this._filmData)
-      );
+      const newFilmData = FilmData.clone(this._filmData);
+      newFilmData.isWatch = !newFilmData.isWatch;
 
-      this._pageUpdateHandler(filmsBlockInitiator);
-      this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.WATCHLIST);
+      this._filmData = this._dataChangeHandler(this._filmData, newFilmData);
+
+      this._updateFilmsBlockHandler(evt, FilterType.WATCHLIST);
     };
   }
 
@@ -405,14 +396,16 @@ export default class FilmController {
   _btnWatchedClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
+      const newFilmData = FilmData.clone(this._filmData);
 
-      this._filmData = this._dataChangeHandler(this._filmData,
-          changeDataRules[FilmAttribute.IS_WATCHED](this._filmData)
-      );
+      newFilmData.isWatched = !newFilmData.isWatched;
+      if (newFilmData.isWatched === Flag.YES) {
+        newFilmData.watchedDate = new Date();
+      }
 
-      this._pageUpdateHandler(filmsBlockInitiator);
-      this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.HISTORY);
+      this._filmData = this._dataChangeHandler(this._filmData, newFilmData);
+
+      this._updateFilmsBlockHandler(evt, FilterType.HISTORY);
     };
   }
 
@@ -424,16 +417,25 @@ export default class FilmController {
   _btnFavoriteClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
+      const newFilmData = FilmData.clone(this._filmData);
+      newFilmData.isFavorite = !newFilmData.isFavorite;
 
-      this._filmData = this._dataChangeHandler(this._filmData,
-          changeDataRules[FilmAttribute.IS_FAVORITE](this._filmData)
-      );
+      this._filmData = this._dataChangeHandler(this._filmData, newFilmData);
 
-      this._pageUpdateHandler(filmsBlockInitiator);
-      this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, FilterType.FAVORITES);
-
+      this._updateFilmsBlockHandler(evt, FilterType.FAVORITES);
     };
+  }
+
+
+  /**
+   * Метод, обеспечивающий обновление отображения данных
+   * @param {Object} evt событие
+   * @param {string} filterType текущий фильтр
+   */
+  _updateFilmsBlockHandler(evt, filterType) {
+    filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
+    this._pageUpdateHandler(filmsBlockInitiator);
+    this._updateBtnAndCardClass(evt.target, filmsBlockInitiator, filterType);
   }
 
 

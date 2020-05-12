@@ -12,7 +12,7 @@ export default class CommentData {
    * Метод, обеспечивающий преобразование локальных данных в соответствующие серверу
    * @return {Object} преобразованные данные
    */
-  toRAW() {
+  toRaw() {
     return {
       'comment': this.text,
       'date': this.date,

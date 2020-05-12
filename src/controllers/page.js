@@ -528,7 +528,7 @@ export default class PageController {
    * @return {Object} обновленные данные фильма
    */
   _dataChangeHandler(oldData, newData) {
-    return this._filmsModel.updateFilmData(oldData.id, newData);
+    return this._filmsModel.updateFilmData(oldData, newData);
   }
 
 

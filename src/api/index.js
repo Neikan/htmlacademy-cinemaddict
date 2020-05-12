@@ -72,14 +72,14 @@ const API = class {
    * Метод, обеспечивающий обновление данных фильма
    * @param {Number} filmDataId идентификатор фильма
    * @param {Object} filmData данные фильма
-   * @return {object}
+   * @return {Object}
    */
   updateFilmData(filmDataId, filmData) {
     return this._load({
       url: `${Url.FILMS}/${filmDataId}`,
       method: Method.PUT,
-      body: JSON.stringify(filmData.toRAW()),
-      headers: new Headers({'Content-Type': `application/json`})
+      body: JSON.stringify(filmData.toRaw()),
+      headers: new Headers({"Content-Type": `application/json`})
     })
       .then((response) => response.json())
       .then(FilmData.parseFilm);
@@ -87,7 +87,7 @@ const API = class {
 
 
   /**
-   * Метод, обеспечиваюший подключение для получения данных
+   * Метод, обеспечиваюший подключение для получения/отправки данных
    * @param {Object} параметры подключения
    * @return {Object}
    */
@@ -101,5 +101,6 @@ const API = class {
       });
   }
 };
+
 
 export default API;

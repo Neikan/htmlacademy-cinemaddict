@@ -10,7 +10,7 @@ import Loader from "./components/loader";
 
 
 const AUTHORIZATION = `Basic ${generateId()}`;
-const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict/`;
+const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
 
 const Nodes = {
   MAIN: document.querySelector(`.main`),
@@ -31,7 +31,7 @@ const init = () => {
 
   api.getFilmsData()
     .then((filmsData) => {
-      const filmsModel = new FilmsModel();
+      const filmsModel = new FilmsModel(api);
       filmsModel.setFilmsData(filmsData);
 
       const promises = filmsData.map((filmData) => api

@@ -35,11 +35,11 @@ export default class FilmData {
       },
       screenwriters: {
         name: DetailsLabel.SCREENWRITERS,
-        info: filmData[`film_info`][`writers`].join(`, `)
+        info: filmData[`film_info`][`writers`]
       },
       actors: {
         name: DetailsLabel.ACTORS,
-        info: Array.from(filmData[`film_info`][`actors`]).join(`, `)
+        info: Array.from(filmData[`film_info`][`actors`])
       },
       releaseDate: {
         name: DetailsLabel.RELEASE_DATE,
@@ -74,7 +74,9 @@ export default class FilmData {
   toRaw() {
     return {
       'id': this.id,
-      'comments': this.commentsIDs,
+
+      'comments': this.commentsIds,
+
       'film_info': {
         'title': this.titles.translate,
         'alternative_title': this.titles.original,
@@ -85,17 +87,18 @@ export default class FilmData {
         'writers': this.details.screenwriters.info,
         'actors': this.details.actors.info,
         'release': {
-          'date': this.details.releaseDate.info,
+          'date': new Date(this.details.releaseDate.info).toISOString(),
           'release_country': this.details.country.info
         },
-        'runtime': this.details.director.info,
+        'runtime': this.details.duration.info,
         'genre': this.details.genres,
         'description': this.details.description
       },
+
       'user_details': {
         'watchlist': this.isWatch,
         'already_watched': this.isWatched,
-        'watching_date': this.watchedDate,
+        'watching_date': this.watchedDate ? new Date(this.watchedDate).toISOString() : null,
         'favorite': this.isFavorite
       }
     };
@@ -128,6 +131,6 @@ export default class FilmData {
    * @return {Object}
    */
   static clone(filmData) {
-    return new FilmData(filmData.toRAW());
+    return new FilmData(filmData.toRaw());
   }
 }

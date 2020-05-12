@@ -187,7 +187,7 @@ export default class Statistics extends AbstractSmartComponent {
    */
   _setChartData() {
     this._chartData = this._filmsModel.getCountWatchedFilmsByGenre(
-        this._filmsModel.getWatchedFilmsDataByTime(this._period)
+        this._filmsModel.getWatchedFilmsDataByPeriod(this._period)
     );
 
     this._chartLabels = this._chartData.map((genre) => genre.name);
