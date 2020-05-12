@@ -16,26 +16,21 @@ const NODE_MAIN = `main`;
 
 const changeDataRules = {
   'isWatch': (filmData) => {
-    filmData.isWatched = !filmData.isWatched;
+    filmData.isWatch = !filmData.isWatch;
 
     return filmData;
   },
 
   'isWatched': (filmData) => {
     filmData.isWatched = !filmData.isWatched;
-
-    const setWatchedData = () => {
-      return filmData.isWatched === Flag.YES ?
-        (filmData.watchedDate = new Date()) :
-        (filmData.watchedDate = null);
-    };
-    setWatchedData();
+    filmData.watchedDate = filmData.isWatched ? new Date() : null;
 
     return filmData;
   },
 
   'isFavorite': (filmData) => {
     filmData.isFavorite = !filmData.isFavorite;
+
     return filmData;
   }
 };
