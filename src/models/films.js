@@ -297,19 +297,7 @@ export default class FilmsModel {
    * @return {Object} обновленные данные фильма
   */
   updateFilmData(oldData, newData) {
-    this._api.updateFilmData(oldData.id, newData);
-    return this.updateModelFilmData(oldData.id, newData);
-  }
-
-
-  /**
-   * Метод, обеспечивающий обновление данных фильма в модели
-   * @param {Number} id
-   * @param {Object} newData
-   * @return {Object}
-   */
-  updateModelFilmData(id, newData) {
-    const index = getIndex(this._filmsData, id);
+    const index = getIndex(this._filmsData, oldData.id);
 
     if (index === -1) {
       return Flag.NO;

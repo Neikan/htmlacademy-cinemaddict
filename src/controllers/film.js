@@ -5,7 +5,7 @@ import Comment from "../components/film-details/comment";
 import {encode} from "he";
 import {
   KeyCode, Position, DetailsElement, CardElement, Flag, FilterType,
-  ClassMarkup, FilmsBlock, Mode, SHAKE_AINMATION, BtnName, BTN_ATTRIBUTE
+  ClassMarkup, FilmsBlock, Mode, SHAKE_AINMATION, BtnName, BTN_ATTRIBUTE, FilmAttribute
 } from "../consts";
 import {render, remove, replace, getItem} from "../utils/components";
 import {getIndex} from "../utils/common";
@@ -13,6 +13,33 @@ import CommentData from "../models/comment";
 
 
 const NODE_MAIN = `main`;
+
+const changeDataRules = {
+  'isWatch': (filmData) => {
+    filmData.isWatched = !filmData.isWatched;
+
+    return filmData;
+  },
+
+  'isWatched': (filmData) => {
+    filmData.isWatched = !filmData.isWatched;
+
+    const setWatchedData = () => {
+      return filmData.isWatched === Flag.YES ?
+        (filmData.watchedDate = new Date()) :
+        (filmData.watchedDate = null);
+    };
+    setWatchedData();
+
+    return filmData;
+  },
+
+  'isFavorite': (filmData) => {
+    filmData.isFavorite = !filmData.isFavorite;
+    return filmData;
+  }
+};
+
 
 let filmsBlockInitiator = FilmsBlock.DEFAULT;
 
@@ -132,6 +159,16 @@ export default class FilmController {
 
 
   /**
+   * Получение данных фильма для отправки на сервер для обновления
+   * @param {string} changeDataRule правило изменения данных
+   * @return {Object} обновляемые данные фильма
+   */
+  _getFilmDataForUpdating(changeDataRule) {
+    return changeDataRules[changeDataRule](FilmData.clone(this._filmData));
+  }
+
+
+  /**
    * Метод, обеспечивающий обновление карточек контроллера
    * @param {Object} oldFilmCard прежняя краткая карточка фильма
    * @param {Object} oldFilmDetails прежняя подробная карточка фильма
@@ -191,17 +228,29 @@ export default class FilmController {
    */
   _addNewComment(container, emojiAddBlock, textArea) {
     if (emojiAddBlock.childNodes.length && textArea.value !== ``) {
-      const commentData = new CommentData(this._getCommentData(container));
       textArea.disabled = Flag.YES;
 
-      this._api.sendCommentData(this._filmData.id, commentData)
-        .then((commentsData) => {
-          this._addNewCommentAfterResponse(container, commentsData, textArea);
-        })
-        .catch(() => {
-          this._setTextAreaAttributesFailureAdding(textArea);
-        });
+      this._addNewCommentSendingRequest(container,
+          new CommentData(this._getCommentData(container)), textArea
+      );
     }
+  }
+
+
+  /**
+   * Метод, обеспечивающий отправку запроса на сервер с данными новыми комментария
+   * @param {Object} container контейнер подробной карточки
+   * @param {Object} commentData данные нового комментария
+   * @param {Object} textArea поле ввода комментария
+   */
+  _addNewCommentSendingRequest(container, commentData, textArea) {
+    this._api.sendCommentData(this._filmData.id, commentData)
+      .then((commentsData) => {
+        this._addNewCommentAfterResponse(container, commentsData, textArea);
+      })
+      .catch(() => {
+        this._setTextAreaAttributesFailureAdding(textArea);
+      });
   }
 
 
@@ -213,9 +262,10 @@ export default class FilmController {
    */
   _addNewCommentAfterResponse(container, commentsData, textArea) {
     const newCommentData = commentsData[commentsData.length - 1];
-    const newCommentComponent = new Comment(newCommentData);
 
-    this._addNewCommentAndSetBtnDeleteListener(container, newCommentComponent, newCommentData);
+    this._addNewCommentAndSetBtnDeleteListener(container,
+        new Comment(newCommentData), newCommentData
+    );
     this._addNewCommentDataForFilmData(newCommentData);
     this._updateCommentsCount(container);
     this._clearNewCommentForm(container, textArea);
@@ -270,6 +320,24 @@ export default class FilmController {
     textArea.value = null;
     textArea.disabled = Flag.NO;
     getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).checked = Flag.NO;
+  }
+
+
+  /**
+   * Метод, выполняющий отправку обновленных данных на сервер с обновлением представления и модели данных фильмов
+   * @param {Object} evt событие
+   * @param {Object} newFilmData обновленные данные фильма
+   * @param {Object} filterType примененный фильтр
+   */
+  _updatefilmDataAfterRequest(evt, newFilmData, filterType) {
+    this._api.updateFilmData(this._filmData.id, newFilmData)
+      .then((newData) => {
+        this._filmData = this._dataChangeHandler(this._filmData, newData);
+        this._updateFilmsBlockHandler(evt, filterType);
+      })
+      .catch(() => {
+        this._filmCard.getElement().classList.add(`${SHAKE_AINMATION}`);
+      });
   }
 
 
@@ -430,7 +498,17 @@ export default class FilmController {
 
 
   /**
-   * Метод, обеспечивающий проверку наличий дополнительных классов на блоке комментария
+   * Метод, обеспечивающий проверку наличия дополнительных классов на краткой карточке фильма
+   */
+  _checkClassesFilmCard() {
+    if (this._filmCard.getElement().classList.contains(`${SHAKE_AINMATION}`)) {
+      this._filmCard.getElement().classList.remove(`${SHAKE_AINMATION}`);
+    }
+  }
+
+
+  /**
+   * Метод, обеспечивающий проверку наличия дополнительных классов на блоке комментария
    * @param {Object} commentItem блок комментария
    */
   _checkClassesCommentItem(commentItem) {
@@ -441,7 +519,7 @@ export default class FilmController {
 
 
   /**
-   * Метод, выполняющий проверку наличий дополнительных классов на поле ввода комментария
+   * Метод, выполняющий проверку наличия дополнительных классов на поле ввода комментария
    * @param {Object} textArea поле воода комментария
    */
   _checkClassesTextArea(textArea) {
@@ -502,13 +580,11 @@ export default class FilmController {
   _btnWatchlistClickHandler() {
     return (evt) => {
       evt.preventDefault();
+      this._checkClassesFilmCard();
 
-      const newFilmData = FilmData.clone(this._filmData);
-      newFilmData.isWatch = !newFilmData.isWatch;
-
-      this._filmData = this._dataChangeHandler(this._filmData, newFilmData);
-
-      this._updateFilmsBlockHandler(evt, FilterType.WATCHLIST);
+      this._updatefilmDataAfterRequest(evt,
+          this._getFilmDataForUpdating(FilmAttribute.IS_WATCH), FilterType.WATCHLIST
+      );
     };
   }
 
@@ -520,18 +596,11 @@ export default class FilmController {
   _btnWatchedClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      const newFilmData = FilmData.clone(this._filmData);
+      this._checkClassesFilmCard();
 
-      newFilmData.isWatched = !newFilmData.isWatched;
-      if (newFilmData.isWatched === Flag.YES) {
-        newFilmData.watchedDate = new Date();
-      } else {
-        newFilmData.watchedDate = null;
-      }
-
-      this._filmData = this._dataChangeHandler(this._filmData, newFilmData);
-
-      this._updateFilmsBlockHandler(evt, FilterType.HISTORY);
+      this._updatefilmDataAfterRequest(evt,
+          this._getFilmDataForUpdating(FilmAttribute.IS_WATCHED), FilterType.HISTORY
+      );
     };
   }
 
@@ -543,12 +612,11 @@ export default class FilmController {
   _btnFavoriteClickHandler() {
     return (evt) => {
       evt.preventDefault();
-      const newFilmData = FilmData.clone(this._filmData);
-      newFilmData.isFavorite = !newFilmData.isFavorite;
+      this._checkClassesFilmCard();
 
-      this._filmData = this._dataChangeHandler(this._filmData, newFilmData);
-
-      this._updateFilmsBlockHandler(evt, FilterType.FAVORITES);
+      this._updatefilmDataAfterRequest(evt,
+          this._getFilmDataForUpdating(FilmAttribute.IS_FAVORITE), FilterType.FAVORITES
+      );
     };
   }
 
