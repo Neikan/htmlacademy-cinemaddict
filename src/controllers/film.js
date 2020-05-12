@@ -401,6 +401,8 @@ export default class FilmController {
       newFilmData.isWatched = !newFilmData.isWatched;
       if (newFilmData.isWatched === Flag.YES) {
         newFilmData.watchedDate = new Date();
+      } else {
+        newFilmData.watchedDate = null;
       }
 
       this._filmData = this._dataChangeHandler(this._filmData, newFilmData);
