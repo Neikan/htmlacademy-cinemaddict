@@ -8,7 +8,8 @@ import {
   FilterType, ClassMarkup, FilmsBlock, Mode
 } from "../consts";
 import {render, remove, replace, getItem} from "../utils/components";
-import {generateId, getIndex} from "../utils/common";
+import {getIndex} from "../utils/common";
+import CommentData from "../models/comment";
 
 
 const NODE_MAIN = `main`;
@@ -21,7 +22,7 @@ let filmsBlockInitiator = FilmsBlock.DEFAULT;
  */
 export default class FilmController {
   constructor(container, viewChangeHandler, dataChangeHandler,
-      pageUpdateHandler, filterType, filmsBlock
+      pageUpdateHandler, filterType, filmsBlock, api
   ) {
     this._container = container;
 
@@ -35,6 +36,7 @@ export default class FilmController {
     this._pageUpdateHandler = pageUpdateHandler;
     this._filterType = filterType;
     this._filmsBlock = filmsBlock;
+    this._api = api;
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._ctrlKeyUpHandler = this._ctrlKeyUpHandler.bind(this);
@@ -131,6 +133,8 @@ export default class FilmController {
       return;
     }
 
+    // textArea.disabled = Flag.YES;
+
     this._addNewComment(container, emojiAddBlock, textArea);
     this._clearNewCommentForm(container);
   }
@@ -144,18 +148,23 @@ export default class FilmController {
    */
   _addNewComment(container, emojiAddBlock, textArea) {
     if (emojiAddBlock.childNodes.length && textArea.value !== ``) {
-      const commentData = this._getCommentData(container);
+      const commentData = new CommentData(this._getCommentData(container));
 
-      const newComment = new Comment(commentData);
+      this._api.sendCommentData(this._filmData.id, commentData)
+        .then((commentsData) => {
+          const newCommentData = commentsData[commentsData.length - 1];
+          const newCommentComponent = new Comment(newCommentData);
 
-      render[Position.BEFORE_END](
-          getItem(container, DetailsElement.COMMENT_LIST), newComment
-      );
+          render[Position.BEFORE_END](
+              getItem(container, DetailsElement.COMMENT_LIST), newCommentComponent
+          );
+          newCommentComponent.setBtnDeleteCommentClickHandler(this._setBtnDeleteCommentClickHandler());
 
-      newComment.setBtnDeleteCommentClickHandler(this._setBtnDeleteCommentClickHandler());
+          this._filmData.comments.push(newCommentData);
+          this._filmData.commentsIds.push(newCommentData.id);
 
-      this._filmData.comments.push(commentData);
-      this._updateCommentsCount(container);
+          this._updateCommentsCount(container);
+        });
     }
   }
 
@@ -167,10 +176,8 @@ export default class FilmController {
    */
   _getCommentData(container) {
     return {
-      commentId: generateId(),
-      emoji: getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).value,
-      text: encode(getItem(container, DetailsElement.COMMENT_INPUT).value),
-      author: `Batman`,
+      emotion: getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).value,
+      comment: encode(getItem(container, DetailsElement.COMMENT_INPUT).value),
       date: new Date()
     };
   }

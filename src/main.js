@@ -40,7 +40,7 @@ const init = () => {
       );
 
       Promise.all(promises).then((commentsData) => {
-        const pageController = new PageController(pageComponent, filmsModel);
+        const pageController = new PageController(pageComponent, filmsModel, api);
 
         filmsModel.setCommentsData(commentsData);
         pageController.render();

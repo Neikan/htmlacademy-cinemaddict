@@ -137,7 +137,6 @@ export default class FilmDetails extends AbstractSmartComponent {
         if (emojiAddBlock.classList.contains(DetailsElement.ERROR)) {
           emojiAddBlock.classList.remove(DetailsElement.ERROR);
         }
-
       });
     };
   }
@@ -165,7 +164,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     return (btn) => {
       btn.addEventListener(`click`, (evt) => {
         evt.preventDefault();
-
+        btn.setAttribute(`disabled`, `${Flag.YES}`);
+        btn.textContent = `Deleting...`;
         this._removeComment(evt.target.closest(`.${DetailsElement.COMMENT_ITEM}`));
         this._updateCommentsCount();
       });

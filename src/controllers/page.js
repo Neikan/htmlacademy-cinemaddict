@@ -30,16 +30,17 @@ const Nodes = {
  * @param {Function} pageUpdateHandler метод котроллера страницы, обеспечивающий обновление меню
  * @param {Object} filterType примененный фильтр
  * @param {string} filmsBlock название блока фильмов
+ * @param {Object} api
  * @return {Array} массив контроллеров карточек фильмов
  */
 const renderFilmControllers = (
     filmsList, filmsData, viewChangeHandler,
-    dataChangeHandler, pageUpdateHandler, filterType, filmsBlock
+    dataChangeHandler, pageUpdateHandler, filterType, filmsBlock, api
 ) => {
   return filmsData.map((filmData) => {
     const filmController = new FilmController(
         filmsList, viewChangeHandler, dataChangeHandler,
-        pageUpdateHandler, filterType, filmsBlock
+        pageUpdateHandler, filterType, filmsBlock, api
     );
 
     filmController.render(filmData);
@@ -53,10 +54,11 @@ const renderFilmControllers = (
  * Создание контроллера, обеспечивающего отрисовку компонентов на странице
  */
 export default class PageController {
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, api) {
     this._container = container;
 
     this._filmsModel = filmsModel;
+    this._api = api;
     this._showedFilmControllers = [];
     this._showedFilmRatedContollers = [];
     this._showedFilmCommentedContollers = [];
@@ -318,7 +320,7 @@ export default class PageController {
     dataset.filmsContollers = dataset.filmsContollers.concat(renderFilmControllers(
         dataset.filmsList, dataset.filmsData.slice(dataset.countPrevFilms, dataset.countFilms),
         this._viewChangeHandler, this._dataChangeHandler,
-        this._pageUpdateHandler, this._filmsModel.getFilterType(), dataset.filmsBlock
+        this._pageUpdateHandler, this._filmsModel.getFilterType(), dataset.filmsBlock, this._api
     ));
   }
 
