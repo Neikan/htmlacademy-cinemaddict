@@ -5,7 +5,7 @@ import Comment from "../components/film-details/comment";
 import {encode} from "he";
 import {
   KeyCode, Position, DetailsElement, CardElement, Flag, FilterType,
-  ClassMarkup, FilmsBlock, Mode, SHAKE_AINMATION, BtnName, BTN_ATTRIBUTE, FilmAttribute
+  ClassMarkup, FilmsBlock, Mode, SHAKE_ANIMATION, BtnName, BTN_ATTRIBUTE, FilmAttribute
 } from "../consts";
 import {render, remove, replace, getItem, changeDataRules} from "../utils/components";
 import {getIndex} from "../utils/common";
@@ -106,7 +106,7 @@ export default class FilmController {
   _setTextAreaAttributesFailureAdding(textArea) {
     textArea.disabled = Flag.NO;
     textArea.classList.add(DetailsElement.ERROR);
-    textArea.classList.add(SHAKE_AINMATION);
+    textArea.classList.add(SHAKE_ANIMATION);
   }
 
 
@@ -308,7 +308,7 @@ export default class FilmController {
         this._updateFilmsBlockHandler(evt, filterType);
       })
       .catch(() => {
-        this._filmCard.getElement().classList.add(`${SHAKE_AINMATION}`);
+        this._filmCard.getElement().classList.add(`${SHAKE_ANIMATION}`);
       });
   }
 
@@ -328,7 +328,7 @@ export default class FilmController {
       })
       .catch(() => {
         this._setBtnDeleteAttributesFailureDeleting(btn);
-        commentItem.classList.add(`${SHAKE_AINMATION}`);
+        commentItem.classList.add(`${SHAKE_ANIMATION}`);
       });
   }
 
@@ -340,6 +340,9 @@ export default class FilmController {
   _removeNewComment(target) {
     this._filmData.comments.splice(
         getIndex(this._filmData.comments, target.dataset.commentId), 1
+    );
+    this._filmData.commentsIds.splice(
+        getIndex(this._filmData.commentsIds, target.dataset.commentId), 1
     );
     target.remove();
   }
@@ -473,8 +476,8 @@ export default class FilmController {
    * Метод, обеспечивающий проверку наличия дополнительных классов на краткой карточке фильма
    */
   _checkClassesFilmCard() {
-    if (this._filmCard.getElement().classList.contains(`${SHAKE_AINMATION}`)) {
-      this._filmCard.getElement().classList.remove(`${SHAKE_AINMATION}`);
+    if (this._filmCard.getElement().classList.contains(`${SHAKE_ANIMATION}`)) {
+      this._filmCard.getElement().classList.remove(`${SHAKE_ANIMATION}`);
     }
   }
 
@@ -484,8 +487,8 @@ export default class FilmController {
    * @param {Object} commentItem блок комментария
    */
   _checkClassesCommentItem(commentItem) {
-    if (commentItem.classList.contains(`${SHAKE_AINMATION}`)) {
-      commentItem.classList.remove(`${SHAKE_AINMATION}`);
+    if (commentItem.classList.contains(`${SHAKE_ANIMATION}`)) {
+      commentItem.classList.remove(`${SHAKE_ANIMATION}`);
     }
   }
 
@@ -495,10 +498,10 @@ export default class FilmController {
    * @param {Object} textArea поле воода комментария
    */
   _checkClassesTextArea(textArea) {
-    if (textArea.classList.contains(SHAKE_AINMATION
+    if (textArea.classList.contains(SHAKE_ANIMATION
       || textArea.classList.remove(DetailsElement.ERROR))) {
       textArea.classList.remove(DetailsElement.ERROR);
-      textArea.classList.remove(SHAKE_AINMATION);
+      textArea.classList.remove(SHAKE_ANIMATION);
     }
   }
 

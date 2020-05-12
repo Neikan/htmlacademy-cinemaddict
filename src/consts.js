@@ -224,7 +224,7 @@ export const StatsElement = {
 };
 
 
-export const SHAKE_AINMATION = `shake`;
+export const SHAKE_ANIMATION = `shake`;
 
 
 export const BtnName = {

@@ -2,8 +2,8 @@ import AbstractSmartComponent from "./abstract/component-smart";
 import {createDetailsInfo} from "./film-details/details-info";
 import {createControls} from "./film-details/controls";
 import {createCommentBlock} from "./film-details/comments";
-import {DetailsElement, Flag, SHAKE_AINMATION, BtnName, BTN_ATTRIBUTE} from "../consts";
-import {getImageElement} from "../utils/components";
+import {DetailsElement, Flag, SHAKE_ANIMATION, BtnName, BTN_ATTRIBUTE, FilmAttribute} from "../consts";
+import {getImageElement, changeDataRules} from "../utils/components";
 import {getIndex} from "../utils/common";
 
 
@@ -69,16 +69,6 @@ export default class FilmDetails extends AbstractSmartComponent {
 
 
   /**
-   * Метод, обспечивающий добавление помощника на кнопку закрытия карточки
-   * @param {Function} handler
-   */
-  setBtnCloseClickHandler(handler) {
-    this.getElement().querySelector(`.${DetailsElement.BTN_CLOSE}`)
-      .addEventListener(`click`, handler);
-  }
-
-
-  /**
    * Метод, обеспечивающий подписку на события на карточке
    */
   _subscribeOnEvents() {
@@ -93,32 +83,11 @@ export default class FilmDetails extends AbstractSmartComponent {
 
 
   /**
-   * Метод, выполняющий установку смайла в форму комментария
+   * Получение данных фильма для отправки на сервер для обновления
+   * @param {string} changeDataRule правило изменения данных
    */
-  _setEmojiClickHandler() {
-    const emojiAddBlock = this.getElement().querySelector(`.${DetailsElement.EMOJI_ADD_BLOCK}`);
-
-    [...this.getElement().querySelectorAll(`.${DetailsElement.EMOJI_ITEM}`)]
-        .map(this._getEmojiClickHandler(emojiAddBlock));
-  }
-
-
-  /**
-   * Метод, выполняющий проверку наличия класса ошибки на поле ввода комментария
-   */
-  _setTextAreaInputHandler() {
-    const textArea = this.getElement().querySelector(`.${DetailsElement.COMMENT_INPUT}`);
-
-    textArea.addEventListener(`input`, this._getTextAreaInputHandler(textArea));
-  }
-
-
-  /**
-   * Метод, обеспечивающий добавление слушателей на кнопки удаления комментариев
-   */
-  _setBtnDeleteCommentClickHandler() {
-    [...this.getElement().querySelectorAll(`.${DetailsElement.BTN_COMMENT_DELETE}`)]
-        .map(this._getBtnDeleteCommentClickHandler());
+  _getFilmDataForUpdating(changeDataRule) {
+    changeDataRules[changeDataRule](this._filmData);
   }
 
 
@@ -133,6 +102,7 @@ export default class FilmDetails extends AbstractSmartComponent {
         if (emojiAddBlock.firstChild) {
           emojiAddBlock.removeChild(emojiAddBlock.firstChild);
         }
+
         emojiAddBlock.appendChild(getImageElement(smile.value));
 
         if (emojiAddBlock.classList.contains(DetailsElement.ERROR)) {
@@ -196,6 +166,75 @@ export default class FilmDetails extends AbstractSmartComponent {
 
 
   /**
+   * Метод, обеспечивающий добавление дополнительных атрибутов чекбоксе, если в процессе обновления произошла ошибка
+   * @param {Object} evt событие
+   */
+  _setCheckBoxAttributeFailureUpdating(evt) {
+    const target = this.getElement()
+      .querySelector(`input[id=${evt.target.getAttribute(`for`)}]`);
+
+    target.checked = !target.checked;
+    evt.target.classList.add(SHAKE_ANIMATION);
+  }
+
+
+  /**
+   * Метод, обспечивающий добавление помощника на кнопку закрытия карточки
+   * @param {Function} handler
+   */
+  setBtnCloseClickHandler(handler) {
+    this.getElement().querySelector(`.${DetailsElement.BTN_CLOSE}`)
+      .addEventListener(`click`, handler);
+  }
+
+
+  /**
+   * Метод, выполняющий установку смайла в форму комментария
+   */
+  _setEmojiClickHandler() {
+    const emojiAddBlock = this.getElement().querySelector(`.${DetailsElement.EMOJI_ADD_BLOCK}`);
+
+    [...this.getElement().querySelectorAll(`.${DetailsElement.EMOJI_ITEM}`)]
+        .map(this._getEmojiClickHandler(emojiAddBlock));
+  }
+
+
+  /**
+   * Метод, выполняющий проверку наличия класса ошибки на поле ввода комментария
+   */
+  _setTextAreaInputHandler() {
+    const textArea = this.getElement().querySelector(`.${DetailsElement.COMMENT_INPUT}`);
+
+    textArea.addEventListener(`input`, this._getTextAreaInputHandler(textArea));
+  }
+
+
+  /**
+   * Метод, обеспечивающий добавление слушателей на кнопки удаления комментариев
+   */
+  _setBtnDeleteCommentClickHandler() {
+    [...this.getElement().querySelectorAll(`.${DetailsElement.BTN_COMMENT_DELETE}`)]
+        .map(this._getBtnDeleteCommentClickHandler());
+  }
+
+
+  /**
+   * Метод, выполняющий отправку обновленных данных на сервер с обновлением представления и модели данных фильмов
+   * @param {Object} evt событие
+   * @param {string} filmDataAttribute изменяемый атрибут фильма
+   */
+  _updateFilmDataAfterRequest(evt, filmDataAttribute) {
+    this._api.updateFilmData(this._filmData.id, this._filmData)
+      .then((newData) => {
+        this._filmData = this._dataChangeHandler(this._filmData, newData);
+      })
+      .catch(() => {
+        this._showFailureUpdating(evt, filmDataAttribute);
+      });
+  }
+
+
+  /**
    * Метод, выполняющий обновление текущего количества комментариев
    */
   _updateCommentsCount() {
@@ -217,7 +256,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       })
       .catch(() => {
         this._setBtnDeleteAttributesFailureDeleting(btn);
-        commentItem.classList.add(`${SHAKE_AINMATION}`);
+        commentItem.classList.add(`${SHAKE_ANIMATION}`);
       });
   }
 
@@ -238,12 +277,34 @@ export default class FilmDetails extends AbstractSmartComponent {
 
 
   /**
+   * Метод, обеспечивающий откат изменения и уведомление, если в процессе обновления произошла ошибка
+   * @param {Object} evt событие
+   * @param {string} filmDataAttribute изменяемый атрибут фильма
+   */
+  _showFailureUpdating(evt, filmDataAttribute) {
+    this._setCheckBoxAttributeFailureUpdating(evt);
+    this._getFilmDataForUpdating(filmDataAttribute);
+  }
+
+
+  /**
+   * Метод, обеспечивающий проверку наличия дополнительных классов на чекбоксе
+   * @param {Object} evt событие
+   */
+  _checkClassesCheckBox(evt) {
+    if (evt.target.classList.contains(SHAKE_ANIMATION)) {
+      evt.target.classList.remove(SHAKE_ANIMATION);
+    }
+  }
+
+
+  /**
    * Метод, обеспечивающий проверку наличий дополнительных классов на блоке комментария
    * @param {Object} commentItem блок комментария
    */
   _checkClassesCommentItem(commentItem) {
-    if (commentItem.classList.contains(`${SHAKE_AINMATION}`)) {
-      commentItem.classList.remove(`${SHAKE_AINMATION}`);
+    if (commentItem.classList.contains(`${SHAKE_ANIMATION}`)) {
+      commentItem.classList.remove(`${SHAKE_ANIMATION}`);
     }
   }
 
@@ -254,10 +315,10 @@ export default class FilmDetails extends AbstractSmartComponent {
    */
   _changeIsWatch(element) {
     element.querySelector(`.${DetailsElement.BTN_WATCHLIST}`)
-      .addEventListener(`click`, () => {
-        const oldFilmData = this._filmData;
-        this._filmData.isWatch = !this._filmData.isWatch;
-        this._filmData = this._dataChangeHandler(oldFilmData, this._filmData);
+      .addEventListener(`click`, (evt) => {
+        this._checkClassesCheckBox(evt);
+        this._getFilmDataForUpdating(FilmAttribute.IS_WATCH);
+        this._updateFilmDataAfterRequest(evt, FilmAttribute.IS_WATCH);
       });
   }
 
@@ -268,16 +329,10 @@ export default class FilmDetails extends AbstractSmartComponent {
    */
   _changeIsWatched(element) {
     element.querySelector(`.${DetailsElement.BTN_HISTORY}`)
-      .addEventListener(`click`, () => {
-        const oldFilmData = this._filmData;
-
-        this._filmData.isWatched = !this._filmData.isWatched;
-        if (this._filmData.isWatched === Flag.YES) {
-          this._filmData.watchedDate = new Date();
-        } else {
-          this._filmData.watchedDate = null;
-        }
-        this._filmData = this._dataChangeHandler(oldFilmData, this._filmData);
+      .addEventListener(`click`, (evt) => {
+        this._checkClassesCheckBox(evt);
+        this._getFilmDataForUpdating(FilmAttribute.IS_WATCHED);
+        this._updateFilmDataAfterRequest(evt, FilmAttribute.IS_WATCHED);
       });
   }
 
@@ -288,10 +343,10 @@ export default class FilmDetails extends AbstractSmartComponent {
    */
   _changeIsFavorite(element) {
     element.querySelector(`.${DetailsElement.BTN_FAVORITE}`)
-      .addEventListener(`click`, () => {
-        const oldFilmData = this._filmData;
-        this._filmData.isFavorite = !this._filmData.isFavorite;
-        this._filmData = this._dataChangeHandler(oldFilmData, this._filmData);
+      .addEventListener(`click`, (evt) => {
+        this._checkClassesCheckBox(evt);
+        this._getFilmDataForUpdating(FilmAttribute.IS_FAVORITE);
+        this._updateFilmDataAfterRequest(evt, FilmAttribute.IS_FAVORITE);
       });
   }
 }
