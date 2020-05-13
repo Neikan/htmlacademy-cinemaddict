@@ -19,7 +19,8 @@ const Method = {
 
 const Url = {
   FILMS: `movies`,
-  COMMENTS: `comments`
+  COMMENTS: `comments`,
+  SYNC: `movies/sync`
 };
 
 
@@ -129,6 +130,22 @@ const API = class {
       .catch((err) => {
         throw err;
       });
+  }
+
+
+  /**
+   * Метод, обеспечивающий синхронизацию данных хранилища с сервером
+   * @param {Object} storeData данные хранилища
+   * @return {Object}
+   */
+  sync(storeData) {
+    return this._load({
+      url: Url.SYNC,
+      method: Method.POST,
+      body: JSON.stringify(storeData),
+      headers: new Headers(HEADER_CONTENT_TYPE)
+    })
+      .then((response) => response.json());
   }
 };
 
