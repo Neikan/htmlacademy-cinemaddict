@@ -313,9 +313,9 @@ export default class FilmController {
    * @param {Object} filterType примененный фильтр
    */
   _updatefilmDataAfterRequest(evt, newFilmData, filterType) {
-    this._api.updateFilmData(this._filmData.id, newFilmData)
+    this._api.updateFilmData(newFilmData)
       .then((newData) => {
-        this._filmData = this._dataChangeHandler(this._filmData, newData);
+        this._filmData = this._dataChangeHandler(newData);
         this._updateFilmsBlockHandler(evt, filterType);
       })
       .catch(() => {
@@ -341,7 +341,7 @@ export default class FilmController {
    * @param {Object} commentItem блок удаляемого комментария
    */
   _removeCommentAfterRequest(evt, btn, commentDataId, commentItem) {
-    this._api.deleteCommentData(commentDataId, this._filmData.id)
+    this._api.deleteCommentData(commentDataId, this._filmData)
       .then(() => {
         this._removeNewComment(evt.target.closest(`.${DetailsElement.COMMENT_ITEM}`));
         this._updateCommentsCount(this._filmDetails.getElement());

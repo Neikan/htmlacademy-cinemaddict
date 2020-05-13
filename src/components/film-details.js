@@ -224,9 +224,9 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @param {string} filmDataAttribute изменяемый атрибут фильма
    */
   _updateFilmDataAfterRequest(evt, filmDataAttribute) {
-    this._api.updateFilmData(this._filmData.id, this._filmData)
+    this._api.updateFilmData(this._filmData)
       .then((newData) => {
-        this._filmData = this._dataChangeHandler(this._filmData, newData);
+        this._filmData = this._dataChangeHandler(newData);
       })
       .catch(() => {
         this._showFailureUpdating(evt, filmDataAttribute);
@@ -249,7 +249,7 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @param {Object} btn кнопка удаления комментария
    */
   _removeCommentAfterRequest(commentItem, btn) {
-    this._api.deleteCommentData(commentItem.dataset.commentId, this._filmData.id)
+    this._api.deleteCommentData(commentItem.dataset.commentId, this._filmData)
       .then(() => {
         this._removeComment(commentItem);
         this._updateCommentsCount();

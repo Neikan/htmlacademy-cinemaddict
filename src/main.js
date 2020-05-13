@@ -22,8 +22,8 @@ const Nodes = {
 };
 
 const StoreName = {
-  FILMS: `cinemaddict-localstorage-filmsdata-v1`,
-  COMMENTS: `cinemaddict-localstorage-commentsdata-v1`
+  FILMS: `cinemaddict-localstorage-filmsdata-v2`,
+  COMMENTS: `cinemaddict-localstorage-commentsdata-v2`
 };
 
 

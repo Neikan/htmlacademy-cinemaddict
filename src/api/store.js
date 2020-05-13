@@ -51,6 +51,7 @@ export default class Store {
    */
   setCommentsData(filmDataId, commentsData, isFilmsDataStore) {
     const store = this.getAllData();
+
     if (isFilmsDataStore) {
       store[filmDataId].comments = commentsData.map((commentData) => commentData.id);
     } else {
@@ -115,9 +116,9 @@ export default class Store {
 
     if (isFilmsDataStore) {
       store[filmDataId].comments = store[filmDataId].comments
-        .filter((commentId) => commentId !== commentDataId);
+      .filter((commentId) => commentId !== commentDataId);
     } else {
-      this.removeDataItem(commentDataId);
+      delete store[commentDataId];
     }
 
     this._setStore(store);

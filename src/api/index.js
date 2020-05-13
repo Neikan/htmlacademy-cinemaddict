@@ -101,13 +101,12 @@ const API = class {
 
   /**
    * Метод, обеспечивающий обновление данных фильма
-   * @param {Number} filmDataId идентификатор фильма
    * @param {Object} filmData данные фильма
    * @return {Object} обновленные данные
    */
-  updateFilmData(filmDataId, filmData) {
+  updateFilmData(filmData) {
     return this._load({
-      url: `${Url.FILMS}/${filmDataId}`,
+      url: `${Url.FILMS}/${filmData.id}`,
       method: Method.PUT,
       body: JSON.stringify(filmData.toRaw()),
       headers: new Headers(HEADER_CONTENT_TYPE)

@@ -2,18 +2,20 @@ import FilmData from "../models/film";
 import {Flag} from "../consts";
 
 
+const Message = {
+  FAIL_SYNC: `Sync data failed`,
+  NOT_IMPLEMENTED: `Logic for offline mode is not implemented`
+};
+
+
+/**
+ * Получение синхронизированных данных
+ * @param {Object} filmsData
+ * @return {Array}
+ */
 const getSyncedFilmsData = (filmsData) => filmsData
   .filter(({success}) => success)
   .map(({payload}) => payload.filmData);
-
-
-const createStoreStructure = (items) => {
-  return items.reduce((acc, current) => {
-    return Object.assign({}, acc, {
-      [current.id]: current,
-    });
-  }, {});
-};
 
 
 /**
@@ -47,6 +49,35 @@ export default class Provider {
 
 
   /**
+   * Метод, обеспечивающий получение сетевого статуса браузера
+   * @return {Boolean} значение
+   */
+  _getIsOnLine() {
+    return window.navigator.onLine;
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение фильма для синхронизации
+   * @param {Object} filmData данные фильма
+   * @return {Object}
+   */
+  _getFilmDataForSync(filmData) {
+    return this._storeFilmsData.setDataItem(
+        filmData.id,
+        Object.assign(
+            {},
+            FilmData.parseFilm(
+                Object.assign(
+                    {},
+                    filmData.toRaw())).toRaw(),
+            {offline: Flag.YES}
+        )
+    );
+  }
+
+
+  /**
    * Метод, обеспечивающий получение данных фильмов
    * @return {Array} полученные данные
    */
@@ -54,12 +85,9 @@ export default class Provider {
     if (this._getIsOnLine()) {
       return this._api.getFilmsData()
         .then((filmsData) => {
-          // filmsData.map((filmData) => {
-          //   this._storeFilmsData.setDataItem(filmData.id, filmData.toRaw());
-          // });
-
-          const items = createStoreStructure(filmsData.map((filmData) => filmData.toRaw()));
-          this._storeFilmsData.setAllData(items);
+          filmsData.map((filmData) => {
+            this._storeFilmsData.setDataItem(filmData.id, filmData.toRaw());
+          });
 
           return filmsData;
         });
@@ -67,7 +95,9 @@ export default class Provider {
 
     this.setIsSynchronized(Flag.NO);
 
-    return Promise.resolve(FilmData.parseFilms(Object.values(this._storeFilmsData.getAllData())));
+    return Promise.resolve(FilmData.parseFilms(
+        Object.values(this._storeFilmsData.getAllData())
+    ));
   }
 
 
@@ -93,15 +123,6 @@ export default class Provider {
 
 
   /**
-   * Метод, обеспечивающий получение сетевого статуса браузера
-   * @return {Boolean} значение
-   */
-  _getIsOnLine() {
-    return window.navigator.onLine;
-  }
-
-
-  /**
    * Метод, обеспечивающий отправку данных комментария
    * @param {Number} filmDataId идентификатор фильма
    * @param {Object} commentData данные комментария
@@ -118,52 +139,40 @@ export default class Provider {
         });
     }
 
-    this.setIsSynchronized(Flag.NO);
-
-    const newComment = commentData;
-    const commentsData = this._storeCommentsData.getAllData()[filmDataId];
-    commentsData.push(newComment);
-
-    this._storeFilmsData.setCommentsData(filmDataId, commentsData, Flag.YES);
-    this._storeCommentsData.setCommentsData(filmDataId, commentsData);
-
-    return Promise.resolve(FilmData.parseFilm(this._storeFilmsData.getAllData()[filmDataId]));
+    return Promise.reject(
+        new Error(Message.NOT_IMPLEMENTED)
+    );
   }
 
 
   /**
    * Метод, обеспечивающий удаление комментария
    * @param {Number} commentDataId идентификатор комментария
-   * @param {Number} filmDataId идентификатор фильма
+   * @param {Number} filmData данные фильма
    * @return {Object}
    */
-  deleteCommentData(commentDataId, filmDataId) {
+  deleteCommentData(commentDataId, filmData) {
     if (this._getIsOnLine()) {
       return this._api.deleteCommentData(commentDataId)
         .then(() => {
-          this._storeFilmsData.removeCommentData(filmDataId, commentDataId, Flag.YES);
-          this._storeCommentsData.removeCommentData(filmDataId, commentDataId);
+          this._removeCommentDataFromStore(filmData, commentDataId);
         });
     }
 
-    // this.setIsSynchronized(Flag.NO);
-
-    // this._storeCommentsData.removeCommentData(filmDataId, commentDataId);
-    // this._storeFilmsData.removeCommentData(filmDataId, commentDataId, Flag.YES);
-
-    return Promise.resolve();
+    return Promise.reject(
+        new Error(Message.NOT_IMPLEMENTED)
+    );
   }
 
 
   /**
    * Метод, обеспечивающий обновление данных фильма
-   * @param {Number} filmDataId идентификатор фильма
    * @param {Object} filmData данные фильма
    * @return {Object} обновленные данные
    */
-  updateFilmData(filmDataId, filmData) {
+  updateFilmData(filmData) {
     if (this._getIsOnLine()) {
-      return this._api.updateFilmData(filmDataId, filmData)
+      return this._api.updateFilmData(filmData)
         .then((newFilmData) => {
           this._storeFilmsData.setDataItem(newFilmData.id, newFilmData.toRaw());
 
@@ -173,9 +182,7 @@ export default class Provider {
 
     this.setIsSynchronized(Flag.NO);
 
-    this._storeFilmsData.setDataItem(filmDataId, filmData.toRaw());
-
-    return Promise.resolve(filmData);
+    return Promise.resolve(this._getFilmDataForSync(filmData));
   }
 
 
@@ -187,24 +194,34 @@ export default class Provider {
     if (this._getIsOnLine()) {
       const storeFilmsData = Object.values(this._storeFilmsData.getAllData());
 
-      return this._api.sss(storeFilmsData)
+      return this._api.sync(storeFilmsData)
         .then((response) => {
-          // storeFilmsData
-          //   .filter((storeFilmData) => storeFilmData.offline)
-          //   .map((storeFilmData) => this._storeFilmsData.removeDataItem(storeFilmData.id));
+          storeFilmsData
+            .filter((storeFilmData) => storeFilmData.offline)
+            .map((storeFilmData) => this._storeFilmsData.removeDataItem(storeFilmData.id));
 
           this._storeFilmsData.setAllData(
               [...getSyncedFilmsData(response.updated)]
           );
-
           this.setIsSynchronized(Flag.YES);
 
-          // return Promise.resolve();
+          return Promise.resolve();
         });
     }
 
     return Promise.reject(
-        new Error(`Sync data failed`)
+        new Error(Message.FAIL_SYNC)
     );
+  }
+
+
+  /**
+   * Метод, обеспечивающий удаление данных комментария из хранилищ
+   * @param {Object} filmData данные фильма
+   * @param {Number} commentDataId идентификатор комментария
+   */
+  _removeCommentDataFromStore(filmData, commentDataId) {
+    this._storeCommentsData.removeCommentData(filmData.id, commentDataId);
+    this._storeFilmsData.removeCommentData(filmData.id, commentDataId, Flag.YES);
   }
 }

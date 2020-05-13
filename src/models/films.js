@@ -260,12 +260,11 @@ export default class FilmsModel {
 
   /**
    * Метод, обеспечивающий обновление данных фильма в исходных данных
-   * @param {Number} oldData прежние данные фильма
    * @param {Object} newData обновленные данные фильма
    * @return {Object} обновленные данные фильма
   */
-  updateFilmData(oldData, newData) {
-    const index = getIndex(this._filmsData, oldData.id);
+  updateFilmData(newData) {
+    const index = getIndex(this._filmsData, newData.id);
 
     if (index === -1) {
       return Flag.NO;
