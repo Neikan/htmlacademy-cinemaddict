@@ -131,6 +131,15 @@ export default class FilmController {
 
 
   /**
+   * Метод, обеспечивающий добавление слушателей на документ
+   */
+  _setDocimentListeners() {
+    document.addEventListener(`keydown`, this._escKeyDownHandler);
+    document.addEventListener(`keyup`, this._ctrlKeyUpHandler);
+  }
+
+
+  /**
    * Получение данных фильма для отправки на сервер для обновления
    * @param {string} changeDataRule правило изменения данных
    * @return {Object} обновляемые данные фильма
@@ -314,6 +323,15 @@ export default class FilmController {
 
 
   /**
+   * Метод, обеспечивающий удаление слушателей с документа
+   */
+  _removeDocumentListeners() {
+    document.removeEventListener(`keydown`, this._escKeyDownHandler);
+    document.removeEventListener(`keyup`, this._ctrlKeyUpHandler);
+  }
+
+
+  /**
    * Метод, выполняющий запрос к серверу и удаление комментария
    * @param {Object} evt событие
    * @param {Object} btn кнопка удаления комментария
@@ -364,9 +382,7 @@ export default class FilmController {
    */
   _closeDetails() {
     remove(this._filmDetails);
-    document.removeEventListener(`keydown`, this._escKeyDownHandler);
-    document.removeEventListener(`keyup`, this._ctrlKeyUpHandler);
-
+    this._removeDocumentListeners();
     this.render(this._filmData);
 
     if (filmsBlockInitiator === FilmsBlock.ALL) {
@@ -525,25 +541,42 @@ export default class FilmController {
 
 
   /**
-   * Метод, обеспечивабщий создание помощника для отображение подробной карточки
+   * Метод, обеспечивающий создание помощника для отображение подробной карточки
    * @param {Object} mainSection секция для отображения подробной карточки фильма
    * @return {Function} созданный помощник
    */
   _showDetailsClickHandler(mainSection) {
     return (evt) => {
+      this._checkClassesFilmCard();
       this._viewChangeHandler();
-      this.render(this._filmData);
-
-      filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
-
-      render[Position.BEFORE_END](mainSection, this._filmDetails);
-      this._mode = Mode.DETAILS;
-
-      document.addEventListener(`keydown`, this._escKeyDownHandler);
-      document.addEventListener(`keyup`, this._ctrlKeyUpHandler);
-
-      this._setDetailsHandlers();
+      this._showDetailsAfterRequestComments(evt, mainSection);
     };
+  }
+
+
+  /**
+   * Метод, обеспечивающий отправку запроса на сервер на получение данных комментариев
+   * и отрисовку подробной карточки фильма
+   * @param {Object} evt событие
+   * @param {Object} mainSection секция для отображения подробной карточки фильма
+   */
+  _showDetailsAfterRequestComments(evt, mainSection) {
+    this._api.getCommentsData(this._filmData.id)
+      .then((commentData) => {
+        this._filmData.comments = commentData;
+        this.render(this._filmData);
+
+        filmsBlockInitiator = evt.target.closest(`.${CardElement.CARD}`).dataset.filmsBlock;
+
+        render[Position.BEFORE_END](mainSection, this._filmDetails);
+        this._mode = Mode.DETAILS;
+
+        this._setDocimentListeners();
+        this._setDetailsHandlers();
+      })
+      .catch(() => {
+        this._filmCard.getElement().classList.add(`${SHAKE_ANIMATION}`);
+      });
   }
 
 
