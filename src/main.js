@@ -48,8 +48,8 @@ const init = () => {
       filmsModel.setFilmsData(filmsData);
 
       const pageController = new PageController(pageComponent, filmsModel, apiWithProvider);
-      pageController.render();
 
+      pageController.render();
       remove(loaderComponent);
       renderMarkup(Nodes.FOOTER_STATS, createFooter(filmsData.length));
     })
@@ -62,16 +62,21 @@ const init = () => {
   window.addEventListener(`load`, () => {
     navigator.serviceWorker.register(`/sw.js`)
       .then(() => {
-        // Действие, в случае успешной регистрации ServiceWorker
-      }).catch(() => {
-        // Действие, в случае ошибки при регистрации ServiceWorker
+      })
+      .catch(() => {
       });
   });
 
   window.addEventListener(`online`, () => {
     document.title = document.title.replace(`${PAGE_STATUS}`, ``);
 
-    apiWithProvider.sync();
+    if (!apiWithProvider.getIsSynchronized()) {
+      apiWithProvider.sync()
+        .then(() => {
+        })
+        .catch(() => {
+        });
+    }
   });
 
   window.addEventListener(`offline`, () => {

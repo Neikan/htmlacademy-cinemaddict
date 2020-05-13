@@ -2,6 +2,20 @@ import FilmData from "../models/film";
 import {Flag} from "../consts";
 
 
+const getSyncedFilmsData = (filmsData) => filmsData
+  .filter(({success}) => success)
+  .map(({payload}) => payload.filmData);
+
+
+const createStoreStructure = (items) => {
+  return items.reduce((acc, current) => {
+    return Object.assign({}, acc, {
+      [current.id]: current,
+    });
+  }, {});
+};
+
+
 /**
  * Провайдер для API
  */
@@ -40,18 +54,20 @@ export default class Provider {
     if (this._getIsOnLine()) {
       return this._api.getFilmsData()
         .then((filmsData) => {
-          filmsData.map((filmData) => {
-            this._storeFilmsData.setDataItem(filmData.id, filmData.toRaw());
-          });
+          // filmsData.map((filmData) => {
+          //   this._storeFilmsData.setDataItem(filmData.id, filmData.toRaw());
+          // });
+
+          const items = createStoreStructure(filmsData.map((filmData) => filmData.toRaw()));
+          this._storeFilmsData.setAllData(items);
+
           return filmsData;
         });
     }
 
     this.setIsSynchronized(Flag.NO);
 
-    return Promise.resolve(FilmData.parseFilms(
-        Object.values(this._storeFilmsData.getAllData())
-    ));
+    return Promise.resolve(FilmData.parseFilms(Object.values(this._storeFilmsData.getAllData())));
   }
 
 
@@ -67,11 +83,10 @@ export default class Provider {
           commentsData.map((commentData) => {
             this._storeCommentsData.setDataItem(commentData.id, commentData.toRaw());
           });
+
           return commentsData;
         });
     }
-
-    this.setIsSynchronized(Flag.NO);
 
     return Promise.resolve();
   }
@@ -105,7 +120,14 @@ export default class Provider {
 
     this.setIsSynchronized(Flag.NO);
 
-    return Promise.resolve();
+    const newComment = commentData;
+    const commentsData = this._storeCommentsData.getAllData()[filmDataId];
+    commentsData.push(newComment);
+
+    this._storeFilmsData.setCommentsData(filmDataId, commentsData, Flag.YES);
+    this._storeCommentsData.setCommentsData(filmDataId, commentsData);
+
+    return Promise.resolve(FilmData.parseFilm(this._storeFilmsData.getAllData()[filmDataId]));
   }
 
 
@@ -124,7 +146,10 @@ export default class Provider {
         });
     }
 
-    this.setIsSynchronized(Flag.NO);
+    // this.setIsSynchronized(Flag.NO);
+
+    // this._storeCommentsData.removeCommentData(filmDataId, commentDataId);
+    // this._storeFilmsData.removeCommentData(filmDataId, commentDataId, Flag.YES);
 
     return Promise.resolve();
   }
@@ -141,12 +166,45 @@ export default class Provider {
       return this._api.updateFilmData(filmDataId, filmData)
         .then((newFilmData) => {
           this._storeFilmsData.setDataItem(newFilmData.id, newFilmData.toRaw());
+
           return newFilmData;
         });
     }
 
-    return Promise.resolve(FilmData.parseFilm(
-        Object.assign({}, filmData.toRaw())
-    ));
+    this.setIsSynchronized(Flag.NO);
+
+    this._storeFilmsData.setDataItem(filmDataId, filmData.toRaw());
+
+    return Promise.resolve(filmData);
+  }
+
+
+  /**
+   * Метод, обеспечивающий выполнение синхронизации данных хранилища и сервера
+   * @return {Object}
+   */
+  sync() {
+    if (this._getIsOnLine()) {
+      const storeFilmsData = Object.values(this._storeFilmsData.getAllData());
+
+      return this._api.sss(storeFilmsData)
+        .then((response) => {
+          // storeFilmsData
+          //   .filter((storeFilmData) => storeFilmData.offline)
+          //   .map((storeFilmData) => this._storeFilmsData.removeDataItem(storeFilmData.id));
+
+          this._storeFilmsData.setAllData(
+              [...getSyncedFilmsData(response.updated)]
+          );
+
+          this.setIsSynchronized(Flag.YES);
+
+          // return Promise.resolve();
+        });
+    }
+
+    return Promise.reject(
+        new Error(`Sync data failed`)
+    );
   }
 }
