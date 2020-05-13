@@ -1,4 +1,6 @@
-import {FilterType, FilmAttribute, Flag, SortType, CountFilm, RankDescription} from '../consts';
+import {FilterType, FilmAttribute, Flag, SortType,
+  CountFilm, RankDescription, NOT_DATA
+} from '../consts';
 import {filterRules, sortRules} from '../utils/components';
 import {getIndex} from '../utils/common';
 
@@ -10,7 +12,6 @@ export default class FilmsModel {
   constructor(api) {
     this._api = api;
     this._filmsData = [];
-    this._commentsData = [];
     this._filterType = FilterType.ALL;
     this._sortType = SortType.DEFAULT;
   }
@@ -22,20 +23,6 @@ export default class FilmsModel {
    */
   setFilmsData(filmsData) {
     this._filmsData = filmsData;
-  }
-
-
-  /**
-   * Метод, обеспечивающий присвоение данным фильмов действительных значений данных комментариев
-   * @param {Array} commentsData данные комментариев
-   */
-  setCommentsData(commentsData) {
-    this._commentsData = Array.from(commentsData);
-
-    this._filmsData.map((filmData) => {
-      filmData.comments = this._commentsData[this._filmsData
-        .findIndex((filmDataIndex) => filmData === filmDataIndex)];
-    });
   }
 
 
@@ -63,15 +50,6 @@ export default class FilmsModel {
    */
   getFilmsData() {
     return this._filmsData;
-  }
-
-
-  /**
-   * Метод, обеспечивающий получение данных комментариев
-   * @return {Array} данные комментариев
-   */
-  getCommentsData() {
-    return this._commentsData;
   }
 
 
@@ -240,7 +218,7 @@ export default class FilmsModel {
       rank: this.getRankDescription(0),
       count: 0,
       duration: 0,
-      topGenre: `—`
+      topGenre: NOT_DATA
     };
   }
 
@@ -265,16 +243,7 @@ export default class FilmsModel {
   _getWatchedFilmsGenres(filmsWatchedData) {
     const uniqueGenres = [];
 
-    const getGenres = () => {
-      filmsWatchedData.map((film) => {
-        film.details.genres.map((genre) => {
-          if (!uniqueGenres.includes(genre)) {
-            uniqueGenres.push(genre);
-          }
-        });
-      });
-    };
-    getGenres();
+    this._fillArrayGenresByWatchedFilms(filmsWatchedData, uniqueGenres);
 
     return uniqueGenres;
   }
@@ -318,5 +287,21 @@ export default class FilmsModel {
     const newFilmsData = this._filmsData.slice();
     newFilmsData[index] = newFilmData;
     this._filmsData = newFilmsData;
+  }
+
+
+  /**
+   * Метод, выполняющий формирование списка жанров просмотренных за период фильмов
+   * @param {Array} filmsWatchedData данные фильмов, соответствующие периоду
+   * @param {Array} uniqueGenres перечень жанров
+   */
+  _fillArrayGenresByWatchedFilms(filmsWatchedData, uniqueGenres) {
+    filmsWatchedData.map((film) => {
+      film.details.genres.map((genre) => {
+        if (!uniqueGenres.includes(genre)) {
+          uniqueGenres.push(genre);
+        }
+      });
+    });
   }
 }
