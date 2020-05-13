@@ -41,25 +41,33 @@ export const FilmAttribute = {
 export const DETAILS = `details`;
 
 
+export const SortKind = {
+  ARRAY: `forArray`,
+  NUMBER_ASC: `forNumberAsc`,
+  NUMBER_DESC: `forNumberDesc`,
+  DATE: `forDate`,
+};
+
+
 export const SortMethod = {
   BY_RATING: {
-    type: `forNumberDesc`,
+    type: SortKind.NUMBER_DESC,
     parameter: `rating`
   },
   BY_COMMENTS: {
-    type: `forArray`,
+    type: SortKind.ARRAY,
     parameter: `commentsIds`
   },
   BY_DATE: {
-    type: `forDate`,
+    type: SortKind.DATE,
     parameter: `year`
   },
   BY_COMMENT_DATE: {
-    type: `forNumberAsc`,
+    type: SortKind.NUMBER_ASC,
     parameter: `date`
   },
   BY_GENRES: {
-    type: `forNumberDesc`,
+    type: SortKind.NUMBER_DESC,
     parameter: `count`
   }
 };

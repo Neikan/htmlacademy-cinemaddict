@@ -1,7 +1,7 @@
 import moment from "moment";
 import {
   Position, CountCheckFormat, START_DATE_FILMS,
-  CountFilm, DETAILS, FormatRule, MINUTES_IN_HOUR
+  CountFilm, DETAILS, FormatRule, MINUTES_IN_HOUR, SortKind
 } from "../consts";
 
 
@@ -87,10 +87,10 @@ export const sortingArray = (array, {type, parameter}, count = CountFilm.EXTRA) 
   [...array].sort(choiceType[type](parameter)).slice(0, count);
 
 const choiceType = {
-  'forNumberDesc': (parameter) => ((a, b) => (b[parameter] - a[parameter])),
-  'forNumberAsc': (parameter) => ((a, b) => (a[parameter] - b[parameter])),
-  'forArray': (parameter) => ((a, b) => (b[parameter].length - a[parameter].length)),
-  'forDate': (parameter) => ((a, b) =>
+  [SortKind.ARRAY]: (parameter) => ((a, b) => (b[parameter].length - a[parameter].length)),
+  [SortKind.NUMBER_ASC]: (parameter) => ((a, b) => (a[parameter] - b[parameter])),
+  [SortKind.NUMBER_DESC]: (parameter) => ((a, b) => (b[parameter] - a[parameter])),
+  [SortKind.DATE]: (parameter) => ((a, b) =>
     parseInt(b[DETAILS][parameter], 10) - parseInt(a[DETAILS][parameter], 10))
 };
 
