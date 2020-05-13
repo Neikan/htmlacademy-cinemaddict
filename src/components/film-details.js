@@ -249,7 +249,7 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @param {Object} btn кнопка удаления комментария
    */
   _removeCommentAfterRequest(commentItem, btn) {
-    this._api.deleteCommentData(commentItem.dataset.commentId)
+    this._api.deleteCommentData(commentItem.dataset.commentId, this._filmData.id)
       .then(() => {
         this._removeComment(commentItem);
         this._updateCommentsCount();

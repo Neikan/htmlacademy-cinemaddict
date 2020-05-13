@@ -341,7 +341,7 @@ export default class FilmController {
    * @param {Object} commentItem блок удаляемого комментария
    */
   _removeCommentAfterRequest(evt, btn, commentDataId, commentItem) {
-    this._api.deleteCommentData(commentDataId)
+    this._api.deleteCommentData(commentDataId, this._filmData.id)
       .then(() => {
         this._removeNewComment(evt.target.closest(`.${DetailsElement.COMMENT_ITEM}`));
         this._updateCommentsCount(this._filmDetails.getElement());

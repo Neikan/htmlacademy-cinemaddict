@@ -6,11 +6,10 @@ import {getIndex} from '../utils/common';
 
 
 /**
- * Создание класса модели данных фильмов
+ * Модель данных фильмов
  */
 export default class FilmsModel {
-  constructor(api) {
-    this._api = api;
+  constructor() {
     this._filmsData = [];
     this._filterType = FilterType.ALL;
     this._sortType = SortType.DEFAULT;

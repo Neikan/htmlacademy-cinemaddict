@@ -1,4 +1,6 @@
-import API from "./api";
+import API from "./api/index";
+import Store from "./api/store";
+import Provider from "./api/provider";
 import FilmsModel from "./models/films";
 import Page from "./components/page";
 import PageController from "./controllers/page";
@@ -18,24 +20,33 @@ const Nodes = {
   FOOTER_STATS: document.querySelector(`.footer__statistics`)
 };
 
+const StoreName = {
+  FILMS: `cinemaddict-localstorage-filmsdata-v1`,
+  COMMENTS: `cinemaddict-localstorage-commentsdata-v1`
+};
+
 
 /**
  * Отрисовка компонентов на странице
  */
 const init = () => {
   const api = new API(AUTHORIZATION, END_POINT);
+  const storeFilmsData = new Store(StoreName.FILMS, window.localStorage);
+  const storeCommentsData = new Store(StoreName.COMMENTS, window.localStorage);
+  const apiWithProvider = new Provider(api, storeFilmsData, storeCommentsData);
+
   const pageComponent = new Page();
   const loaderComponent = new Loader();
 
   render[Position.BEFORE_END](Nodes.MAIN, pageComponent);
   render[Position.BEFORE_END](Nodes.MAIN, loaderComponent);
 
-  api.getFilmsData()
+  apiWithProvider.getFilmsData()
     .then((filmsData) => {
-      const filmsModel = new FilmsModel(api);
+      const filmsModel = new FilmsModel();
       filmsModel.setFilmsData(filmsData);
 
-      const pageController = new PageController(pageComponent, filmsModel, api);
+      const pageController = new PageController(pageComponent, filmsModel, apiWithProvider);
       pageController.render();
 
       remove(loaderComponent);

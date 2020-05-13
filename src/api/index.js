@@ -3,6 +3,9 @@ import CommentData from "../models/comment";
 import {RequestStatusCode} from "../consts";
 
 
+const HEADER_CONTENT_TYPE = {'Content-Type': `application/json`};
+const HEADER_AUTHORIZATION = `Authorization`;
+
 const Method = {
   GET: `GET`,
   POST: `POST`,
@@ -65,14 +68,14 @@ const API = class {
    * Метод, обеспечивающий отправку данных комментария
    * @param {Number} filmDataId идентификатор фильма
    * @param {Object} commentData данные комментария
-   * @return {Object}
+   * @return {Object} обновленные данные комментариев
    */
   sendCommentData(filmDataId, commentData) {
     return this._load({
       url: `${Url.COMMENTS}/${filmDataId}`,
       method: Method.POST,
       body: JSON.stringify(commentData.toRaw()),
-      headers: new Headers({"Content-Type": `application/json`})
+      headers: new Headers(HEADER_CONTENT_TYPE)
     })
       .then((response) => response.json())
       .then((filmData) => CommentData.parseComments(filmData.comments));
@@ -82,7 +85,7 @@ const API = class {
   /**
    * Метод, обеспечивающий удаление комментария
    * @param {Number} commentDataId идентификатор комментария
-   * @return {Object}
+   * @return {Object} результат
    */
   deleteCommentData(commentDataId) {
     return this._load({
@@ -95,14 +98,14 @@ const API = class {
    * Метод, обеспечивающий обновление данных фильма
    * @param {Number} filmDataId идентификатор фильма
    * @param {Object} filmData данные фильма
-   * @return {Object}
+   * @return {Object} обновленные данные
    */
   updateFilmData(filmDataId, filmData) {
     return this._load({
       url: `${Url.FILMS}/${filmDataId}`,
       method: Method.PUT,
       body: JSON.stringify(filmData.toRaw()),
-      headers: new Headers({"Content-Type": `application/json`})
+      headers: new Headers(HEADER_CONTENT_TYPE)
     })
       .then((response) => response.json())
       .then(FilmData.parseFilm);
@@ -112,10 +115,10 @@ const API = class {
   /**
    * Метод, обеспечиваюший подключение для получения/отправки данных
    * @param {Object} параметры подключения
-   * @return {Object}
+   * @return {Object} результат
    */
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
-    headers.append(`Authorization`, this._authorization);
+    headers.append(HEADER_AUTHORIZATION, this._authorization);
 
     return fetch(`${this._endPoint}/${url}`, {method, body, headers})
       .then(checkStatus)
