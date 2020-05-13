@@ -1,10 +1,14 @@
 import FilmData from "../models/film";
 import CommentData from "../models/comment";
-import {RequestStatusCode} from "../consts";
 
 
 const HEADER_CONTENT_TYPE = {'Content-Type': `application/json`};
 const HEADER_AUTHORIZATION = `Authorization`;
+
+const RequestStatusCode = {
+  OK: 200,
+  MULTIPLE: 300
+};
 
 const Method = {
   GET: `GET`,

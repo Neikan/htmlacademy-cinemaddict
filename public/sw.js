@@ -1,8 +1,7 @@
-import {RequestStatusCode} from "../src/consts";
-
 const CACHE_PREFIX = `cinemaddict-cache`;
 const CACHE_VER = `v1`;
 const CACHE_NAME = `${CACHE_PREFIX}-${CACHE_VER}`;
+const REQUEST_CODE_OK = 200;
 const RESPONSE_TYPE = `basic`;
 
 self.addEventListener(`install`, (evt) => {
@@ -94,7 +93,7 @@ const fetchHandler = (evt) => {
                 // или ответ небезопасного тип (не basic), тогда просто передаём
                 // ответ дальше, никак не обрабатываем
                 if (!response
-                  || response.status !== RequestStatusCode.OK
+                  || response.status !== REQUEST_CODE_OK
                   || response.type !== RESPONSE_TYPE) {
                   return response;
                 }

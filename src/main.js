@@ -12,6 +12,7 @@ import Loader from "./components/loader";
 import NoFilms from "./components/no-films";
 
 
+const PAGE_STATUS = ` [offline]`;
 const AUTHORIZATION = `Basic ${generateToken()}`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
 
@@ -56,6 +57,26 @@ const init = () => {
       remove(loaderComponent);
       render[Position.BEFORE_END](Nodes.MAIN, new NoFilms(Flag.NO));
     });
+
+
+  window.addEventListener(`load`, () => {
+    navigator.serviceWorker.register(`/sw.js`)
+      .then(() => {
+        // Действие, в случае успешной регистрации ServiceWorker
+      }).catch(() => {
+        // Действие, в случае ошибки при регистрации ServiceWorker
+      });
+  });
+
+  window.addEventListener(`online`, () => {
+    document.title = document.title.replace(`${PAGE_STATUS}`, ``);
+
+    apiWithProvider.sync();
+  });
+
+  window.addEventListener(`offline`, () => {
+    document.title += `${PAGE_STATUS}`;
+  });
 };
 
 
