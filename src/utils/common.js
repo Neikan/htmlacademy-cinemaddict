@@ -161,10 +161,10 @@ export const formatDuration = (duration) => {
 
 
 /**
- * Генерация идентификатора для фильмов и комментариев
+ * Генерация строки для авторизации
  * @return {string}
  */
-export const generateId = () => `f${(+new Date()).toString(16)}${Math.random() * 1e8}`;
+export const generateToken = () => `f${(+new Date()).toString(16)}${Math.random() * 1e8}`;
 
 
 /**
