@@ -10,6 +10,7 @@ export default class Provider {
     this._api = api;
     this._storeFilmsData = storeFilmsData;
     this._storeCommentsData = storeCommentsData;
+    this._isSynchronized = Flag.YES;
   }
 
 
