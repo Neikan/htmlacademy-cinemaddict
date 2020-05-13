@@ -93,7 +93,7 @@ export const filterRules = {
   [FilterType.RATED]: (filmsData) => filmsData.filter((filmData) => filmData.rating !== 0),
 
   [FilterType.COMMENTED]: (filmsData) =>
-    filmsData.filter((filmData) => filmData.comments.length !== 0),
+    filmsData.filter((filmData) => filmData.commentsIds.length !== 0),
 
   [FilterType.GENRES]: (filmsData, genre) =>
     filmsData.filter((filmData) => filmData.details.genres.includes(genre)).length,

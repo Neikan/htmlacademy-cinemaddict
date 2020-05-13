@@ -48,7 +48,7 @@ export const SortMethod = {
   },
   BY_COMMENTS: {
     type: `forArray`,
-    parameter: `comments`
+    parameter: `commentsIds`
   },
   BY_DATE: {
     type: `forDate`,
