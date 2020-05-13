@@ -24,11 +24,23 @@ const createDetails = (details) => {
  * @return {Object} обновленная информация о длительности
  */
 const updateFormatDuration = (duration) => {
-  duration = {
+  return {
     name: duration.name,
     info: formatDuration(duration.info)
   };
-  return duration;
+};
+
+
+/**
+ * Добавление пробела в перечислении
+ * @param {Object} detailsData
+ * @return {Object} обновленная информация
+ */
+const addSpaceDetailsData = (detailsData) => {
+  return {
+    name: detailsData.name,
+    info: detailsData.info.join(`, `)
+  };
 };
 
 
@@ -38,9 +50,14 @@ const updateFormatDuration = (duration) => {
  * @return {Array} массив элементов
  */
 const getRows = ({director, screenwriters, actors, releaseDate, duration, country}) =>
-  Object.values({director, screenwriters, actors, releaseDate,
-    duration: updateFormatDuration(duration), country}
-  );
+  Object.values({
+    director,
+    screenwriters: addSpaceDetailsData(screenwriters),
+    actors: addSpaceDetailsData(actors),
+    releaseDate,
+    duration: updateFormatDuration(duration),
+    country
+  });
 
 
 /**

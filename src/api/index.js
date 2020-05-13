@@ -69,6 +69,36 @@ const API = class {
 
 
   /**
+   * Метод, обеспечивающий отправку данных комментария
+   * @param {Number} filmDataId идентификатор фильма
+   * @param {Object} commentData данные комментария
+   * @return {Object}
+   */
+  sendCommentData(filmDataId, commentData) {
+    return this._load({
+      url: `${Url.COMMENTS}/${filmDataId}`,
+      method: Method.POST,
+      body: JSON.stringify(commentData.toRaw()),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then((response) => response.json())
+      .then((filmData) => CommentData.parseComments(filmData.comments));
+  }
+
+
+  /**
+   * Метод, обеспечивающий удаление комментария
+   * @param {Number} commentDataId идентификатор комментария
+   * @return {Object}
+   */
+  deleteCommentData(commentDataId) {
+    return this._load({
+      url: `${Url.COMMENTS}/${commentDataId}`,
+      method: Method.DELETE});
+  }
+
+
+  /**
    * Метод, обеспечивающий обновление данных фильма
    * @param {Number} filmDataId идентификатор фильма
    * @param {Object} filmData данные фильма

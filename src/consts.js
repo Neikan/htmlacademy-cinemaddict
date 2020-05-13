@@ -3,7 +3,9 @@ export const KeyCode = {
   ESC: 27
 };
 
+
 export const MINUTES_IN_HOUR = 60;
+
 
 export const CountFilm = {
   ALL: 22,
@@ -17,7 +19,9 @@ export const CountCheckFormat = {
   NUMBER: 1000,
 };
 
+
 export const FILM_DESCRIPTION_LENGTH = 140;
+
 
 export const Position = {
   BEFORE_END: `beforeend`,
@@ -33,30 +37,41 @@ export const FilmAttribute = {
   IS_FAVORITE: `isFavorite`
 };
 
+
 export const DETAILS = `details`;
+
+
+export const SortKind = {
+  ARRAY: `forArray`,
+  NUMBER_ASC: `forNumberAsc`,
+  NUMBER_DESC: `forNumberDesc`,
+  DATE: `forDate`,
+};
+
 
 export const SortMethod = {
   BY_RATING: {
-    type: `forNumberDesc`,
+    type: SortKind.NUMBER_DESC,
     parameter: `rating`
   },
   BY_COMMENTS: {
-    type: `forArray`,
-    parameter: `comments`
+    type: SortKind.ARRAY,
+    parameter: `commentsIds`
   },
   BY_DATE: {
-    type: `forDate`,
+    type: SortKind.DATE,
     parameter: `year`
   },
   BY_COMMENT_DATE: {
-    type: `forNumberAsc`,
+    type: SortKind.NUMBER_ASC,
     parameter: `date`
   },
   BY_GENRES: {
-    type: `forNumberDesc`,
+    type: SortKind.NUMBER_DESC,
     parameter: `count`
   }
 };
+
 
 export const SortType = {
   DEFAULT: `default`,
@@ -66,10 +81,12 @@ export const SortType = {
   BY_GENRES: `by-genres`
 };
 
+
 export const SortClass = {
   BUTTON: `sort__button`,
   BUTTON_ACTIVE: `sort__button--active`
 };
+
 
 export const RankDescription = {
   NOVICE: {
@@ -86,6 +103,7 @@ export const RankDescription = {
   }
 };
 
+
 export const EMOJIES = [
   `smile`,
   `sleeping`,
@@ -93,7 +111,9 @@ export const EMOJIES = [
   `angry`
 ];
 
+
 export const START_DATE_FILMS = [1970, 1, 1];
+
 
 export const ExtraName = {
   RATED: `Top rated`,
@@ -108,10 +128,12 @@ export const FilmsBlock = {
   COMMENTED: `most-commented`
 };
 
+
 export const ClassMarkup = {
   POINTER: `pointer`,
   OPACITY: `film-card--opacity`,
 };
+
 
 export const CARD_ELEMENTS = [
   `film-card__poster`,
@@ -119,11 +141,13 @@ export const CARD_ELEMENTS = [
   `film-card__comments`
 ];
 
+
 export const FilmsElement = {
   EXTRA: `films-list--extra`,
   TITLE: `films-list__title`,
   FILM_LIST: `.films-list__container`
 };
+
 
 export const CardElement = {
   CARD: `film-card`,
@@ -132,6 +156,7 @@ export const CardElement = {
   BTN_FAVORITE: `film-card__controls-item--favorite`,
   BTN_ACTIVE: `film-card__controls-item--active`,
 };
+
 
 export const DetailsElement = {
   BTN_CLOSE: `film-details__close-btn`,
@@ -149,6 +174,7 @@ export const DetailsElement = {
   ERROR: `film-details__new-comment--error`
 };
 
+
 export const MenuElement = {
   ITEMS: `main-navigation__items`,
   ITEM: `main-navigation__item`,
@@ -157,10 +183,12 @@ export const MenuElement = {
   DATA_ID: `a[data-item-id]`
 };
 
+
 export const Flag = {
   YES: true,
   NO: false
 };
+
 
 export const FormatRule = {
   RELEASE_DATE: `DD MMMM YYYY`,
@@ -169,6 +197,7 @@ export const FormatRule = {
   DURATION: `mm[m]`,
   DURATION_WITH_HOURS: `H[h] mm[m]`
 };
+
 
 export const FilterType = {
   ALL: `All movies`,
@@ -181,10 +210,12 @@ export const FilterType = {
   GENRES: `By genres`
 };
 
+
 export const Mode = {
   DEFAULT: `default`,
   DETAILS: `details`,
 };
+
 
 export const Period = {
   TODAY: 1,
@@ -193,8 +224,24 @@ export const Period = {
   YEAR: 365
 };
 
+
 export const StatsElement = {
   NAME: `Stats`,
   FILTER: `statistic__filters-input`,
   CHART: `statistic__chart`
 };
+
+
+export const SHAKE_ANIMATION = `shake`;
+
+
+export const BtnName = {
+  DELETE: `Delete`,
+  DELETING: `Deleting`
+};
+
+
+export const BTN_ATTRIBUTE = `disabled`;
+
+
+export const NOT_DATA = `—`;

@@ -2,14 +2,15 @@ import API from "./api";
 import FilmsModel from "./models/films";
 import Page from "./components/page";
 import PageController from "./controllers/page";
-import {Position} from "./consts";
-import {renderMarkup, generateId} from "./utils/common";
+import {Position, Flag} from "./consts";
+import {renderMarkup, generateToken} from "./utils/common";
 import {render, remove} from "./utils/components";
 import {createFooter} from "./components/footer";
 import Loader from "./components/loader";
+import NoFilms from "./components/no-films";
 
 
-const AUTHORIZATION = `Basic ${generateId()}`;
+const AUTHORIZATION = `Basic ${generateToken()}`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
 
 const Nodes = {
@@ -34,19 +35,15 @@ const init = () => {
       const filmsModel = new FilmsModel(api);
       filmsModel.setFilmsData(filmsData);
 
-      const promises = filmsData.map((filmData) => api
-        .getCommentsData(filmData.id)
-        .then((commentsData) => commentsData)
-      );
+      const pageController = new PageController(pageComponent, filmsModel, api);
+      pageController.render();
 
-      Promise.all(promises).then((commentsData) => {
-        const pageController = new PageController(pageComponent, filmsModel);
-
-        filmsModel.setCommentsData(commentsData);
-        pageController.render();
-        remove(loaderComponent);
-        renderMarkup(Nodes.FOOTER_STATS, createFooter(filmsData.length));
-      });
+      remove(loaderComponent);
+      renderMarkup(Nodes.FOOTER_STATS, createFooter(filmsData.length));
+    })
+    .catch(() => {
+      remove(loaderComponent);
+      render[Position.BEFORE_END](Nodes.MAIN, new NoFilms(Flag.NO));
     });
 };
 

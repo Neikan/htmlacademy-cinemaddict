@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract/component";
-import {CARD_ELEMENTS, CardElement, ClassMarkup, FILM_DESCRIPTION_LENGTH} from "../consts";
+import {CARD_ELEMENTS, CardElement, ClassMarkup, FILM_DESCRIPTION_LENGTH, NOT_DATA} from "../consts";
 import {formatDuration} from "../utils/common";
 
 
@@ -26,6 +26,8 @@ const createFilmCard = ({
     'markAsFavourite': isFavorite ? ` ` + CardElement.BTN_ACTIVE : ``
   };
 
+  const checkGenre = details.genres.length ? details.genres[0] : NOT_DATA;
+
   const formatDescription = details.description.length > FILM_DESCRIPTION_LENGTH ?
     `${details.description.substring(0, FILM_DESCRIPTION_LENGTH - 1)}...` : details.description;
 
@@ -36,7 +38,7 @@ const createFilmCard = ({
       <p class="film-card__info">
         <span class="film-card__year">${details.year}</span>
         <span class="film-card__duration">${formatDuration(details.duration.info)}</span>
-        <span class="film-card__genre">${details.genres[0]}</span>
+        <span class="film-card__genre">${checkGenre}</span>
       </p>
       <img src="${promo.poster}" alt="" class="film-card__poster">
       <p class="film-card__description">${formatDescription}</p>
