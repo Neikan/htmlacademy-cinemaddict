@@ -7,7 +7,7 @@ import {
   KeyCode, Position, DetailsElement, CardElement, Flag, FilterType,
   ClassMarkup, FilmsBlock, Mode, SHAKE_ANIMATION, BtnName, BTN_ATTRIBUTE, FilmAttribute
 } from "../consts";
-import {render, remove, replace, getItem, changeDataRules} from "../utils/components";
+import {render, remove, replace, changeDataRules} from "../utils/components";
 import {getIndex} from "../utils/common";
 import CommentData from "../models/comment";
 
@@ -171,8 +171,8 @@ export default class FilmController {
    */
   _getCommentData(container) {
     return {
-      emotion: getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).value,
-      comment: encode(getItem(container, DetailsElement.COMMENT_INPUT).value),
+      emotion: container.querySelector(`.${DetailsElement.EMOJI_ITEM_CHECKED}`).value,
+      comment: encode(container.querySelector(`.${DetailsElement.COMMENT_INPUT}`).value),
       date: new Date()
     };
   }
@@ -183,8 +183,8 @@ export default class FilmController {
    */
   _renderNewComment() {
     const container = this._filmDetails.getElement();
-    const emojiAddBlock = getItem(container, DetailsElement.EMOJI_ADD_BLOCK);
-    const textArea = getItem(container, DetailsElement.COMMENT_INPUT);
+    const emojiAddBlock = container.querySelector(`.${DetailsElement.EMOJI_ADD_BLOCK}`);
+    const textArea = container.querySelector(`.${DetailsElement.COMMENT_INPUT}`);
 
     if (!emojiAddBlock.childNodes.length) {
       emojiAddBlock.classList.add(DetailsElement.ERROR);
@@ -271,7 +271,7 @@ export default class FilmController {
    */
   _addNewCommentAndSetBtnDeleteListener(container, newCommentComponent, newCommentData) {
     render[Position.BEFORE_END](
-        getItem(container, DetailsElement.COMMENT_LIST), newCommentComponent
+        container.querySelector(`.${DetailsElement.COMMENT_LIST}`), newCommentComponent
     );
     newCommentComponent.setBtnDeleteCommentClickHandler(
         this._setBtnDeleteCommentClickHandler(newCommentData.id)
@@ -295,12 +295,14 @@ export default class FilmController {
    * @param {Object} textArea поле ввода комментария
    */
   _clearNewCommentForm(container, textArea) {
-    const emojiAddBlock = getItem(container, DetailsElement.EMOJI_ADD_BLOCK);
+    const emojiAddBlock = container.querySelector(`.${DetailsElement.EMOJI_ADD_BLOCK}`);
 
     emojiAddBlock.removeChild(emojiAddBlock.firstChild);
+
     textArea.value = null;
     textArea.disabled = Flag.NO;
-    getItem(container, DetailsElement.EMOJI_ITEM_CHECKED).checked = Flag.NO;
+
+    container.querySelector(`.${DetailsElement.EMOJI_ITEM_CHECKED}`).checked = Flag.NO;
   }
 
 

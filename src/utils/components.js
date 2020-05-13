@@ -70,15 +70,6 @@ export const getImageElement = (imageName) => {
 
 
 /**
- * Получение элемента по селектору класса
- * @param {Object} contaner контейнер, в котором выполняется поиск
- * @param {string} selector параметр поиска
- * @return {Object} найденный элемент
- */
-export const getItem = (contaner, selector) => contaner.querySelector(`.${selector}`);
-
-
-/**
  * Правила фильтрации
  */
 export const filterRules = {
