@@ -3,15 +3,6 @@ import {Flag} from "../consts";
 
 
 /**
- * Проверка сетевого статуса браузера
- * @return {Boolean} результат
- */
-const checkIsOnline = () => {
-  return window.navigator.onLine;
-};
-
-
-/**
  * Провайдер для API
  */
 export default class Provider {
@@ -23,11 +14,29 @@ export default class Provider {
 
 
   /**
+   * Метод, обеспечивающий установку значения результату выполнения синхронизации
+   * @param {Boolean} value значение
+   */
+  setIsSynchronized(value) {
+    this._isSynchronized = value;
+  }
+
+
+  /**
+   * Метод, обеспечиваюший получение значения результата выполнения синхронизации
+   * @return {Boolean}
+   */
+  getIsSynchronized() {
+    return this._isSynchronized;
+  }
+
+
+  /**
    * Метод, обеспечивающий получение данных фильмов
    * @return {Array} полученные данные
    */
   getFilmsData() {
-    if (checkIsOnline()) {
+    if (this._getIsOnLine()) {
       return this._api.getFilmsData()
         .then((filmsData) => {
           filmsData.map((filmData) => {
@@ -36,6 +45,8 @@ export default class Provider {
           return filmsData;
         });
     }
+
+    this.setIsSynchronized(Flag.NO);
 
     return Promise.resolve(FilmData.parseFilms(
         Object.values(this._storeFilmsData.getAllData())
@@ -49,7 +60,7 @@ export default class Provider {
    * @return {Object} полученные данные
    */
   getCommentsData(filmDataId) {
-    if (checkIsOnline()) {
+    if (this._getIsOnLine()) {
       return this._api.getCommentsData(filmDataId)
         .then((commentsData) => {
           commentsData.map((commentData) => {
@@ -59,7 +70,18 @@ export default class Provider {
         });
     }
 
+    this.setIsSynchronized(Flag.NO);
+
     return Promise.resolve();
+  }
+
+
+  /**
+   * Метод, обеспечивающий получение сетевого статуса браузера
+   * @return {Boolean} значение
+   */
+  _getIsOnLine() {
+    return window.navigator.onLine;
   }
 
 
@@ -70,7 +92,7 @@ export default class Provider {
    * @return {Object}
    */
   sendCommentData(filmDataId, commentData) {
-    if (checkIsOnline()) {
+    if (this._getIsOnLine()) {
       return this._api.sendCommentData(filmDataId, commentData)
         .then((commentsData) => {
           this._storeFilmsData.setCommentsData(filmDataId, commentsData, Flag.YES);
@@ -79,6 +101,8 @@ export default class Provider {
           return commentsData;
         });
     }
+
+    this.setIsSynchronized(Flag.NO);
 
     return Promise.resolve();
   }
@@ -91,13 +115,15 @@ export default class Provider {
    * @return {Object}
    */
   deleteCommentData(commentDataId, filmDataId) {
-    if (checkIsOnline()) {
+    if (this._getIsOnLine()) {
       return this._api.deleteCommentData(commentDataId)
         .then(() => {
           this._storeFilmsData.removeCommentData(filmDataId, commentDataId, Flag.YES);
           this._storeCommentsData.removeCommentData(filmDataId, commentDataId);
         });
     }
+
+    this.setIsSynchronized(Flag.NO);
 
     return Promise.resolve();
   }
@@ -110,7 +136,7 @@ export default class Provider {
    * @return {Object} обновленные данные
    */
   updateFilmData(filmDataId, filmData) {
-    if (checkIsOnline()) {
+    if (this._getIsOnLine()) {
       return this._api.updateFilmData(filmDataId, filmData)
         .then((newFilmData) => {
           this._storeFilmsData.setDataItem(newFilmData.id, newFilmData.toRaw());
