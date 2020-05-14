@@ -8,7 +8,6 @@ export const MINUTES_IN_HOUR = 60;
 
 
 export const CountFilm = {
-  ALL: 22,
   START: 5,
   BY_BUTTON: 5,
   EXTRA: 2,
@@ -110,9 +109,6 @@ export const EMOJIES = [
   `puke`,
   `angry`
 ];
-
-
-export const START_DATE_FILMS = [1970, 1, 1];
 
 
 export const ExtraName = {
@@ -217,14 +213,6 @@ export const Mode = {
 };
 
 
-export const Period = {
-  TODAY: 1,
-  WEEK: 7,
-  MONTH: 30,
-  YEAR: 365
-};
-
-
 export const StatsElement = {
   NAME: `Stats`,
   FILTER: `statistic__filters-input`,
@@ -245,4 +233,3 @@ export const BTN_ATTRIBUTE = `disabled`;
 
 
 export const NOT_DATA = `—`;
-

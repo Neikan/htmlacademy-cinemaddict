@@ -72,7 +72,7 @@ export default class FilmCard extends AbstractComponent {
   }
 
   setClickHandler(handler) {
-    for (let cardElement of CARD_ELEMENTS) {
+    for (const cardElement of CARD_ELEMENTS) {
       const target = this.getElement().querySelector(`.${cardElement}`);
       target.classList.add(ClassMarkup.POINTER);
       target.addEventListener(`click`, handler);

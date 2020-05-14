@@ -37,10 +37,10 @@ const STATS_FILTERS = [
  * @return {string} разметка фильтра
  */
 const createStatsFilter = (filter, {input, label}) => {
-  const isCheckd = filter === input ? ` checked` : ``;
+  const signOfCheck = filter === input ? ` checked` : ``;
 
   return (
-    `<input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${input}" value="${input}"${isCheckd}>
+    `<input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${input}" value="${input}"${signOfCheck}>
     <label for="statistic-${input}" class="statistic__filters-label">${label}</label>`
   );
 };
