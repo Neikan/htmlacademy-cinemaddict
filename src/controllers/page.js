@@ -525,12 +525,11 @@ export default class PageController {
 
   /**
    * Метод, обеспечивающий обновление контроллера фильма на основе новых данных
-   * @param {Object} oldData прежние данные фильма
    * @param {Object} newData обновленные данные фильма
    * @return {Object} обновленные данные фильма
    */
-  _dataChangeHandler(oldData, newData) {
-    return this._filmsModel.updateFilmData(oldData, newData);
+  _dataChangeHandler(newData) {
+    return this._filmsModel.updateFilmData(newData);
   }
 
 
