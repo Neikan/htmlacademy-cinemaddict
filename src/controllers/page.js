@@ -3,7 +3,7 @@ import FilmController from "./film";
 import Films from "../components/films";
 import FilmsExtra from "../components/films-extra";
 import NoFilms from "../components/no-films";
-import ShowMoreBtn from "../components/show-more-button";
+import ShowMoreBtn from "../components/show-more-btn";
 import Sorting from "../components/sorting";
 import ProfileRank from "../components/profile-rank";
 import Statistics from "../components/statistics";
