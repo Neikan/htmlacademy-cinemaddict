@@ -140,9 +140,9 @@ export default class FilmsModel {
 
     if (filmsWatchedData.length) {
       return this._getRealStats(filmsWatchedData);
-    } else {
-      return this._getZeroStats();
     }
+
+    return this._getZeroStats();
   }
 
 
@@ -171,13 +171,17 @@ export default class FilmsModel {
   getRankDescription(countWatchedFilms) {
     if (countWatchedFilms >= RankDescription.MOVIE_BUFF.from) {
       return RankDescription.MOVIE_BUFF.rank;
-    } else if (countWatchedFilms >= RankDescription.FUN.from) {
-      return RankDescription.FUN.rank;
-    } else if (countWatchedFilms >= RankDescription.NOVICE.from) {
-      return RankDescription.NOVICE.rank;
-    } else {
-      return (``);
     }
+
+    if (countWatchedFilms >= RankDescription.FUN.from) {
+      return RankDescription.FUN.rank;
+    }
+
+    if (countWatchedFilms >= RankDescription.NOVICE.from) {
+      return RankDescription.NOVICE.rank;
+    }
+
+    return (``);
   }
 
 

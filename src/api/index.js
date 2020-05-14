@@ -33,9 +33,9 @@ const checkStatus = (response) => {
   if (response.status >= RequestStatusCode.OK
     && response.status < RequestStatusCode.MULTIPLE) {
     return response;
-  } else {
-    throw new Error(`${response.status}: ${response.statusText}`);
   }
+
+  throw new Error(`${response.status}: ${response.statusText}`);
 };
 
 
