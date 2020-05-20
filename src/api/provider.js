@@ -181,8 +181,9 @@ export default class Provider {
     }
 
     this.setIsSynchronized(Flag.NO);
+    this._getFilmDataForSync(filmData);
 
-    return Promise.resolve(this._getFilmDataForSync(filmData));
+    return Promise.resolve(filmData);
   }
 
 
