@@ -133,7 +133,7 @@ export default class FilmController {
   /**
    * Метод, обеспечивающий добавление слушателей на документ
    */
-  _setDocimentListeners() {
+  _setDocumentListeners() {
     document.addEventListener(`keydown`, this._escKeyDownHandler);
     document.addEventListener(`keyup`, this._ctrlKeyUpHandler);
   }
@@ -573,7 +573,7 @@ export default class FilmController {
         render[Position.BEFORE_END](mainSection, this._filmDetails);
         this._mode = Mode.DETAILS;
 
-        this._setDocimentListeners();
+        this._setDocumentListeners();
         this._setDetailsHandlers();
       })
       .catch(() => {

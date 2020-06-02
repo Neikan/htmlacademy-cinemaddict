@@ -1,0 +1,133 @@
+===============================================================================
+EXTENSION NAME : linecounter
+EXTENSION VERSION : 0.2.7
+-------------------------------------------------------------------------------
+count time : 2020-06-01 17:42:23
+count workspace : c:\Devel\Projects\1264031-cinemaddict-11
+total files : 108
+total code lines : 12076
+total comment lines : 1602
+total blank lines : 1345
+
+    statistics
+   |      extension|     total code|  total comment|    total blank|percent|
+   -------------------------------------------------------------------------
+   |               |             44|              1|              7|   0.36|
+   |           .yml|             13|              0|              4|   0.11|
+   |            .md|             56|              7|             39|   0.46|
+   |          .json|           6492|              0|              0|     54|
+   |            .js|           2659|           1331|            830|     22|
+   |          .html|            522|              5|             83|    4.3|
+   |           .map|              1|              0|              0| 0.0083|
+   |           .css|           2245|            258|            382|     19|
+   |           .svg|             44|              0|              0|   0.36|
+   -------------------------------------------------------------------------
+.editorconfig, code is 19, comment is 1, blank is 3.
+.eslintignore, code is 1, comment is 0, blank is 0.
+.eslintrc.yml, code is 8, comment is 0, blank is 2.
+.gitattributes, code is 7, comment is 0, blank is 1.
+.gitignore, code is 14, comment is 0, blank is 3.
+.stylelintrc, code is 3, comment is 0, blank is 0.
+.travis.yml, code is 5, comment is 0, blank is 2.
+Contributing.md, code is 26, comment is 1, blank is 16.
+markup\css\main.css, code is 961, comment is 0, blank is 116.
+markup\css\normalize.css, code is 146, comment is 129, blank is 74.
+markup\film-details-adding-comment.html, code is 65, comment is 0, blank is 7.
+markup\film-details.html, code is 65, comment is 0, blank is 7.
+markup\images\background.png, it is a binary file.
+markup\images\bitmap.png, it is a binary file.
+markup\images\bitmap@2x.png, it is a binary file.
+markup\images\bitmap@3x.png, it is a binary file.
+markup\images\emoji\angry.png, it is a binary file.
+markup\images\emoji\puke.png, it is a binary file.
+markup\images\emoji\sleeping.png, it is a binary file.
+markup\images\emoji\smile.png, it is a binary file.
+markup\images\icons\icon-favorite-active.svg, code is 3, comment is 0, blank is 0.
+markup\images\icons\icon-favorite.svg, code is 3, comment is 0, blank is 0.
+markup\images\icons\icon-watched-active.svg, code is 3, comment is 0, blank is 0.
+markup\images\icons\icon-watched.svg, code is 3, comment is 0, blank is 0.
+markup\images\icons\icon-watchlist-active.svg, code is 5, comment is 0, blank is 0.
+markup\images\icons\icon-watchlist.svg, code is 5, comment is 0, blank is 0.
+markup\images\posters\made-for-each-other.png, it is a binary file.
+markup\images\posters\popeye-meets-sinbad.png, it is a binary file.
+markup\images\posters\sagebrush-trail.jpg, it is a binary file.
+markup\images\posters\santa-claus-conquers-the-martians.jpg, it is a binary file.
+markup\images\posters\the-dance-of-life.jpg, it is a binary file.
+markup\images\posters\the-great-flamarion.jpg, it is a binary file.
+markup\images\posters\the-man-with-the-golden-arm.jpg, it is a binary file.
+markup\index-loading.html, code is 48, comment is 0, blank is 8.
+markup\index-no-data.html, code is 48, comment is 0, blank is 8.
+markup\index-no-extra-films.html, code is 65, comment is 0, blank is 7.
+markup\index.html, code is 65, comment is 0, blank is 7.
+markup\no-user-level.html, code is 66, comment is 0, blank is 14.
+markup\statistic.html, code is 75, comment is 0, blank is 16.
+package-lock.json, code is 6463, comment is 0, blank is 0.
+package.json, code is 29, comment is 0, blank is 0.
+public\bundle.js, code is 67, comment is 89, blank is 5.
+public\bundle.js.map, code is 1, comment is 0, blank is 0.
+public\css\main.css, code is 992, comment is 0, blank is 118.
+public\css\normalize.css, code is 146, comment is 129, blank is 74.
+public\images\background.png, it is a binary file.
+public\images\bitmap.png, it is a binary file.
+public\images\bitmap@2x.png, it is a binary file.
+public\images\bitmap@3x.png, it is a binary file.
+public\images\emoji\angry.png, it is a binary file.
+public\images\emoji\puke.png, it is a binary file.
+public\images\emoji\sleeping.png, it is a binary file.
+public\images\emoji\smile.png, it is a binary file.
+public\images\icons\icon-favorite-active.svg, code is 3, comment is 0, blank is 0.
+public\images\icons\icon-favorite.svg, code is 3, comment is 0, blank is 0.
+public\images\icons\icon-watched-active.svg, code is 3, comment is 0, blank is 0.
+public\images\icons\icon-watched.svg, code is 3, comment is 0, blank is 0.
+public\images\icons\icon-watchlist-active.svg, code is 5, comment is 0, blank is 0.
+public\images\icons\icon-watchlist.svg, code is 5, comment is 0, blank is 0.
+public\images\posters\made-for-each-other.png, it is a binary file.
+public\images\posters\popeye-meets-sinbad.png, it is a binary file.
+public\images\posters\sagebrush-trail.jpg, it is a binary file.
+public\images\posters\santa-claus-conquers-the-martians.jpg, it is a binary file.
+public\images\posters\the-dance-of-life.jpg, it is a binary file.
+public\images\posters\the-great-flamarion.jpg, it is a binary file.
+public\images\posters\the-man-with-the-golden-arm.jpg, it is a binary file.
+public\index.html, code is 25, comment is 5, blank is 9.
+public\sw.js, code is 82, comment is 18, blank is 16.
+Readme.md, code is 29, comment is 6, blank is 23.
+src\api\index.js, code is 88, comment is 40, blank is 27.
+src\api\provider.js, code is 125, comment is 60, blank is 43.
+src\api\store.js, code is 62, comment is 42, blank is 22.
+src\components\abstract\component-smart.js, code is 14, comment is 0, blank is 5.
+src\components\abstract\component.js, code is 6, comment is 3, blank is 3.
+src\components\film-card.js, code is 71, comment is 9, blank is 13.
+src\components\film-details.js, code is 185, comment is 106, blank is 61.
+src\components\film-details\comment.js, code is 41, comment is 21, blank is 13.
+src\components\film-details\comments.js, code is 31, comment is 15, blank is 8.
+src\components\film-details\controls.js, code is 14, comment is 5, blank is 3.
+src\components\film-details\details-info.js, code is 20, comment is 5, blank is 4.
+src\components\film-details\details.js, code is 44, comment is 35, blank is 16.
+src\components\film-details\emojies.js, code is 13, comment is 15, blank is 6.
+src\components\film-details\genres.js, code is 14, comment is 15, blank is 7.
+src\components\film-details\promo.js, code is 9, comment is 5, blank is 2.
+src\components\film-details\titles.js, code is 9, comment is 5, blank is 2.
+src\components\films-extra.js, code is 19, comment is 8, blank is 6.
+src\components\films.js, code is 15, comment is 7, blank is 4.
+src\components\footer.js, code is 3, comment is 5, blank is 4.
+src\components\loader.js, code is 15, comment is 7, blank is 4.
+src\components\menu.js, code is 97, comment is 54, blank is 28.
+src\components\no-films.js, code is 23, comment is 13, blank is 9.
+src\components\page.js, code is 7, comment is 7, blank is 3.
+src\components\profile-rank.js, code is 18, comment is 9, blank is 7.
+src\components\show-more-btn.js, code is 10, comment is 7, blank is 5.
+src\components\sorting.js, code is 53, comment is 25, blank is 16.
+src\components\statistics.js, code is 186, comment is 50, blank is 36.
+src\consts.js, code is 176, comment is 0, blank is 59.
+src\controllers\film.js, code is 349, comment is 203, blank is 116.
+src\controllers\menu.js, code is 30, comment is 17, blank is 11.
+src\controllers\page.js, code is 319, comment is 186, blank is 103.
+src\main.js, code is 60, comment is 11, blank is 18.
+src\models\comment.js, code is 22, comment is 14, blank is 6.
+src\models\film.js, code is 97, comment is 19, blank is 20.
+src\models\films.js, code is 137, comment is 110, blank is 62.
+src\Readme.md, code is 1, comment is 0, blank is 0.
+src\utils\common.js, code is 39, comment is 60, blank is 25.
+src\utils\components.js, code is 69, comment is 31, blank is 31.
+webpack.config.js, code is 20, comment is 0, blank is 1.
+===============================================================================

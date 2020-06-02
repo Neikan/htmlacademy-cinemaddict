@@ -107,7 +107,6 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._container = container;
     this._filmsModel = filmsModel;
-    this._filmsWatchedData = [];
     this._filter = `all-time`;
     this._period = 0;
     this._chart = null;

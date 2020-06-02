@@ -1,0 +1,742 @@
+{
+    "extension": "linecounter",
+    "version": "0.2.7",
+    "workspace": "c:\\Devel\\Projects\\1264031-cinemaddict-11",
+    "linecount": [
+        {
+            "version": "0.2.7",
+            "counttime": "2020-06-01 17:42:23",
+            "filesum": 108,
+            "codesum": 12076,
+            "commentsum": 1602,
+            "blanksum": 1345,
+            "statistics": {
+                "": {
+                    "code": 44,
+                    "comment": 1,
+                    "blank": 7
+                },
+                ".yml": {
+                    "code": 13,
+                    "comment": 0,
+                    "blank": 4
+                },
+                ".md": {
+                    "code": 56,
+                    "comment": 7,
+                    "blank": 39
+                },
+                ".json": {
+                    "code": 6492,
+                    "comment": 0,
+                    "blank": 0
+                },
+                ".js": {
+                    "code": 2659,
+                    "comment": 1331,
+                    "blank": 830
+                },
+                ".html": {
+                    "code": 522,
+                    "comment": 5,
+                    "blank": 83
+                },
+                ".map": {
+                    "code": 1,
+                    "comment": 0,
+                    "blank": 0
+                },
+                ".css": {
+                    "code": 2245,
+                    "comment": 258,
+                    "blank": 382
+                },
+                ".svg": {
+                    "code": 44,
+                    "comment": 0,
+                    "blank": 0
+                }
+            },
+            "filelist": [
+                {
+                    "blank": 3,
+                    "code": 19,
+                    "comment": 1,
+                    "filename": ".editorconfig"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".eslintignore"
+                },
+                {
+                    "blank": 2,
+                    "code": 8,
+                    "comment": 0,
+                    "filename": ".eslintrc.yml"
+                },
+                {
+                    "blank": 1,
+                    "code": 7,
+                    "comment": 0,
+                    "filename": ".gitattributes"
+                },
+                {
+                    "blank": 3,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": ".gitignore"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": ".stylelintrc"
+                },
+                {
+                    "blank": 2,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": ".travis.yml"
+                },
+                {
+                    "blank": 16,
+                    "code": 26,
+                    "comment": 1,
+                    "filename": "Contributing.md"
+                },
+                {
+                    "blank": 116,
+                    "code": 961,
+                    "comment": 0,
+                    "filename": "markup\\css\\main.css"
+                },
+                {
+                    "blank": 74,
+                    "code": 146,
+                    "comment": 129,
+                    "filename": "markup\\css\\normalize.css"
+                },
+                {
+                    "blank": 7,
+                    "code": 65,
+                    "comment": 0,
+                    "filename": "markup\\film-details-adding-comment.html"
+                },
+                {
+                    "blank": 7,
+                    "code": 65,
+                    "comment": 0,
+                    "filename": "markup\\film-details.html"
+                },
+                {
+                    "filename": "markup\\images\\background.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "markup\\images\\bitmap.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "markup\\images\\bitmap@2x.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "markup\\images\\bitmap@3x.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "markup\\images\\emoji\\angry.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "markup\\images\\emoji\\puke.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "markup\\images\\emoji\\sleeping.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "markup\\images\\emoji\\smile.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "markup\\images\\icons\\icon-favorite-active.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "markup\\images\\icons\\icon-favorite.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "markup\\images\\icons\\icon-watched-active.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "markup\\images\\icons\\icon-watched.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": "markup\\images\\icons\\icon-watchlist-active.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": "markup\\images\\icons\\icon-watchlist.svg"
+                },
+                {
+                    "filename": "markup\\images\\posters\\made-for-each-other.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "markup\\images\\posters\\popeye-meets-sinbad.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "markup\\images\\posters\\sagebrush-trail.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "markup\\images\\posters\\santa-claus-conquers-the-martians.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "markup\\images\\posters\\the-dance-of-life.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "markup\\images\\posters\\the-great-flamarion.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "markup\\images\\posters\\the-man-with-the-golden-arm.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 8,
+                    "code": 48,
+                    "comment": 0,
+                    "filename": "markup\\index-loading.html"
+                },
+                {
+                    "blank": 8,
+                    "code": 48,
+                    "comment": 0,
+                    "filename": "markup\\index-no-data.html"
+                },
+                {
+                    "blank": 7,
+                    "code": 65,
+                    "comment": 0,
+                    "filename": "markup\\index-no-extra-films.html"
+                },
+                {
+                    "blank": 7,
+                    "code": 65,
+                    "comment": 0,
+                    "filename": "markup\\index.html"
+                },
+                {
+                    "blank": 14,
+                    "code": 66,
+                    "comment": 0,
+                    "filename": "markup\\no-user-level.html"
+                },
+                {
+                    "blank": 16,
+                    "code": 75,
+                    "comment": 0,
+                    "filename": "markup\\statistic.html"
+                },
+                {
+                    "blank": 0,
+                    "code": 6463,
+                    "comment": 0,
+                    "filename": "package-lock.json"
+                },
+                {
+                    "blank": 0,
+                    "code": 29,
+                    "comment": 0,
+                    "filename": "package.json"
+                },
+                {
+                    "blank": 5,
+                    "code": 67,
+                    "comment": 89,
+                    "filename": "public\\bundle.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "public\\bundle.js.map"
+                },
+                {
+                    "blank": 118,
+                    "code": 992,
+                    "comment": 0,
+                    "filename": "public\\css\\main.css"
+                },
+                {
+                    "blank": 74,
+                    "code": 146,
+                    "comment": 129,
+                    "filename": "public\\css\\normalize.css"
+                },
+                {
+                    "filename": "public\\images\\background.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\images\\bitmap.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\images\\bitmap@2x.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\images\\bitmap@3x.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\images\\emoji\\angry.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\images\\emoji\\puke.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\images\\emoji\\sleeping.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\images\\emoji\\smile.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "public\\images\\icons\\icon-favorite-active.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "public\\images\\icons\\icon-favorite.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "public\\images\\icons\\icon-watched-active.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "public\\images\\icons\\icon-watched.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": "public\\images\\icons\\icon-watchlist-active.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": "public\\images\\icons\\icon-watchlist.svg"
+                },
+                {
+                    "filename": "public\\images\\posters\\made-for-each-other.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\images\\posters\\popeye-meets-sinbad.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\images\\posters\\sagebrush-trail.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\images\\posters\\santa-claus-conquers-the-martians.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\images\\posters\\the-dance-of-life.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\images\\posters\\the-great-flamarion.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\images\\posters\\the-man-with-the-golden-arm.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 9,
+                    "code": 25,
+                    "comment": 5,
+                    "filename": "public\\index.html"
+                },
+                {
+                    "blank": 16,
+                    "code": 82,
+                    "comment": 18,
+                    "filename": "public\\sw.js"
+                },
+                {
+                    "blank": 23,
+                    "code": 29,
+                    "comment": 6,
+                    "filename": "Readme.md"
+                },
+                {
+                    "blank": 27,
+                    "code": 88,
+                    "comment": 40,
+                    "filename": "src\\api\\index.js"
+                },
+                {
+                    "blank": 43,
+                    "code": 125,
+                    "comment": 60,
+                    "filename": "src\\api\\provider.js"
+                },
+                {
+                    "blank": 22,
+                    "code": 62,
+                    "comment": 42,
+                    "filename": "src\\api\\store.js"
+                },
+                {
+                    "blank": 5,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\components\\abstract\\component-smart.js"
+                },
+                {
+                    "blank": 3,
+                    "code": 6,
+                    "comment": 3,
+                    "filename": "src\\components\\abstract\\component.js"
+                },
+                {
+                    "blank": 13,
+                    "code": 71,
+                    "comment": 9,
+                    "filename": "src\\components\\film-card.js"
+                },
+                {
+                    "blank": 61,
+                    "code": 185,
+                    "comment": 106,
+                    "filename": "src\\components\\film-details.js"
+                },
+                {
+                    "blank": 13,
+                    "code": 41,
+                    "comment": 21,
+                    "filename": "src\\components\\film-details\\comment.js"
+                },
+                {
+                    "blank": 8,
+                    "code": 31,
+                    "comment": 15,
+                    "filename": "src\\components\\film-details\\comments.js"
+                },
+                {
+                    "blank": 3,
+                    "code": 14,
+                    "comment": 5,
+                    "filename": "src\\components\\film-details\\controls.js"
+                },
+                {
+                    "blank": 4,
+                    "code": 20,
+                    "comment": 5,
+                    "filename": "src\\components\\film-details\\details-info.js"
+                },
+                {
+                    "blank": 16,
+                    "code": 44,
+                    "comment": 35,
+                    "filename": "src\\components\\film-details\\details.js"
+                },
+                {
+                    "blank": 6,
+                    "code": 13,
+                    "comment": 15,
+                    "filename": "src\\components\\film-details\\emojies.js"
+                },
+                {
+                    "blank": 7,
+                    "code": 14,
+                    "comment": 15,
+                    "filename": "src\\components\\film-details\\genres.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 9,
+                    "comment": 5,
+                    "filename": "src\\components\\film-details\\promo.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 9,
+                    "comment": 5,
+                    "filename": "src\\components\\film-details\\titles.js"
+                },
+                {
+                    "blank": 6,
+                    "code": 19,
+                    "comment": 8,
+                    "filename": "src\\components\\films-extra.js"
+                },
+                {
+                    "blank": 4,
+                    "code": 15,
+                    "comment": 7,
+                    "filename": "src\\components\\films.js"
+                },
+                {
+                    "blank": 4,
+                    "code": 3,
+                    "comment": 5,
+                    "filename": "src\\components\\footer.js"
+                },
+                {
+                    "blank": 4,
+                    "code": 15,
+                    "comment": 7,
+                    "filename": "src\\components\\loader.js"
+                },
+                {
+                    "blank": 28,
+                    "code": 97,
+                    "comment": 54,
+                    "filename": "src\\components\\menu.js"
+                },
+                {
+                    "blank": 9,
+                    "code": 23,
+                    "comment": 13,
+                    "filename": "src\\components\\no-films.js"
+                },
+                {
+                    "blank": 3,
+                    "code": 7,
+                    "comment": 7,
+                    "filename": "src\\components\\page.js"
+                },
+                {
+                    "blank": 7,
+                    "code": 18,
+                    "comment": 9,
+                    "filename": "src\\components\\profile-rank.js"
+                },
+                {
+                    "blank": 5,
+                    "code": 10,
+                    "comment": 7,
+                    "filename": "src\\components\\show-more-btn.js"
+                },
+                {
+                    "blank": 16,
+                    "code": 53,
+                    "comment": 25,
+                    "filename": "src\\components\\sorting.js"
+                },
+                {
+                    "blank": 36,
+                    "code": 186,
+                    "comment": 50,
+                    "filename": "src\\components\\statistics.js"
+                },
+                {
+                    "blank": 59,
+                    "code": 176,
+                    "comment": 0,
+                    "filename": "src\\consts.js"
+                },
+                {
+                    "blank": 116,
+                    "code": 349,
+                    "comment": 203,
+                    "filename": "src\\controllers\\film.js"
+                },
+                {
+                    "blank": 11,
+                    "code": 30,
+                    "comment": 17,
+                    "filename": "src\\controllers\\menu.js"
+                },
+                {
+                    "blank": 103,
+                    "code": 319,
+                    "comment": 186,
+                    "filename": "src\\controllers\\page.js"
+                },
+                {
+                    "blank": 18,
+                    "code": 60,
+                    "comment": 11,
+                    "filename": "src\\main.js"
+                },
+                {
+                    "blank": 6,
+                    "code": 22,
+                    "comment": 14,
+                    "filename": "src\\models\\comment.js"
+                },
+                {
+                    "blank": 20,
+                    "code": 97,
+                    "comment": 19,
+                    "filename": "src\\models\\film.js"
+                },
+                {
+                    "blank": 62,
+                    "code": 137,
+                    "comment": 110,
+                    "filename": "src\\models\\films.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "src\\Readme.md"
+                },
+                {
+                    "blank": 25,
+                    "code": 39,
+                    "comment": 60,
+                    "filename": "src\\utils\\common.js"
+                },
+                {
+                    "blank": 31,
+                    "code": 69,
+                    "comment": 31,
+                    "filename": "src\\utils\\components.js"
+                },
+                {
+                    "blank": 1,
+                    "code": 20,
+                    "comment": 0,
+                    "filename": "webpack.config.js"
+                }
+            ]
+        }
+    ]
+}
